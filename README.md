@@ -1,6 +1,6 @@
 # PsiU-Protocol-HoTT.
 "PsiU-Protocol-HoTT: Soluzione al problema dei tipi semi-simpliciali e stabilità strutturale nell'n-simplesso mediante l'Assioma di Univalenza."
-opyright © 2024 Roberto Lombardi. All rights reserved.
+Copyright © 2024 Roberto Lombardi. All rights reserved.
 # PsiU-Protocol-HoTT: Topological Resonance in Simplicial Types
 
 ## 🚀 La Soluzione al Problema dei Tipi Semi-Simpliciali
