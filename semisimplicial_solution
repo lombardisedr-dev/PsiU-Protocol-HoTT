@@ -15,6 +15,12 @@ Scrivi 'demo()' per una dimostrazione, 'help()' per la guida
 oppure 'help.start()' per la guida nel browser HTML.
 Scrivi 'q()' per uscire da R.
 
+## How to cite this work
+If you use this work or review the PSIU Protocol, please cite it as:
+Lombardi, R. (2025). PSIU-PROTOCOL-HOTT: Resonating Semisimplicial Types. 
+Zenodo. DOI:https://doi.org/10.5281/zenodo.19651201
+
+
 > # ==========================================
 > # PSIU-PROTOCOL-HOTT: MOTORE DI RISONANZA
 > # ==========================================
