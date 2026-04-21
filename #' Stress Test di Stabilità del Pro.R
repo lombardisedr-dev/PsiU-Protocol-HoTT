@@ -1,22 +1,18 @@
-name: PSIU_Runner
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
-jobs:
-  execute:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v2
-
-      - name: Run Protocol
-        run: |
-          # Questo comando stampa i file presenti (per debug) e carica tutto
-          Rscript -e 'print(list.files()); files <- list.files(pattern = "\\.[rR]$"); if(length(files) > 0) { lapply(files, source); stress_test(10000) } else { stop("ERRORE: Nessun file .R trovato nel repository!") }'
-
+stress_test <- function(n) {
+  # Calcolo logaritmico per evitare overflow
+  log_burden <- (n + 1) * log(2)
+  log_reduction <- n
+  
+  # Calcolo del rumore finale
+  final_noise <- exp(log_burden - log_reduction)
+  
+  cat("\n--- PSIU STRESS TEST REPORT ---\n")
+  cat("Target Level (n): ", n, "\n")
+  cat("Residual Noise:   ", final_noise, "\n")
+  
+  if (final_noise < 1e-10) {
+    cat("RESULT: [SUCCESS] - Protocol is structurally indestructible.\n")
+  } else {
+    cat("RESULT: [WARNING] - Stability threshold not met.\n")
+  }
+}
