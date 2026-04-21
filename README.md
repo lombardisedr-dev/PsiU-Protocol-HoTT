@@ -29,3 +29,22 @@ The file `psiu_protocol.R` located in the `/src` directory allows you to simulat
 Run the script directly from your terminal or R console:
 ```r
 source("src/psiu_protocol.R")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
