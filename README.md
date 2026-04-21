@@ -1,6 +1,7 @@
 # PSIU-Protocol-HoTT 🌀
 ![Status](https://github.com)
 
+
 ### Validazione della Stabilità Topologica tramite Assioma di Univalenza
 
 Questo repository contiene il motore di calcolo per la simulazione del collasso del rumore logico. 
