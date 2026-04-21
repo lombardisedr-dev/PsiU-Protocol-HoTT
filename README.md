@@ -1,25 +1,18 @@
-#  PSIU-Protocol-HoTT
+PSIU-Protocol-HoTT
+Topological Stability Validation
+The protocol passed the stress test with residual noise equal to 0 at 
 
-
-### Validazione Stabilità Topologica
-Il protocollo ha superato lo stress test con un rumore residuo pari a **0** a $n=10.000$.
-
-# 🌀 PSIU-Protocol-HoTT
-[![PSIU_Runner](https://github.com)](https://github.com)
-
-## Report di Validazione (Stress Test)
-L'architettura topologica è stata sottoposta a una simulazione di carico estremo per verificare il collasso del rumore logico tramite l'Assioma di Univalenza.
-
-
-| Parametro | Valore | Stato |
-| :--- | :--- | :--- |
-| **Livello di Complessità (n)** | 10.000 | ✅ Target Raggiunto |
-| **Rumore Residuo (Noise)** | 0 | 💎 Collasso Totale |
-| **Stabilità Omega ($\Omega_n$)** | Massima | 🛡️ Indistruttibile |
-
-### 🔬 Verdetto Finale
-> **RESULT: [SUCCESS]**
-> Il protocollo è strutturalmente indistruttibile. La risonanza dell'Assioma di Univalenza annulla completamente l'entropia logica all'aumentare delle dimensioni del simplesso.
+PSIU-Protocol-HoTT
+Validation Report (Stress Test)
+The topological architecture underwent an extreme load simulation to verify the collapse of logical noise via the Univalence Axiom.
+Parameter	Value	Status
+Complexity Level (n)	10,000	✅ Target Reached
+Residual Noise	0	💎 Total Collapse
+Omega Stability (
+)	Maximum	🛡️ Indestructible
+🔬 Final Verdict
+RESULT: [SUCCESS]
+The protocol is structurally indestructible. The resonance of the Univalence Axiom completely nullifies logical entropy as the simplex dimensions increase.
 [![PSIU_Runner](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT./actions/workflows/r.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT./actions/workflows/r.yml)
 
 
