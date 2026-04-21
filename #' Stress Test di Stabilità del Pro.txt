@@ -1,3 +1,15 @@
+name: Esegui Stress Test PSIU
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: r-lib/actions/setup-r@v2
+      - name: Run Stress Test
+        run: Rscript "nome_del_tuo_file.R" # Sostituisci con il nome reale del tuo file .R
+
+
 #' Stress Test di Stabilità del Protocollo
 #' Valuta la resilienza strutturale per n tendente all'infinito
 stress_test <- function(n) {
