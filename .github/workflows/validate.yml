@@ -14,7 +14,11 @@ jobs:
           agda-version: '2.6.4'
 
       - name: Run Validation
-        # Le virgolette sono fondamentali qui per via degli spazi
-        run: agda --no-libraries "Agda Formal Verification.agda"
+        # Comando pulito senza spazi
+        run: agda --no-libraries AgdaFormalVerification.agda
+
+      - name: Check Status
+        if: success()
+        run: echo "Protocollo validato al 100% con successo!"
 
 
