@@ -15,9 +15,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Agda and Dependencies
+        # Aggiungiamo 'fix-missing' e forziamo l'aggiornamento per evitare l'errore 100
         run: |
-          sudo apt-get update
+          sudo apt-get update --fix-missing
           sudo apt-get install -y agda libtinfo5
 
       - name: Run Agda Typecheck
+        # Usiamo --no-libraries per evitare che Agda fallisca cercando la std-lib non presente
         run: agda --no-libraries agdatest.agda
