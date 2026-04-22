@@ -1,4 +1,4 @@
-module agdatest where
+module "Agda Formal Verification" where
 
 -- 1. Definiamo i Numeri Naturali internamente
 data Nat : Set where
@@ -15,7 +15,7 @@ data _≡_ {A : Set} (x : A) : A → Set where
 {-# BUILTIN EQUALITY _≡_ #-}
 
 -- 3. PROVA DI CRISTALLIZZAZIONE (Omega Stability n=10000)
--- Se Agda accetta questa riga, il protocollo è validato.
 proof : 10000 ≡ 10000
 proof = refl
+
 
