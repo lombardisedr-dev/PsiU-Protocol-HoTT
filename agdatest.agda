@@ -55,3 +55,5 @@ proof = certified refl
 git add agdatest.agda
 git commit -m "PSIU-Protocol: Cristallizzazione validata n=10000"
 git push origin main
+mkdir -p .github/workflows
+nano .github/workflows/agda-check.yml
