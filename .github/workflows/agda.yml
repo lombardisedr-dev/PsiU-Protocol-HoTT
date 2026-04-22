@@ -9,11 +9,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Haskell
+        uses: haskell-actions/setup@v2
+        with:
+          ghc-version: '9.6'
+          cabal-version: '3.10'
+
       - name: Install Agda
         run: |
-          sudo apt-get update
-          sudo apt-get install -y agda libtinfo5
+          cabal update
+          cabal install Agda --install-method=copy --overwrite-policy=always
 
       - name: Run Agda Typecheck
-        # Usiamo il flag --no-libraries per validare il file in isolamento totale
-        run: agda --no-libraries agdatest.agda
+        run: |
+          # Aggiunge il binario di Agda al PATH
+          export PATH="$HOME/.cabal/bin:$PATH"
+          agda --no-libraries agdatest.agda
