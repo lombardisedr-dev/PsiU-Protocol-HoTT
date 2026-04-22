@@ -1,6 +1,6 @@
 # 🌀 PSIU-Protocol-HoTT
 
-[![Agda-Check](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda.yml)
+[![Agda Formal Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/validate.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/validate.yml)
 
 VALIDE ON AGDA
 
