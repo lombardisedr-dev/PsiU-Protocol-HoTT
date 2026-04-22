@@ -1,13 +1,23 @@
 name: Agda-Check
-on: [push]
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
 jobs:
   validate:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Agda
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Agda and Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y agda libtinfo5
-      - name: Run Agda
+
+      - name: Run Agda Typecheck
         run: agda agdatest.agda
