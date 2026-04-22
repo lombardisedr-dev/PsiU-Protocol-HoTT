@@ -1,9 +1,8 @@
 # 🌀 PSIU-Protocol-HoTT
 
-![PSIU Validated](https://shields.io)
+[![Agda-Check](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda.yml)
 
-
-https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/commit/0e6da3b43189187cbdcccb4e710070a64c374960
+VALIDE ON AGDA
 
 
 
