@@ -1,0 +1,24 @@
+name: Agda Formal Verification
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Agda
+        uses: wenkokke/setup-agda@v2
+        with:
+          agda-version: '2.6.4'
+
+      - name: Run PsiU Protocol Validation
+        # Puntiamo a source.agda e usiamo --sharing per risparmiare RAM
+        run: agda --no-libraries --sharing source.agda
+
+      - name: Check Status
+        if: success()
+        run: echo "Protocollo validato al 100% con successo!"
+
+        
