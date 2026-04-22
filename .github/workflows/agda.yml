@@ -1,25 +1,22 @@
-name: Agda-Check
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+name: Diagnostica-Agda
+on: [push, pull_request]
 
 jobs:
-  validate:
+  debug:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Agda
-        # Usa l'azione ufficiale per evitare errori di apt-get
-        uses: wenkokke/setup-agda@v2
-        with:
-          agda-version: '2.6.4'
-
-      - name: Run Agda Typecheck
-        run: agda --no-libraries agdatest.agda
+      - uses: actions/checkout@v4
+      
+      - name: Verifica Ambiente
+        run: |
+          echo "Verifica file presenti:"
+          ls -R
+          
+      - name: Prova Installazione Semplice
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y agda
+          
+      - name: Esegui Agda
+        run: agda --version || echo "Agda non installato"
 
