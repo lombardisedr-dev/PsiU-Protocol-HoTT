@@ -13,10 +13,11 @@ jobs:
         with:
           agda-version: '2.6.4'
 
-      - name: Run PsiU Protocol Validation
-        # Rimosso --sharing che causava l'errore 71
-        run: agda --no-libraries source.agda
+      - name: Run Validation
+        # Questo comando valida il tuo protocollo nel file agdatest.agda
+        run: agda --no-libraries agdatest.agda
 
       - name: Check Status
         if: success()
         run: echo "Protocollo validato al 100% con successo!"
+
