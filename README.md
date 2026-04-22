@@ -4,6 +4,15 @@
 
 [![PSIU_Runner](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT./actions/workflows/r.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT./actions/workflows/r.yml)
 
+
+Legal Notice & Intellectual Property
+Official Signature: This protocol and its documentation are legally signed and timestamped via Aruba PEC/Digital Signature to certify authorship and integrity.
+Usage Terms:
+Permitted Use: This project is released exclusively for academic study, dissertation purposes, and scientific dissemination.
+Prohibitions: Any commercial use, reproduction, or redistribution of the PSIU-Protocol-HoTT architecture without explicit written consent is strictly prohibited.
+Contact: For any other use cases, licensing inquiries, or to discuss the protocol directly, please contact the author through the GitHub profile or the official communication channels provided.
+
+
 ## 📌 Project Overview
 **PSIU-Protocol-HoTT** is a topological architecture based on **Homotopy Type Theory (HoTT)**. It leverages the **Univalence Axiom** to achieve logical noise collapse in high-dimensional simplex structures, ensuring maximum stability in complex computational environments.
 
