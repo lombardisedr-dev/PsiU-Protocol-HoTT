@@ -20,4 +20,4 @@ jobs:
           sudo apt-get install -y agda libtinfo5
 
       - name: Run Agda Typecheck
-        run: agda agdatest.agda
+        run: agda --no-libraries agdatest.agda
