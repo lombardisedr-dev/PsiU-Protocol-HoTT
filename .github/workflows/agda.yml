@@ -1,20 +1,13 @@
-name: Agda-Check
+name: Agda-Validation-PSIU
 
 on: [push, pull_request]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+    container:
+      image: agda/agda:latest # Usa l'ambiente ufficiale Agda
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Agda
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y agda libtinfo5
-
-      - name: Run Agda Typecheck
-        # Usiamo --library-file per dire ad Agda di non cercare nulla fuori dal file stesso
-        run: |
-          touch empty.agda-lib
-          agda --no-default-libraries --no-libraries agdatest.agda
+      - name: Run Agda
+        run: agda --no-libraries agdatest.agda
