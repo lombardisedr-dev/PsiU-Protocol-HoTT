@@ -14,12 +14,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Agda and Dependencies
-        # Aggiungiamo 'fix-missing' e forziamo l'aggiornamento per evitare l'errore 100
-        run: |
-          sudo apt-get update --fix-missing
-          sudo apt-get install -y agda libtinfo5
+      - name: Setup Agda
+        # Usa l'azione ufficiale per evitare errori di apt-get
+        uses: wenkokke/setup-agda@v2
+        with:
+          agda-version: '2.6.4'
 
       - name: Run Agda Typecheck
-        # Usiamo --no-libraries per evitare che Agda fallisca cercando la std-lib non presente
         run: agda --no-libraries agdatest.agda
+
