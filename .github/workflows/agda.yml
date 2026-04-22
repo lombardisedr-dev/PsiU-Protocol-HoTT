@@ -6,22 +6,14 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Haskell
-        uses: haskell-actions/setup@v2
+      - name: Setup Agda (Pre-compiled)
+        uses: wenkokke/setup-agda@v2
         with:
-          ghc-version: '9.6'
-          cabal-version: '3.10'
-
-      - name: Install Agda
-        run: |
-          cabal update
-          cabal install Agda --install-method=copy --overwrite-policy=always
+          agda-version: '2.6.4'
 
       - name: Run Agda Typecheck
-        run: |
-          # Aggiunge il binario di Agda al PATH
-          export PATH="$HOME/.cabal/bin:$PATH"
-          agda --no-libraries agdatest.agda
+        run: agda --no-libraries agdatest.agda
+
+        
