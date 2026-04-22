@@ -1,4 +1,4 @@
-module "Agda Formal Verification" where
+module agdaformalverification where
 
 -- 1. Definiamo i Numeri Naturali internamente
 data Nat : Set where
