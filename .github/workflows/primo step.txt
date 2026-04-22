@@ -1,0 +1,26 @@
+name: PSIU-Protocol-Gnomonic-Resonance
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Ti permette di avviarlo anche manualmente
+
+jobs:
+  crystallization:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install Dependencies
+        run: Rscript -e 'install.packages("simplextree")'
+
+      - name: Run PSIU Runner (n=10.000)
+        run: Rscript runner.R
+
+
