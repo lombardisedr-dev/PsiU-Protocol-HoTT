@@ -2,6 +2,8 @@
 
 [![PSIU_Runner](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT./actions/workflows/r.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT./actions/workflows/r.yml)
 
+[![PSIU_Runner](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT./actions/workflows/r.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT./actions/workflows/r.yml)
+
 ## 📌 Project Overview
 **PSIU-Protocol-HoTT** is a topological architecture based on **Homotopy Type Theory (HoTT)**. It leverages the **Univalence Axiom** to achieve logical noise collapse in high-dimensional simplex structures, ensuring maximum stability in complex computational environments.
 
