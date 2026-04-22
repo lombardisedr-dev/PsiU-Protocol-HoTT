@@ -1,22 +1,23 @@
-name: Diagnostica-Agda
-on: [push, pull_request]
+name: Agda-Check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  debug:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Verifica Ambiente
-        run: |
-          echo "Verifica file presenti:"
-          ls -R
-          
-      - name: Prova Installazione Semplice
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Agda
         run: |
           sudo apt-get update
-          sudo apt-get install -y agda
-          
-      - name: Esegui Agda
-        run: agda --version || echo "Agda non installato"
+          sudo apt-get install -y agda libtinfo5
 
+      - name: Run Agda Typecheck
+        # Qui eseguiamo la validazione formale del tuo codice
+        run: agda --no-libraries agdatest.agda
