@@ -52,3 +52,6 @@ data Verified (r : Resonance) : Set where
 -- Se questa riga si colora, il sistema è perfetto
 proof : Verified stress-test
 proof = certified refl
+git add agdatest.agda
+git commit -m "PSIU-Protocol: Cristallizzazione validata n=10000"
+git push origin main
