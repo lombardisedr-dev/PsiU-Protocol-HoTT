@@ -16,14 +16,13 @@ jobs:
 
       - name: Download Agda Standard Library
         run: |
-          git clone --depth 1 https://github.com ~/agda-stdlib
-          mkdir -p ~/.agda
-          echo "$HOME/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
-          echo "standard-library" > ~/.agda/defaults
+          # URL completo per evitare l'errore 128
+          git clone --depth 1 https://github.com $HOME/agda-stdlib
+          mkdir -p $HOME/.agda
+          echo "$HOME/agda-stdlib/standard-library.agda-lib" > $HOME/.agda/libraries
+          echo "standard-library" > $HOME/.agda/defaults
 
       - name: Formal Verification (No Postulates)
         run: |
-          # Ora Agda userà la libreria scaricata. 
-          # Se passa questo con --safe, la prova è blindata.
+          # Verifica finale: se questo passa, la teoria è dimostrata senza postulati
           agda --safe PSIU_Protocol.agda
-
