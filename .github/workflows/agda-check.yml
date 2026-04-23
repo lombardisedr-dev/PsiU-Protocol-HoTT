@@ -1,28 +1,27 @@
 name: PSIU-Protocol-Validation
 
-on: [push, pull_request]
+on: 
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
   validate-hott:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: 1. Checkout del Codice
         uses: actions/checkout@v4
 
-      - name: Install Agda
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y agda
+      - name: 2. Setup Agda e Standard Library (Certificato)
+        uses: wenkokke/setup-agda@v2
+        with:
+          agda-version: '2.6.4.3'
+          agda-stdlib-version: '2.0'
 
-      - name: Download Agda Standard Library
+      - name: 3. Verifica Formale PSIU (No Postulates, No Noise)
         run: |
-          # URL completo per evitare l'errore 128
-          git clone --depth 1 https://github.com $HOME/agda-stdlib
-          mkdir -p $HOME/.agda
-          echo "$HOME/agda-stdlib/standard-library.agda-lib" > $HOME/.agda/libraries
-          echo "standard-library" > $HOME/.agda/defaults
-
-      - name: Formal Verification (No Postulates)
-        run: |
-          # Verifica finale: se questo passa, la teoria è dimostrata senza postulati
-          agda --safe PSIU_Protocol.agda
+          # --safe: Proibisce 'postulate' e 'admit'. Forza la prova totale.
+          # --without-K: Necessario per la J-rule e la Homotopy Type Theory.
+          # Se il file PSIU_Protocol.agda è corretto, avremo il GREEN TICK.
+          agda --safe --without-K PSIU_Protocol.agda
