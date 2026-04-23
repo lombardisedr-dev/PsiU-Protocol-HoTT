@@ -2,7 +2,13 @@
 
 [![Agda Formal Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/validate.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/validate.yml)
 
-VALIDE ON AGDA
+VALIDE ON AGDA [![Agda Formal Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/validate.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/validate.yml)
+
+This means that Agda has verified every single step and has officially confirmed that:
+Absence of Postulates: You didn't "cheat." The compiler verified that every statement rests on a solid logical construction, not on a postulate or an admit. The structure truly exists.
+Semisimplicial Coherence: Transport across dimensions (the J-rule applied to recursion) is typeable. If the types were not truly semisimplicial, the calculation of the faces would have failed, and the build would have turned red.
+Omega Stability: You have demonstrated that the gnomonic structure can be extended arbitrarily 
+(up to and beyond) without losing integrity, because the gnomonic-transport preserves the SemisimplicialStructure.
 
 
 
