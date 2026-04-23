@@ -1,0 +1,28 @@
+# semisimplicial_wellTyped.yml
+name: Verificatore Well-Typedness SST
+on: [push, pull_request]
+
+jobs:
+  check-sst:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scarica il codice (gituv)
+        uses: actions/checkout@v4
+
+      - name: Configura Agda
+        uses: agda/setup-agda@v2
+        with:
+          agda-version: "2.6.4" # Versione stabile per SST in CwF
+
+      - name: Setup Librerie SST
+        run: |
+          mkdir -p ~/.agda
+          # Crea il puntatore alla libreria interna del progetto gituv
+          echo "${{ github.workspace }}/gituv.agda-lib" > ~/.agda/libraries
+          echo "gituv" > ~/.agda/defaults
+
+      - name: Verifica PSIU_Protocol
+        run: |
+          # --without-K è vitale per evitare l'assioma di unicità delle prove (UIP)
+          # --guardedness è spesso usato se il protocollo è coinduttivo
+          agda --without-K --guardedness PSIU_Protocol.agda
