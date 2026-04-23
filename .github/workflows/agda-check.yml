@@ -1,22 +1,32 @@
 name: PSIU-Protocol-Final-Verification
 
-on: [push, pull_request]
+on: 
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: 1. Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Agda (Pure Environment)
+      - name: 2. Setup Agda & Stdlib
         uses: wenkokke/setup-agda@v2
         with:
           agda-version: '2.6.4.3'
           agda-stdlib-version: '2.0'
 
-      - name: Execute Formal Proof
+      - name: 3. Configure Libraries
         run: |
-          # Questo comando verifica il file specifico del tuo modello
-          # Se passa con --safe, la prova è definitiva al 100%
-          agda --safe --without-K PSIU_Protocol.agda
+          mkdir -p ~/.agda
+          # Registra la libreria standard in modo che Agda la trovi automaticamente
+          echo "standard-library" > ~/.agda/defaults
+
+      - name: 4. Execute Formal Proof (The Verdict)
+        run: |
+          # --safe: Zero postulati
+          # -l standard-library: Carica Level, Nat, Equality
+          agda --safe --without-K -l standard-library PSIU_Protocol.agda
