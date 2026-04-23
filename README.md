@@ -1,6 +1,6 @@
 # Certified PSIU Protocol - SemiSimplicial Types (SST)
 
-[![PSIU-Protocol-Final-Verification](https://github.com)](https://github.com)
+[![PSIU-Protocol-Final-Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml)
 
 Questo repository contiene la formalizzazione in **Agda** del protocollo PSIU, risolvendo il problema della coerenza nei tipi semisimpliciali (SST) fino alla dimensione $X_4$.
 
