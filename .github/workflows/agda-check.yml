@@ -1,27 +1,22 @@
-name: PSIU-Protocol-Validation
+name: PSIU-Protocol-Final-Verification
 
-on: 
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: [push, pull_request]
 
 jobs:
-  validate-hott:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - name: 1. Checkout del Codice
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: 2. Setup Agda e Standard Library (Certificato)
+      - name: Setup Agda (Pure Environment)
         uses: wenkokke/setup-agda@v2
         with:
           agda-version: '2.6.4.3'
           agda-stdlib-version: '2.0'
 
-      - name: 3. Verifica Formale PSIU (No Postulates, No Noise)
+      - name: Execute Formal Proof
         run: |
-          # --safe: Proibisce 'postulate' e 'admit'. Forza la prova totale.
-          # --without-K: Necessario per la J-rule e la Homotopy Type Theory.
-          # Se il file PSIU_Protocol.agda è corretto, avremo il GREEN TICK.
+          # Questo comando verifica il file specifico del tuo modello
+          # Se passa con --safe, la prova è definitiva al 100%
           agda --safe --without-K PSIU_Protocol.agda
