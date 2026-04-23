@@ -15,13 +15,13 @@ jobs:
           agda-version: '2.6.4.3'
           agda-stdlib-version: '2.0'
 
-      - name: 3. Create Library Path
+      - name: 3. Final Verification
         run: |
+          # Creiamo il file di default per caricare la libreria standard
           mkdir -p ~/.agda
           echo "standard-library" > ~/.agda/defaults
-
-      - name: 4. Execute Formal Proof (Final Verdict)
-        run: |
-          # -i . cerca il file PSIU_Protocol.agda nella cartella corrente
-          # -l standard-library abilita l'import di Data.Nat e Level
+          
+          # Eseguiamo il controllo formale:
+          # -i . (Guarda nella cartella corrente)
+          # -l standard-library (Carica i moduli Level, Nat, Equality)
           agda --safe --without-K -i . -l standard-library PSIU_Protocol.agda
