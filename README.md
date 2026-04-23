@@ -1,7 +1,7 @@
 # PSIU-Protocol-HoTT
 **Formal Verification of Gnomonic Crystallization via Homotopy Type Theory**
 
-![PSIU Validation](https://github.com)
+[![PSIU-Protocol-Final-Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml)
 
 ## Overview
 The **PSIU-Protocol-HoTT** is a high-dimensional computational architecture designed to nullify logical entropy. This repository contains the formal proof in **Agda** certifying that the system is:
