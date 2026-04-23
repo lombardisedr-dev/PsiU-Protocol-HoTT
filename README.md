@@ -12,9 +12,6 @@ The **PSIU-Protocol-HoTT** is a high-dimensional computational architecture desi
 ## Formal Source Code
 The core logic is located in `PSIU_Protocol.agda`. It uses `--safe` and `--without-K` flags to ensure a pure HoTT environment.
 
-```agda
--- (Inserisci qui il codice Agda che abbiamo validato)
-```
 
 ## How to Verify
 To run the proof locally:
