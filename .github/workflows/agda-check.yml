@@ -1,0 +1,27 @@
+name: PSIU-Protocol-Validation
+
+on: [push, pull_request]
+
+jobs:
+  validate-hott:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Agda
+        uses: agda/setup-agda@v3
+        with:
+          agda-version: '2.6.3' # Versione stabile per HoTT
+
+      - name: Install Agda Standard Library
+        run: |
+          git clone https://github.com ~/agda-stdlib
+          mkdir -p ~/.agda
+          echo "~/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
+          echo "standard-library" > ~/.agda/defaults
+
+      - name: Formal Verification (No Postulates)
+        run: |
+          # Il comando fallisce se ci sono errori di tipo o postulati mancanti
+          agda --safe PSIU_Protocol.agda
