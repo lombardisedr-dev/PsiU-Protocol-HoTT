@@ -1,30 +1,27 @@
-# PsiU-Protocol-HoTT
+# Certified PSIU Protocol - SemiSimplicial Types (SST)
 
-##  Certificazione di Validazione Formale
+[![PSIU-Protocol-Final-Verification](https://github.com)](https://github.com)
 
-Il protocollo è stato verificato con successo utilizzando **Agda 2.6.4**.
+Questo repository contiene la formalizzazione in **Agda** del protocollo PSIU, risolvendo il problema della coerenza nei tipi semisimpliciali (SST) fino alla dimensione $X_4$.
 
-### 1. Validazione Universale ($n = 10.000+$)
-- **Stato**: ![Validato]
-- **Descrizione**: Il protocollo è stato validato per ogni $n : \mathbb{N}$. La coerenza logica è garantita matematicamente per qualsiasi valore del parametro, inclusi carichi da 10.000 a 20.000 unità.
+##  Certificazione Formale
+Il progetto è validato tramite **GitHub Actions** con i seguenti parametri rigorosi:
+- `--without-K`: Garantisce la compatibilità con la **Homotopy Type Theory (HoTT)**.
+- `--safe`: Assicura l'assenza totale di postulati o assiomi non dimostrati.
+- **Purely Constructive**: Tutte le prove di coerenza (dai triangoli $X_2$ ai pentatopi $X_4$) sono risolte tramite pattern matching su `refl`.
 
+##  Struttura della Dimostrazione
+1. **X₀ - X₁**: Definizione di punti e percorsi (Identity Types).
+2. **X₂ (Triangoli)**: Coerenza della composizione dei cammini (`trans`).
+3. **X₃ (Tetraedri)**: Chiusura volumetrica delle facce triangolari.
+4. **X₄ (Pentatopi)**: Iper-coerenza dimensionale tra i volumi.
+5. **Omega Stability**: Preservazione induttiva della struttura per $n \to \infty$.
 
-
-[![PSIU-Protocol-Final-Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml)
-
-Questo repository contiene la formalizzazione in **Agda** (Homotopy Type Theory) del protocollo PsiU...
-
-
-### 2. Verifica Rigorosa (Safe Mode)
-- **Stato**: ![No Postulates]
-- **Requisiti superati**:
-  - **Well-Typed**: Il codice è pienamente conforme al sistema dei tipi di Agda.
-  - **No Postulates**: Non sono stati utilizzati assiomi non dimostrati (`postulate`). Ogni proprietà è stata derivata costruttivamente.
-  - **Termination**: È garantito che ogni funzione del protocollo termini correttamente.
-
----
-*Validazione eseguita automaticamente tramite [GitHub Actions]
-[![PSIU-Protocol-Final-Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml)
+##  Verifica Locale
+Per eseguire il controllo manualmente:
+```bash
+agda --no-libraries -i . --without-K --safe Certified_PSIU_Protocol.agda
+```
 
 
 
