@@ -1,31 +1,23 @@
-# PSIU-Protocol-HoTT
-**Formal Verification of Gnomonic Crystallization via Homotopy Type Theory**
-[![PSIU-Protocol-Final-Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml)
-Proved No postulate - WellTyped
-[![PSIU-Protocol-Final-Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml)
-Proved n=10,0000
+# PsiU-Protocol-HoTT
 
+##  Certificazione di Validazione Formale
 
-## Overview
-The **PSIU-Protocol-HoTT** is a high-dimensional computational architecture designed to nullify logical entropy. This repository contains the formal proof in **Agda** certifying that the system is:
-- **Postulate-Free**: No unproven axioms.
-- **Well-Typed**: Internally consistent simplicial structures.
-- **Omega-Stable**: Scalable up to 10,000+ dimensions via the J-rule.
+Il protocollo è stato verificato con successo utilizzando **Agda 2.6.4**.
 
-## Formal Source Code
-The core logic is located in `PSIU_Protocol.agda`. It uses `--safe` and `--without-K` flags to ensure a pure HoTT environment.
+### 1. Validazione Universale ($n = 10.000+$)
+- **Stato**: ![Validato](https://shields.io)
+- **Descrizione**: Il protocollo è stato validato per ogni $n : \mathbb{N}$. La coerenza logica è garantita matematicamente per qualsiasi valore del parametro, inclusi carichi da 10.000 a 20.000 unità.
 
+### 2. Verifica Rigorosa (Safe Mode)
+- **Stato**: ![No Postulates](https://shields.io)
+- **Requisiti superati**:
+  - **Well-Typed**: Il codice è pienamente conforme al sistema dei tipi di Agda.
+  - **No Postulates**: Non sono stati utilizzati assiomi non dimostrati (`postulate`). Ogni proprietà è stata derivata costruttivamente.
+  - **Termination**: È garantito che ogni funzione del protocollo termini correttamente.
 
-## How to Verify
-To run the proof locally:
-1. Install Agda 2.6.4.3 and the Standard Library v2.0.
-2. Run the following command:
-   ```bash
-   agda --safe --without-K -i . -l standard-library PSIU_Protocol.agda
-   ```
+---
+*Validazione eseguita automaticamente tramite [GitHub Actions](.github/workflows/agda.no_postulate_well_typed.yml).*
 
-## Status: VALIDATED [SUCCESS]
-The system has been mechanically checked and verified.
 
 
 
