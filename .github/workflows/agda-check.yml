@@ -1,0 +1,27 @@
+name: PSIU-Protocol-Final-Verification
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Agda & Stdlib
+        uses: wenkokke/setup-agda@v2
+        with:
+          agda-version: '2.6.4.3'
+          agda-stdlib-version: '2.0'
+
+      - name: 3. Final Verification
+        run: |
+          # Creiamo il file di default per caricare la libreria standard
+          mkdir -p ~/.agda
+          echo "standard-library" > ~/.agda/defaults
+          
+          # Eseguiamo il controllo formale:
+          # -i . (Guarda nella cartella corrente)
+          # -l standard-library (Carica i moduli Level, Nat, Equality)
+          agda --safe --without-K -i . -l standard-library PSIU_Protocol.agda
