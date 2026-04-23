@@ -12,17 +12,18 @@ jobs:
       - name: Install Agda
         run: |
           sudo apt-get update
-          sudo apt-get install -y agda agda-stdlib
+          sudo apt-get install -y agda
 
-      - name: Setup Libraries
+      - name: Download Agda Standard Library
         run: |
+          git clone --depth 1 https://github.com ~/agda-stdlib
           mkdir -p ~/.agda
-          echo "/usr/share/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
+          echo "$HOME/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
           echo "standard-library" > ~/.agda/defaults
 
       - name: Formal Verification (No Postulates)
         run: |
-          # Il flag --safe impedisce l'uso di postulati. 
-          # Se compila, la prova è assoluta.
+          # Ora Agda userà la libreria scaricata. 
+          # Se passa questo con --safe, la prova è blindata.
           agda --safe PSIU_Protocol.agda
 
