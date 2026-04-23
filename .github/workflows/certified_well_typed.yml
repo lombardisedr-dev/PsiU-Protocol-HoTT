@@ -1,0 +1,19 @@
+name: Certified Well-Typedness Check
+
+on: [push, pull_request]
+
+jobs:
+  verify-protocol:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Agda
+        uses: agda/setup-agda@v2
+        with:
+          agda-version: '2.6.4'
+
+      - name: Formal Verification (No Postulates)
+        run: |
+          agda --no-libraries -i . --without-K --safe Certified_PSIU_Protocol.agda
