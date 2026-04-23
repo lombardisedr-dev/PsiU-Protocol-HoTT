@@ -1,6 +1,9 @@
 # PSIU-Protocol-HoTT
 **Formal Verification of Gnomonic Crystallization via Homotopy Type Theory**
 [![PSIU-Protocol-Final-Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml)
+Proved No postulate - WellTyped
+[![PSIU-Protocol-Final-Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml)
+Proved n=10,0000
 
 
 ## Overview
