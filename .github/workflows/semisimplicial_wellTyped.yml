@@ -17,11 +17,11 @@ jobs:
       - name: Setup Agda
         uses: agda/setup-agda@v2
         with:
-          agda-version: '2.6.4' # Versione stabile per SST e CwF
+          agda-version: '2.6.4'
 
       - name: Verify PSIU_Protocol
         run: |
-          # Usiamo -i . per permettere ad Agda di trovare i file locali di gituv
-          # Usiamo --without-K perché essenziale per i tipi semisimpliciali
+          # Il comando punta ora correttamente al file PSIU_Protocol.agda
+          # -i . serve per risolvere gli import locali del progetto gituv
+          # --without-K risolve il problema dei semisimpliciali evitando l'assioma K
           agda --no-libraries -i . --without-K PSIU_Protocol.agda
-
