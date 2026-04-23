@@ -7,21 +7,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup Agda
-        uses: agda/setup-agda@v3
-        with:
-          agda-version: '2.6.3' # Versione stabile per HoTT
-
-      - name: Install Agda Standard Library
+      - name: Install Agda
         run: |
-          git clone https://github.com ~/agda-stdlib
+          sudo apt-get update
+          sudo apt-get install -y agda agda-stdlib
+
+      - name: Setup Libraries
+        run: |
           mkdir -p ~/.agda
-          echo "~/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
+          echo "/usr/share/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
           echo "standard-library" > ~/.agda/defaults
 
       - name: Formal Verification (No Postulates)
         run: |
-          # Il comando fallisce se ci sono errori di tipo o postulati mancanti
+          # Il flag --safe impedisce l'uso di postulati. 
+          # Se compila, la prova è assoluta.
           agda --safe PSIU_Protocol.agda
+
