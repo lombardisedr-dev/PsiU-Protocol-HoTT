@@ -1,10 +1,6 @@
 name: PSIU-Protocol-Final-Verification
 
-on: 
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: [push, pull_request]
 
 jobs:
   validate:
@@ -19,14 +15,8 @@ jobs:
           agda-version: '2.6.4.3'
           agda-stdlib-version: '2.0'
 
-      - name: 3. Configure Libraries
+      - name: 3. Execute Formal Proof
         run: |
-          mkdir -p ~/.agda
-          # Registra la libreria standard in modo che Agda la trovi automaticamente
-          echo "standard-library" > ~/.agda/defaults
-
-      - name: 4. Execute Formal Proof (The Verdict)
-        run: |
-          # --safe: Zero postulati
-          # -l standard-library: Carica Level, Nat, Equality
-          agda --safe --without-K -l standard-library PSIU_Protocol.agda
+          # -i . forza Agda a guardare nella cartella del repository
+          # -l standard-library carica le dipendenze esterne
+          agda --safe --without-K -i . -l standard-library PSIU_Protocol.agda
