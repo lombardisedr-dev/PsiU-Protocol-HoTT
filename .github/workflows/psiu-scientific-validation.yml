@@ -1,0 +1,12 @@
+# Questo file deve essere salvato come: .github/workflows/psiu-scientific-validation.yml
+
+name: "PSIU: Scientific Validation (Agda + R-Scale)"
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  # ... qui seguono i passaggi di Agda e R che abbiamo visto prima
