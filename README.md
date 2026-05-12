@@ -1,5 +1,5 @@
 # Formalization of Semisimplicial Types in Agda
-
+[![Validazione Scientifica PSIU](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/verify-protocol.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/verify-protocol.yml)
 ## Overview
 This repository provides a machine-checked construction of semisimplicial types within the framework of Homotopy Type Theory (HoTT). The project addresses the infinite coherence problem of semisimplicial structures using Agda as the primary formalization engine.
 
