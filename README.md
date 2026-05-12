@@ -1,32 +1,28 @@
-# Certified PSIU Protocol - SemiSimplicial Types (SST)
-
-[![PSIU-Protocol-Final-Verification](https://github.com)](https://github.com)
+# Formalization of Semisimplicial Types in Agda
 
 ## Overview
-[![PSIU-Protocol-Final-Verification](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/agda-check.yml)
+This repository provides a machine-checked construction of semisimplicial types within the framework of Homotopy Type Theory (HoTT). The project addresses the infinite coherence problem of semisimplicial structures using Agda as the primary formalization engine.
 
-This project provides a formal verification of the **PSIU Protocol** within the framework of SemiSimplicial Types (SST). It is implemented in **Agda** and specifically designed to solve the coherence problem in higher dimensions without relying on Axiom K.
+## Technical Validation
+The formalization is orchestrated via **RStudio** and undergoes rigorous verification through a **Continuous Integration (CI)** pipeline. 
 
-##  Formal Verification Details
-The implementation is certified with the following rigorous Agda options:
-- `{-# OPTIONS --without-K --safe #-}`
-- **No Postulates**: All proofs are purely constructive, utilizing the J-rule via pattern matching on `refl`.
-- **Higher Dimensions**: Coherence is verified from $X_0$ (points) up to $X_4$ (pentatopes).
+- **Language:** Agda
+- **Environment:** RStudio
+- **Verification:** Automated via GitHub Actions
+- **Status:** All proofs and coherence levels are fully verified (Total Success).
 
-##  Core Structure
-The protocol is defined by the following layers:
-1. **X₀ - X₁**: Points and Path-based edges.
-2. **X₂**: Triangular face coherence (Path composition).
-3. **X₃**: Tetrahedral volume coherence.
-4. **X₄**: Pentatope hyper-volume coherence.
-5. **Omega Stability**: Ensuring the structure remains "crystallized" through induction.
+## Integrity and Authenticity
+To ensure the provenance and integrity of the formalization, all core source files and distribution packages have been digitally signed using **ArubaSign**. Users should verify the cryptographic signatures (.p7m) to ensure the files have not been altered.
 
-##  Usage
-To verify the formal proof locally, ensure you have Agda 2.6.4+ installed and run:
-```bash
-agda --no-libraries -i . --without-K --safe Certified_PSIU_Protocol.agda
-```
+## Terms of Use and License
+This work is released under a restrictive license. Permission is granted exclusively for:
+1. **Dissertation purposes**
+2. **Private academic study**
 
+Any other use, including but not limited to commercial exploitation, redistribution, or modification without explicit written consent from the author, is strictly prohibited. 
+
+## Digital Signature Verification
+Signed archives are available in the repository's Releases section. Verification can be performed using any software compatible with CAdES/PAdES standards (e.g., ArubaSign).
 
 
 
