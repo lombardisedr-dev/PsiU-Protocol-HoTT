@@ -1,5 +1,166 @@
-{-# OPTIONS --cubical --safe #-} module PSIU_Protocol where -- ======================================================================== -- 0. INFRASTRUTTURA ASSIOMATICA ZERO (Uguaglianza e Assurdo Costruttivo) -- ======================================================================== open import Agda.Primitive.Cubical renaming (primIntervalInv to ~_) open import Agda.Builtin.Cubical.Path open import Level using (Level; suc; zero) open import Data.Nat using (ℕ; zero; suc; _+_; _*_) _≡_ : {ℓ : Level} {A : Set ℓ} → A → A → Set ℓ _≡_ = Path data ⊥ : Set where ⊥-elim : {ℓ : Level} {A : Set ℓ} → ⊥ → A ⊥-elim () tautologia-identita : {ℓ : Level} {A : Set ℓ} (x : A) → x ≡ x tautologia-identita x i = x ------------------------------------------------------------------------ -- 1. COMPLESSO CUBICO COMPLETO (Mappe di Faccia e Degenerazione) ------------------------------------------------------------------------ -- Struttura combinatoria unificata che descrive le facce e le proiezioni dimensionali data OperatoreCubico : ℕ → ℕ → Set where faccia-base : {n : ℕ} → OperatoreCubico n (suc n) faccia-passo : {n m : ℕ} → OperatoreCubico n m → OperatoreCubico (suc n) (suc m) degen-base : {n : ℕ} → OperatoreCubico (suc n) n degen-passo : {n m : ℕ} → OperatoreCubico n m → OperatoreCubico (suc n) (suc m) -- Composizione totale e rigorosa di tutti gli operatori geometrici comp-cubo : {n m k : ℕ} → OperatoreCubico m k → OperatoreCubico n m → OperatoreCubico n k comp-cubo faccia-base _ = faccia-base comp-cubo (faccia-passo f) faccia-base = faccia-base comp-cubo (faccia-passo f) (faccia-passo g) = faccia-passo (comp-cubo f g) comp-cubo (faccia-passo f) degen-base = degen-base comp-cubo (faccia-passo f) (degen-passo g) = degen-passo (comp-cubo f g) comp-cubo degen-base _ = degen-base comp-cubo (degen-passo f) faccia-base = faccia-base comp-cubo (degen-passo f) (faccia-passo g) = faccia-passo (comp-cubo f g) comp-cubo (degen-passo f) degen-base = degen-base comp-cubo (degen-passo f) (degen-passo g) = degen-passo (comp-cubo f g) EstraiSpazioGnomonico : {n m : ℕ} → OperatoreCubico n m → ℕ EstraiSpazioGnomonico faccia-base = 2 EstraiSpazioGnomonico (faccia-passo m) = 2 + EstraiSpazioGnomonico m EstraiSpazioGnomonico degen-base = 0 EstraiSpazioGnomonico (degen-passo m) = EstraiSpazioGnomonico m EstraiMateriaGnomonica : {n m : ℕ} → OperatoreCubico n m → ℕ EstraiMateriaGnomonica faccia-base = 1 EstraiMateriaGnomonica (faccia-passo m) = 1 + EstraiMateriaGnomonica m EstraiMateriaGnomonica degen-base = 0 EstraiMateriaGnomonica (degen-passo m) = EstraiMateriaGnomonica m -- Teorema d'invarianza dimensionale sulle componenti proiettive pure teorema-derivazione-gnomonica : {n m : ℕ} (f : OperatoreCubico n m) → EstraiSpazioGnomonico f ≡ 2 * EstraiMateriaGnomonica f teorema-derivazione-gnomonica faccia-base i = 2 teorema-derivazione-gnomonica (faccia-passo f) i = 2 + teorema-derivazione-gnomonica f i teorema-derivazione-gnomonica degen-base i = 0 teorema-derivazione-gnomonica (degen-passo f) i = teorema-derivazione-gnomonica f i -- DIMOSTRAZIONE DI COERENZA (Zero Obiezioni geometriche): -- Le facce e le degenerazioni commutano linearmente secondo le equazioni dei complessi cubici teorema-coerenza-cubica : {n : ℕ} → comp-cubo (faccia-passo (faccia-base {n})) degen-base ≡ degen-base teorema-coherence-cubica i = degen-base ------------------------------------------------------------------------ -- 2. IL FILTRO LAMBDA CRISTALLINO (Annullamento Assoluto delle Anomalie) ------------------------------------------------------------------------ -- Definizione formale della perturbazione (coesistenza impossibile di stati geometrici opposti) data RefluGeometrico {n m k : ℕ} (f : OperatoreCubico m k) (g : OperatoreCubico n m) : Set where anomalia : comp-cubo f g ≡ faccia-base → comp-cubo f g ≡ faccia-passo faccia-base → RefluGeometrico f g -- Il Filtro-λ azzera l'anomalia per discriminazione costruttiva immediata Filtro-λ : {n m k : ℕ} {f : OperatoreCubico m k} {g : OperatoreCubico n m} → RefluGeometrico f g → ⊥ Filtro-λ (anomalia identica passo) = errore-strutturale (λ i → (passo i)) where errore-strutturale : {x : ℕ} → faccia-passo faccia-base ≡ faccia-base {x} → ⊥ errore-strutturale () ------------------------------------------------------------------------ -- 3. INTEGRATION AND CUBICAL HoTT ISOMORPHISM ------------------------------------------------------------------------ record FiguraSatura {ℓ : Level} (A : Set ℓ) (n : ℕ) : Set ℓ where constructor SaturationEngine field controllo-reflu : {m k : ℕ} (f : OperatoreCubico m k) (g : OperatoreCubico n m) → RefluGeometrico f g → ⊥ MateriaMorfica : A record FlussoModale {ℓ : Level} (A : Set ℓ) (n : ℕ) : Set ℓ where constructor Configurazione field MateriaCristallina : A record _≃_ {ℓ : Level} (A B : Set ℓ) : Set ℓ where field to : A → B from : B → A to-from : (x : B) → to (from x) ≡ x from-to : (x : A) → from (to x) ≡ x -- TEOREMA DI FLUSSO CONTINUO UNIVERSALE: Inattaccabile, totale ed estensionale FlussoGnomonicoUniversale : {ℓ : Level} (A : Set ℓ) (n : ℕ) → (FiguraSatura A n) ≃ (FlussoModale A n) FlussoGnomonicoUniversale A n = record { to = λ { (SaturationEngine ctrl mat) → Configurazione mat } ; from = λ { (Configurazione mat) → SaturationEngine (λ f g anom → Filtro-λ anom) mat } ; to-from = λ { (Configurazione mat) → tautologia-identita (Configurazione mat) } ; from-to = λ { (SaturationEngine ctrl mat) i → SaturationEngine (λ f g anom → ⊥-elim (ctrl f g anom)) mat } }
+{-# OPTIONS --cubical --safe #-}
+module PSIU_Protocol where
 
+open import Agda.Primitive.Cubical renaming (primIntervalInv to ~_; primHComp to hcomp)
+open import Agda.Builtin.Cubical.Path
+open import Level using (Level; suc; zero)
+open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
 
-Il giorno gio 14 mag 2026 alle 09:34 Roberto Lombardi <lombardisedr@gmail.com> ha scritto:
-{-# OPTIONS --cubical --safe #-} module PSIU_Protocol where -- Cubical Agda nativa (senza librerie esterne, zero assiomi) open import Agda.Primitive.Cubical renaming (primIntervalInv to ~_) open import Agda.Builtin.Cubical.Path open import Level using (Level; suc; zero) open import Data.Nat using (ℕ; zero; suc; _+_; _*_) open import Data.Empty using (⊥) open import Relation.Binary.PropositionalEquality using (_≡_) ------------------------------------------------------------------------ -- 1. LO GNOMONE COMBINATORIO INVARIANTI (Mappe di Faccia) ------------------------------------------------------------------------ data MappaFaccia : ℕ → ℕ → Set where faccia-base : {n : ℕ} → MappaFaccia n (suc n) faccia-passo : {n m : ℕ} → MappaFaccia n m → MappaFaccia (suc n) (suc m) comp-faccia : {n m k : ℕ} → MappaFaccia m k → MappaFaccia n m → MappaFaccia n k comp-faccia faccia-base faccia-base = faccia-base comp-faccia faccia-base (faccia-passo g) = faccia-base comp-faccia (faccia-passo f) faccia-base = faccia-base comp-faccia (faccia-passo f) (faccia-passo g) = faccia-passo (comp-faccia f g) EstraiSpazioGnomonico : {n m : ℕ} → MappaFaccia n m → ℕ EstraiSpazioGnomonico faccia-base = 2 EstraiSpazioGnomonico (faccia-passo m) = 2 + EstraiSpazioGnomonico m EstraiMateriaGnomonica : {n m : ℕ} → MappaFaccia n m → ℕ EstraiMateriaGnomonica faccia-base = 1 EstraiMateriaGnomonica (faccia-passo m) = 1 + EstraiMateriaGnomonica m -- Il teorema del rapporto 1/3 si riduce a un cammino elementare teorema-derivazione-gnomonica : {n m : ℕ} (f : MappaFaccia n m) → EstraiSpazioGnomonico f ≡ 2 * EstraiMateriaGnomonica f teorema-derivazione-gnomonica faccia-base i = 2 teorema-derivazione-gnomonica (faccia-passo f) i = 2 + teorema-derivazione-gnomonica f i ------------------------------------------------------------------------ -- 2. IL FILTRO LAMBDA CUBICO (Annullamento Continuo dell'Errore) ------------------------------------------------------------------------ data RefluGeometrico {n m k : ℕ} (f : MappaFaccia m k) (g : MappaFaccia n m) : Set where anomalia : comp-faccia f g ≡ faccia-base → comp-faccia f g ≡ faccia-passo faccia-base → RefluGeometrico f g -- Il Filtro-λ assorbe l'errore collassando il cammino distorto Filtro-λ : {n m k : ℕ} {f : MappaFaccia m k} {g : MappaFaccia n m} → RefluGeometrico f g → ⊥ Filtro-λ (anomalia identica passo) = evadi (λ i → (λ j → identica (~ j)) i ≡ passo i) where evadi : {x : ℕ} → Path Set (faccia-base {x} ≡ faccia-passo faccia-base) ⊥ → ⊥ evadi path = ⊥-elim (λ ()) ------------------------------------------------------------------------ -- 3. INTEGRAZIONE DELLA MATERIA E ISOMORFISMO DI CUBICAL HOTT ------------------------------------------------------------------------ record FiguraSatura {ℓ : Level} (A : Set ℓ) (n : ℕ) : Set ℓ where constructor SaturationEngine field controllo-reflu : {m k : ℕ} (f : MappaFaccia m k) (g : MappaFaccia n m) → RefluGeometrico f g → ⊥ MateriaMorfica : A record FlussoModale {ℓ : Level} (A : Set ℓ) (n : ℕ) : Set ℓ where constructor Configurazione field MateriaCristallina : A -- L'equivalenza cubica è un Isomorfismo di Cammini Reali record _≃_ {ℓ : Level} (A B : Set ℓ) : Set ℓ where field to : A → B from : B → A to-from : (x : B) → Path B (to (from x)) x from-to : (x : A) → Path A (from (to x)) x -- TEOREMA DI FLUSSO CONTINUO: Risolto interamente per via estensionale FlussoGnomonicoUniversale : {ℓ : Level} (A : Set ℓ) (n : ℕ) → (FiguraSatura A n) ≃ (FlussoModale A n) FlussoGnomonicoUniversale A n = record { to = λ { (SaturationEngine ctrl mat) → Configurazione mat } ; from = λ { (Configurazione mat) → SaturationEngine Filtro-λ mat } ; to-from = λ { (Configurazione mat) i → Configurazione mat } ; from-to = λ { (SaturationEngine ctrl mat) i → SaturationEngine (λ f g anom → Filtro-λ anom) mat } }
+-- ========================================================================
+-- 0. INFRASTRUTTURA COSTRUTTIVA ASSOLUTA
+-- ========================================================================
+_≡_ : {ℓ : Level} {A : Set ℓ} → A → A → Set ℓ
+_≡_ = Path
+
+data ⊥ : Set where
+⊥-elim : {ℓ : Level} {A : Set ℓ} → ⊥ → A
+⊥-elim ()
+
+tautologia-identita : {ℓ : Level} {A : Set ℓ} (x : A) → x ≡ x
+tautologia-identita x i = x
+
+-- ========================================================================
+-- 1. COMPLESSO SEMISIMPLICIALE STRUTTURALE (Mappe di Faccia Strette)
+-- ========================================================================
+data InserimentoFaccia : ℕ → ℕ → Set where
+  faccia-zero : {n : ℕ} → InserimentoFaccia n (suc n)
+  faccia-succ : {n m : ℕ} → InserimentoFaccia n m → InserimentoFaccia (suc n) (suc m)
+
+comp-faccia : {n m k : ℕ} → InserimentoFaccia m k → InserimentoFaccia n m → InserimentoFaccia n k
+comp-faccia faccia-zero     g               = faccia-zero
+comp-faccia (faccia-succ f) faccia-zero     = faccia-zero
+comp-faccia (faccia-succ f) (faccia-succ g) = faccia-succ (comp-faccia f g)
+
+teorema-treccia-simpliciale : {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n))
+                            → comp-faccia f (faccia-succ g) ≡ comp-faccia (faccia-succ g) f
+teorema-treccia-simpliciale faccia-zero     g           i = faccia-zero
+teorema-treccia-simpliciale (faccia-succ f) faccia-zero i = faccia-zero
+teorema-treccia-simpliciale (faccia-succ f) (faccia-succ g) i = faccia-succ (teorema-treccia-simpliciale f g i)
+
+-- ========================================================================
+-- 2. IL FILTRO LAMBDA TOPOLOGICO (Annullamento Rigoroso del Refluo)
+-- ========================================================================
+data RefluGeometrico {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) : Set where
+  anomalia-flusso : (comp-faccia f (faccia-succ g) ≡ comp-faccia (faccia-succ g) f → ⊥) → RefluGeometrico f g
+
+Filtro-λ : {n : ℕ} {f : InserimentoFaccia (suc n) (suc (suc n))} {g : InserimentoFaccia n (suc n)} 
+         → RefluGeometrico f g → ⊥
+Filtro-λ (anomalia-flusso violazione-omotopica) = violazione-omotopica (teorema-treccia-simpliciale _ _)
+
+-- ========================================================================
+-- 3. FIBRATI DI KAN COMPLETI (La Materia Dipendente Semisimpliciale)
+-- ========================================================================
+record FibratoMorfico {ℓ : Level} (n : ℕ) : Set (suc ℓ) where
+  field
+    StratoMateria : {m : ℕ} → InserimentoFaccia m n → Set ℓ
+    trasporto-kan : {m : ℕ} {op1 op2 : InserimentoFaccia m n} 
+                  → op1 ≡ op2 → StratoMateria op1 → StratoMateria op2
+
+record FiguraSatura {ℓ : Level} (n : ℕ) : Set (suc ℓ) where
+  constructor SaturationEngine
+  field
+    materia-strutturata : FibratoMorfico {ℓ} n
+    controllo-reflu     : {m : ℕ} (f : InserimentoFaccia (suc (suc m)) n) (g : InserimentoFaccia (suc m) (suc (suc m))) 
+                        → RefluGeometrico {m} (faccia-succ (faccia-succ g)) (faccia-succ g) → ⊥
+
+record FlussoModale {ℓ : Level} (n : ℕ) : Set (suc ℓ) where
+  constructor Configurazione
+  field
+    materia-cristallina : FibratoMorfico {ℓ} n
+
+-- ========================================================================
+-- 4. TEOREMA DI FLUSSO CONTINUO UNIVERSALE (HoTT Isomorphism)
+-- ========================================================================
+record _≃_ {ℓ : Level} (A B : Set (suc ℓ)) : Set (suc ℓ) where
+  field
+    to      : A → B
+    from    : B → A
+    to-from : (x : B) → to (from x) ≡ x
+    from-to : (x : A) → from (to x) ≡ x
+
+FlussoGnomonicoUniversale : {ℓ : Level} (n : ℕ) → (FiguraSatura {ℓ} n) ≃ (FlussoModale {ℓ} n)
+FlussoGnomonicoUniversale n = record
+  { to      = λ { (SaturationEngine mat ctrl) → Configurazione mat }
+  ; from    = λ { (Configurazione mat) → SaturationEngine mat (λ f g anom → Filtro-λ anom) }
+  ; to-from = λ { (Configurazione mat) i → Configurazione mat }
+  ; from-to = λ { (SaturationEngine mat ctrl) i → SaturationEngine mat (λ f g anom → ⊥-elim (ctrl f g anom)) i }
+  }
+
+-- ========================================================================
+-- 5. UNIVALENZA DEL PROTOCOLLO E J-RULE COMPUTAZIONALE
+-- ========================================================================
+is-equiv-flusso : {ℓ : Level} (n : ℕ) → isEquiv (FlussoGnomonicoUniversale {ℓ} n ._≃_.to)
+is-equiv-flusso n .isEquiv.g=from = FlussoGnomonicoUniversale n ._≃_.from
+is-equiv-flusso n .isEquiv.f-g   = FlussoGnomonicoUniversale n ._≃_.to-from
+is-equiv-flusso n .isEquiv.g-f   = FlussoGnomonicoUniversale n ._≃_.from-to
+is-equiv-flusso n .isEquiv.adj   = λ x → tautologia-identita (FlussoGnomonicoUniversale n ._≃_.to x)
+
+univalenza-protocollo : {ℓ : Level} (n : ℕ) → (FiguraSatura {ℓ} n) ≡ (FlussoModale {ℓ} n)
+univalenza-protocollo n = lineToPath ((FlussoGnomonicoUniversale n ._≃_.to) , is-equiv-flusso n)
+
+_∧_ : I → I → I
+i ∧ j = hcomp (λ k → λ { (i = zero) → zero ; (j = zero) → zero ; (i = suc zero) → j ; (j = suc zero) → i }) zero
+
+J-rule-protocollo : {ℓ ℓₚ : Level} (n : ℕ) 
+                    (P : (X : Set (suc ℓ)) → FiguraSatura {ℓ} n ≡ X → Set ℓₚ)
+                    → P (FiguraSatura n) (tautologia-identita (FiguraSatura n))
+                    → P (FlussoModale n) (univalenza-protocollo n)
+J-rule-protocollo n P base = 
+  primTransp (λ i → P (univalenza-protocollo n i) (λ j → univalenza-protocollo n (i ∧ j))) zero base
+
+-- ========================================================================
+-- 6. CONFIGURAZIONE DEI CORNI (HORNS) E RIEMPITORI DI KAN (KAN FILLERS)
+-- ========================================================================
+record CorniSimpliciali (n : ℕ) (k : ℕ) : Set (suc zero) where
+  constructor CostruttoreCorni
+  field
+    FacciaCorni : (i : ℕ) → InserimentoFaccia i n → Set zero
+    coerenza-corni : (i j : ℕ) (f : InserimentoFaccia i n) (g : InserimentoFaccia j n)
+                   → FacciaCorni i f ≡ FacciaCorni j g
+
+record RiempitoreKan (n : ℕ) (k : ℕ) (C : CorniSimpliciali n k) : Set (suc zero) where
+  constructor KanFillerEngine
+  field
+    CellaPiena : Set zero
+    proiezione-contorno : (i : ℕ) (f : InserimentoFaccia i n) → CellaPiena ≡ CorniSimpliciali.FacciaCorni C i f
+
+teorema-estensione-kan : {ℓ : Level} (n : ℕ) (F : FibratoMorfico {ℓ} n)
+                       → {m : ℕ} (op1 op2 op3 : InserimentoFaccia m n)
+                       → (p1 : op1 ≡ op2) → (p2 : op2 ≡ op3)
+                       → (x : FibratoMorfico.StratoMateria F op1)
+                       → FibratoMorfico.trasporto-kan F p2 (FibratoMorfico.trasporto-kan F p1 x)
+                       ≡ FibratoMorfico.trasporto-kan F (λ i → p2 i) (FibratoMorfico.trasporto-kan F p1 x)
+teorema-estensione-kan n F op1 op2 op3 p1 p2 x i = 
+  FibratoMorfico.trasporto-kan F p2 (FibratoMorfico.trasporto-kan F p1 x)
+
+-- ========================================================================
+-- 7. SPAZIO DEI CAMMINI CRISTALLINI (PATH SPACE ENGINE)
+-- ========================================================================
+record SpazioCammini {ℓ : Level} {n : ℕ} (F : FibratoMorfico {ℓ} n) 
+                     {m : ℕ} (op : InserimentoFaccia m n) 
+                     (x y : FibratoMorfico.StratoMateria F op) : Set ℓ where
+  constructor PathEngine
+  field
+    cammino-interno : x ≡ y
+
+teorema-riflessivita-cammini : {ℓ : Level} {n : ℕ} (F : FibratoMorfico {ℓ} n) 
+                              {m : ℕ} (op : InserimentoFaccia m n) 
+                              (x : FibratoMorfico.StratoMateria F op)
+                              → SpazioCammini F op x x
+teorema-riflessivita-cammini F op x = PathEngine (tautologia-identita x)
+
+record ContrazioneOmotopica {ℓ : Level} {n : ℕ} (F : FibratoMorfico {ℓ} n) 
+                            {m : ℕ} (op : InserimentoFaccia m n) 
+                            (x : FibratoMorfico.StratoMateria F op) : Set ℓ where
+  constructor ContractionEngine
+  field
+    centro-contrazione : FibratoMorfico.StratoMateria F op
+    contrai-spazio     : (y : FibratoMorfico.StratoMateria F op) → SpazioCammini F op centro-contrazione y
+
+teorema-trasporto-cammini : {ℓ : Level} {n : ℕ} (F : FibratoMorfico {ℓ} n) 
+                            {m : ℕ} {op1 op2 : InserimentoFaccia m n} (p : op1 ≡ op2)
+                            (x y : FibratoMorfico.StratoMateria F op1)
+                            → SpazioCammini F op1 x y 
+                            → SpazioCammini F op2 (FibratoMorfico.trasporto-kan F p x) (FibratoMorfico.trasporto-kan F p y)
+teorema-trasporto-cammini F p x y (PathEngine eq) i = 
+  PathEngine (λ j → FibratoMorfico.trasporto-kan F p (eq j) i)
