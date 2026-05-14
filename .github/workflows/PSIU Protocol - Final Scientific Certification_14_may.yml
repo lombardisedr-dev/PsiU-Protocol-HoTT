@@ -2,6 +2,9 @@ name: "PSIU Protocol - Final Scientific Certification"
 
 on: [push]
 
+permissions:
+  contents: read
+
 jobs:
   ultimate-audit:
     runs-on: ubuntu-latest
