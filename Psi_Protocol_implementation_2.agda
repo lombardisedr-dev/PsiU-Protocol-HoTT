@@ -185,4 +185,15 @@ PSIU-Inductive-Hierarchy (suc n) =
 Violazione-Simmetria : SST-Level (suc zero)
 Violazione-Simmetria = primTransp (Symmetry-1/2) Base-Coherence 
 -- Agda dovrebbe dire: "Symmetry-1/2 non è compatibile con Filtro-λ"
+-- ---------------------------------------------------------
+-- TEST DI CANONICITÀ: CALCOLO EFFETTIVO (NORMALIZZAZIONE)
+-- ---------------------------------------------------------
+
+-- Questo test obbliga Agda a calcolare il valore finale della 
+-- coerenza X3. Se non è un "imbroglio", deve ridursi a una forma normale.
+
+_ : PSIU-Inductive-Hierarchy (suc (suc (suc zero))) ≡ Expected-X3-Stability
+_ = refl 
+-- 'refl' (riflessività) passerà SOLO SE i due lati sono computazionalmente identici.
+-- Se Agda calcola e i valori coincidono, la canonicità è provata.
 
