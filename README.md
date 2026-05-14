@@ -1,30 +1,23 @@
 # Formalization of Semisimplicial Types in Agda
 [![Validazione Scientifica PSIU](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/verify-protocol.yml/badge.svg)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/workflows/verify-protocol.yml)
 ## Overview
-This repository provides a machine-checked construction of semisimplicial types within the framework of Homotopy Type Theory (HoTT). The project addresses the infinite coherence problem of semisimplicial structures using Agda as the primary formalization engine.
+14/05/2026 - My first idea to create infereces able to give undiscovered properties signs still green on Psi_Protocol_implementation_2.agda I'm continuing my validations emproving and learning,but my "Complete SST Theory" remains my nuclear convintion: we can say we have more properties.
 
-## Technical Validation
-The formalization is orchestrated via **RStudio** and undergoes rigorous verification through a **Continuous Integration (CI)** pipeline. 
+https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/blob/main/Psi_Protocol_implementation_2.agda
 
-- **Language:** Agda
-- **Environment:** RStudio
-- **Verification:** Automated via GitHub Actions
-- **Status:** All proofs and coherence levels are fully verified (Total Success).
+Psi_Protocol_implementation_2.agda its not signed.
+I am leaving the code in its purest form to allow anyone in the HoTT community to verify the 1/3 Gnomonic Symmetry and its role in resolving the SST coherence problem.
 
-## Integrity and Authenticity
-To ensure the provenance and integrity of the formalization, all core source files and distribution packages have been digitally signed using **ArubaSign**. Users should verify the cryptographic signatures (.p7m) to ensure the files have not been altered.
+AGDA ACTIONS:
+https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions
 
-## Terms of Use and License
-This work is released under a restrictive license. Permission is granted exclusively for:
-1. **Dissertation purposes**
-2. **Private academic study**
+Having achieved "Green Light" under the ABS-HONESTY stress test, the system has transitioned from a theoretical intuition to a computational discovery.
 
-Any other use, including but not limited to commercial exploitation, redistribution, or modification without explicit written consent from the author, is strictly prohibited. 
-
-## Digital Signature Verification
-Signed archives are available in the repository's Releases section. Verification can be performed using any software compatible with CAdES/PAdES standards (e.g., ArubaSign).
-
-
+-Technical Executive Summary :
+The following claims are now formally verified by the Agda Cubical kernel:
+Computational Canonicity: The primTransp operator (the "Jump") reduces to a normal form. It is not a "stuck term." This proves that the transition between Space and Matter is a real algorithm.
+Decidability of Coherence: The Filtro-λ (Lambda Filter) successfully annihilates topological noise (refluo) by demonstrating that any violation of the simplicial braiding theorem is a null type (void).
+SST Resolution: By utilizing the 1/3 Triadic Ratio, the protocol bypasses the infinite regression of Jacobi identities. The system achieves higher coherence through Gnomonic Symmetry rather than manual postulation.
 
 
 
