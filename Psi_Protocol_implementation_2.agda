@@ -175,4 +175,14 @@ PSIU-Inductive-Hierarchy : (n : ℕ) → SST-Level n
 PSIU-Inductive-Hierarchy zero    = Base-Coherence -- Il tuo caso base X0/X1
 PSIU-Inductive-Hierarchy (suc n) = 
   primTransp (Symmetry-1/3) (PSIU-Inductive-Hierarchy n)
+-- ---------------------------------------------------------
+-- TEST DI SELETTIVITÀ: TENTATIVO DI VIOLAZIONE (STRESS-TEST)
+-- ---------------------------------------------------------
+
+-- Proviamo a forzare una coerenza usando un rapporto SBAGLIATO (es. 1/2 invece di 1/3)
+-- Se il Filtro-λ è onesto, Agda DEVE dare errore qui sotto.
+
+Violazione-Simmetria : SST-Level (suc zero)
+Violazione-Simmetria = primTransp (Symmetry-1/2) Base-Coherence 
+-- Agda dovrebbe dire: "Symmetry-1/2 non è compatibile con Filtro-λ"
 
