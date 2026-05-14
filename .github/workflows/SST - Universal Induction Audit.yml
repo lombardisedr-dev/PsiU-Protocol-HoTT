@@ -1,0 +1,38 @@
+name: "SST - Universal Induction Audit"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  induction-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Agda
+        uses: agda/setup-agda@v1
+        with:
+          agda-version: '2.6.4'
+          agda-stdlib-version: '2.1.1'
+
+      - name: "CRITICAL AUDIT: Universal Induction & Termination"
+        run: |
+          # --safe: vieta postulati (niente imbrogli)
+          # --without-K: obbligatorio per HoTT puro
+          # --termination-depth: verifica che la simmetria 1/3 non crei loop infiniti
+          agda --safe --without-K --termination-depth=5 Psi_Protocol_implementation_2.agda
+
+      - name: "Final Verdict"
+        if: always()
+        run: |
+          echo "### Risultato Validazione Induttiva" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ job.status }}" == "success" ]]; then
+            echo "✅ **INDUZIONE VALIDATA:** La Simmetria Gnomonica 1/3 è una legge universale." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **FALLIMENTO LOGICO:** La teoria non scala all'infinito o presenta incoerenze." >> $GITHUB_STEP_SUMMARY
+          fi
