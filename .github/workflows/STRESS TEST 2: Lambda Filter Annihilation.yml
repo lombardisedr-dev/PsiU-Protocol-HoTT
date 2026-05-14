@@ -1,0 +1,5 @@
+name: "STRESS TEST 2: Lambda Filter Annihilation"
+        run: |
+          # Questo test DEVE fallire se il Filtro-λ funziona.
+          # Proviamo a passare un refluo topologico non nullo.
+          agda --safe --without-K StressTest_Filtro.agda && exit 1 || echo "Il Filtro-λ ha bloccato il rumore correttamente."
