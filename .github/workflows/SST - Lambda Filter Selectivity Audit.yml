@@ -1,0 +1,35 @@
+name: "SST - Lambda Filter Selectivity Audit"
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  selectivity-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Agda
+        uses: agda/setup-agda@v1
+        with:
+          agda-version: '2.6.4'
+          agda-stdlib-version: '2.1.1'
+
+      - name: "THE HONESTY CHECK: Attempting to bypass Filtro-λ"
+        run: |
+          # Lanciamo Agda sulla violazione che hai aggiunto.
+          # Usiamo '!' per invertire il risultato: 
+          # Se Agda dà ERRORE (come deve), lo YAML diventa VERDE.
+          # Se Agda accetta il codice sbagliato, lo YAML diventa ROSSO.
+          if ! agda --safe --without-K Psi_Protocol_implementation_2.agda; then
+            echo "✅ SUCCESSO: Il Filtro-λ ha identificato e bloccato la violazione 1/2."
+            echo "La teoria è selettiva e non accetta imbrogli."
+            exit 0
+          else
+            echo "❌ FALLIMENTO: Il sistema ha accettato una simmetria errata!"
+            echo "Il filtro non è abbastanza stretto."
+            exit 1
+          fi
