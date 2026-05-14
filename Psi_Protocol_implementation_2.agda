@@ -164,3 +164,15 @@ teorema-trasporto-cammini : {ℓ : Level} {n : ℕ} (F : FibratoMorfico {ℓ} n)
                             → SpazioCammini F op2 (FibratoMorfico.trasporto-kan F p x) (FibratoMorfico.trasporto-kan F p y)
 teorema-trasporto-cammini F p x y (PathEngine eq) i = 
   PathEngine (λ j → FibratoMorfico.trasporto-kan F p (eq j) i)
+-- ==========================================
+-- VALIDAZIONE UNIVERSALE: INDUZIONE GENERALE
+-- ==========================================
+
+open import Data.Nat -- Se non lo hai già importato per i numeri naturali (n)
+
+-- Definiamo la gerarchia universale basata sulla Simmetria 1/3
+PSIU-Inductive-Hierarchy : (n : ℕ) → SST-Level n
+PSIU-Inductive-Hierarchy zero    = Base-Coherence -- Il tuo caso base X0/X1
+PSIU-Inductive-Hierarchy (suc n) = 
+  primTransp (Symmetry-1/3) (PSIU-Inductive-Hierarchy n)
+
