@@ -1,0 +1,7 @@
+      - name: "STRESS TEST 3: SST Higher Coherence Scaling"
+        run: |
+          # Verifichiamo che la coerenza X3 si estenda ricorsivamente
+          # Se la regressione di Jacobi è interrotta dalla simmetria 1/3, 
+          # il controllo di terminazione di Agda deve passare.
+          agda --safe --without-K --termination-depth=3 Psi_Protocol_implementation_2.agda
+          echo "La gerarchia SST è stabile oltre il livello tetraedrico."
