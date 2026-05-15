@@ -1,4 +1,4 @@
-name: "validazione-scientifica"
+name: " Validazione Scientifica Integrale e Definitiva"
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       - name: " Step 4: Test di Onestà Logica (Tentativo di Violazione)"
         run: |
           echo "module Breach where" > Breach.agda
-          echo "open import PSIU_Protocol" >> Breach.agda
+          echo "open import Psi_Protocol_implementation_2" >> Breach.agda
           echo "open import Data.Empty" >> Breach.agda
           echo "breach : ⊥" >> Breach.agda
           echo "breach = Filtro-λ (anomalia-flusso (λ x → x))" >> Breach.agda
@@ -44,10 +44,9 @@ jobs:
           fi
 
       - name: " Step 5: Test di Canonicità Forte (Verifica Computazionale)"
-        # Allineato per verificare l'uguaglianza omotopica con la forma normale (tautologia-identita 42)
         run: |
           echo "module Canon where" > Canon.agda
-          echo "open import PSIU_Protocol" >> Canon.agda
+          echo "open import Psi_Protocol_implementation_2" >> Canon.agda
           echo "test-canon : Calcolo-Flusso-Reale ≡ tautologia-identita 42" >> Canon.agda
           echo "test-canon = refl" >> Canon.agda
           
@@ -62,7 +61,7 @@ jobs:
       - name: " Step 6: Test di Estensione di Kan (Risoluzione SST)"
         run: |
           echo "module KanTest where" > KanTest.agda
-          echo "open import PSIU_Protocol" >> KanTest.agda
+          echo "open import Psi_Protocol_implementation_2" >> KanTest.agda
           echo "open import Data.Nat" >> KanTest.agda
           echo "universality : (n : ℕ) → SST-Level n" >> KanTest.agda
           echo "universality n = PSIU-Inductive-Hierarchy n" >> KanTest.agda
