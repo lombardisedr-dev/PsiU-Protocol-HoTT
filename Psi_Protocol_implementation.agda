@@ -18,8 +18,6 @@ Type ℓ = Set ℓ
 -- 0. SPAZIO DEI CAMMINI E STRUTTURE COSTRUTTIVE BASE
 -- ========================================================================
 
--- NOTA: La ridefinizione di _≡_ è stata eliminata poiché già importata nativamente.
-
 data ⊥ : Type lzero where
   -- Il tipo vuoto non possiede costruttori interni
 
@@ -78,10 +76,10 @@ record FiguraSatura {ℓ : Level} (n : ℕ) : Type (lsuc ℓ) where
     controllo-reflu : {m : ℕ} (f : InserimentoFaccia (suc (suc m)) n) (g : InserimentoFaccia (suc m) (suc (suc m)))
       → RefluGeometrico {m} (faccia-succ (faccia-succ g)) (faccia-succ g) → ⊥
 
-record FlussoModale {ℓ : Level} (n : ℕ) : Type (lsuc ℓ) where
+record FlussoModale {ℓ : Level} (n : ℕ) : Type (lsuc lzero) where
   constructor Configurazione
   field
-    materia-cristallina : FibratoMorfico {ℓ} n
+    materia-cristallina : FibratoMorfico {lzero} n
 
 -- ========================================================================
 -- 4. EQUIVALENZA OMUTOPICA DEL PROTOCOLLO (HoTT Equivalence)
@@ -92,9 +90,9 @@ record _≃_ {ℓ : Level} (A B : Type (lsuc ℓ)) : Type (lsuc ℓ) where
     to : A → B
     from : B → A
     to-from : (x : B) → to (from x) ≡ x
-    from-to : (x : A) → from (to x) i ≡ x i -- Adattato per estensionalità Path nativa
+    from-to : (x : A) → from (to x) ≡ x
 
-FlussoGnomonicoUniversale : {ℓ : Level} (n : ℕ) → (FiguraSatura {ℓ} n) ≃ (FlussoModale {ℓ} n)
+FlussoGnomonicoUniversale : {ℓ : Level} (n : ℕ) → (FiguraSatura {lzero} n) ≃ (FlussoModale {lzero} n)
 FlussoGnomonicoUniversale n = record
   { to = λ { (SaturationEngine mat ctrl) → Configurazione mat }
   ; from = λ { (Configurazione mat) → SaturationEngine mat (λ f g anom → Filtro-λ anom) }
@@ -103,7 +101,7 @@ FlussoGnomonicoUniversale n = record
   }
 
 -- ========================================================================
--- 5. DEFINIZIONE SCIENTIFICA DI LIVELLO SST (Torre di Coherence Induttiva)
+-- 5. DEFINIZIONE SCIENTIFICA DI LIVELLO SST (Torre di Coerenza Induttiva)
 -- ========================================================================
 
 record SST-Level (n : ℕ) : Type (lsuc lzero) where
