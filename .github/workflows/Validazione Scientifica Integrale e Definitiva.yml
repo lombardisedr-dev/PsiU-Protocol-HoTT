@@ -21,8 +21,7 @@ jobs:
         uses: wenkokke/setup-agda@v2
         with:
           agda-version: '2.6.4'
-          agda-stdlib-version: '2.0'
-          agda-libraries: 'standard-library'
+          agda-stdlib-version: '2.0' # Gestisce l'installazione nativa senza bisogno di agda-libraries
 
       - name: " Step 3: Audit di Purezza e Sicurezza Matematica"
         run: |
@@ -82,3 +81,4 @@ jobs:
           echo "================================================================"
           echo "IL PROTOCOLLO PSIU HA SUPERATO TUTTI I RIGOROSI CONTROLLI HOTT"
           echo "================================================================"
+
