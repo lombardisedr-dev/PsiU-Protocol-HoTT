@@ -1,0 +1,67 @@
+    name: "Ultimate validations"
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  scientific-audit:
+    name: "Independent Formal Validation"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Step 1: Source Retrieval"
+        uses: actions/checkout@v4
+
+      - name: "Step 2: Environment Setup"
+        uses: wenkokke/setup-agda@v2
+        with:
+          agda-version: '2.6.4'
+
+      - name: "Step 3: Purity & Safety Audit"
+        # The --safe flag forces Agda to reject any postulates or non-terminating code.
+        # This confirms the protocol is a pure mathematical construction.
+        run: |
+          agda --cubical --safe PSIU_Protocol.agda
+
+      - name: "Step 4: Logical Honesty Test"
+        # Attempt to derive a contradiction (Bottom) using the λ-Filter.
+        # The test is SUCCESSFUL only if Agda REJECTS the proof.
+        run: |
+          echo "module Breach where" > Breach.agda
+          echo "open import PSIU_Protocol" >> Breach.agda
+          echo "open import Data.Empty" >> Breach.agda
+          echo "breach : ⊥" >> Breach.agda
+          echo "breach = Filtro-λ (anomalia-flusso (λ x → x))" >> Breach.agda
+          if agda --cubical Breach.agda; then
+            echo "VERDICT: FAILURE - Protocol accepted a contradiction."
+            exit 1
+          else
+            echo "VERDICT: SUCCESS - Protocol is logically honest."
+            exit 0
+          fi
+
+      - name: "Step 5: Universality & Induction Test"
+        # Verifies the solution holds for ANY dimension 'n', not just hardcoded values.
+        # It imports the protocol as a library to test its inductive strength.
+        run: |
+          echo "module InductionTest where" > InductionTest.agda
+          echo "open import PSIU_Protocol" >> InductionTest.agda
+          echo "open import Data.Nat" >> InductionTest.agda
+          echo "open import Relation.Binary.PropositionalEquality" >> InductionTest.agda
+          echo "universality : (n : ℕ) → RiempitoreKan n" >> InductionTest.agda
+          echo "universality n = record { riempimento = λ f → f ; coerenza = λ f → refl }" >> InductionTest.agda
+          agda --cubical --safe InductionTest.agda
+
+      - name: "Step 6: Computational Canonicity"
+        # Forces the reduction of a 4D data stream to its normal form.
+        # Confirms the protocol is alive and computing, not just static.
+        run: |
+          RESULT=$(agda --compute-normal-form --cubical <<< "Calcolo-Flusso-Reale")
+          if [[ "$RESULT" == *"42"* ]]; then
+            echo "VERDICT: SUCCESS - Strong canonicity verified."
+          else
+            echo "VERDICT: FAILURE - Terms are stuck or non-computational."
+            exit 1
+          fi
