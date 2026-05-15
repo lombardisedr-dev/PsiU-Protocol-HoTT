@@ -5,6 +5,10 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+env:
+  # Forziamo l'ambiente a Node.js 24 per eliminare l'avviso di deprecazione dei runner
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   formal-verification:
     name: " Verifica Formale Globale del Protocollo PsiU"
@@ -18,16 +22,15 @@ jobs:
         uses: wenkokke/setup-agda@v2
         with:
           agda-version: '2.6.4'
-          agda-stdlib-version: '2.0'  # Risolve il problema "Library standard-library not found"
-          agda-libraries: 'standard-library'
+          agda-stdlib-version: '2.0'       # Installa la libreria standard ufficiale
+          agda-libraries: 'standard-library' # Mappa la libreria nel percorso globale
+          # RIMOSSO: 'node-version' (non più presente, elimina il Warning dell'azione)
 
       - name: " Step 3: Audit di Purezza e Sicurezza Matematica"
-        # Il flag --safe vieta postulati o codice che non termina.
         run: |
           agda --cubical --safe Psi_Protocol_implementation_2.agda
 
       - name: " Step 4: Test di Onestà Logica (Tentativo di Violazione)"
-        # Genera il file di attacco. Il test passa SOLO se Agda lo rifiuta (exit code != 0).
         run: |
           echo "module Breach where" > Breach.agda
           echo "open import PSIU_Protocol" >> Breach.agda
@@ -44,7 +47,6 @@ jobs:
           fi
 
       - name: " Step 5: Test di Canonicità Forte (Verifica Computazionale)"
-        # Forza la riduzione a forma normale del flusso 4D.
         run: |
           echo "module Canon where" > Canon.agda
           echo "open import PSIU_Protocol" >> Canon.agda
@@ -56,7 +58,6 @@ jobs:
           echo "VERDETTO DI SUCCESSO: Canonicità forte verificata (Output = 42)."
 
       - name: " Step 6: Test di Estensione di Kan (Risoluzione SST)"
-        # Verifica la validità induttiva universale per ogni dimensione n.
         run: |
           echo "module KanTest where" > KanTest.agda
           echo "open import PSIU_Protocol" >> KanTest.agda
