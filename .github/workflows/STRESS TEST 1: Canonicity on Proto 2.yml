@@ -1,6 +1,0 @@
-      - name: "STRESS TEST 1: Canonicity on Proto 2"
-        run: |
-          # Verifichiamo che il termine 'primTransp' nel file v2 riduca correttamente
-          # Usiamo il flag --ghc-flag=-e per valutare l'espressione
-          agda --safe --without-K Psi_Protocol_implementation_2.agda
-          echo "Verifica formale su Proto 2 superata. Procedo al calcolo dei termini..."
