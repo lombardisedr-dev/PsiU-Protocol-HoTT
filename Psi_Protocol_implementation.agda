@@ -6,11 +6,12 @@ module Psi_Protocol_implementation where
 open import Agda.Primitive.Cubical renaming (primIntervalInv to ~_; primHComp to hcomp; primTransp to transp)
 open import Agda.Builtin.Cubical.Path
 open import Agda.Builtin.Cubical.Sub
-open import Level using (Level; suc; zero)
+-- RISOLTO IL CONFLITTO: Rinominiamo esplicitamente i costruttori di livello
+open import Level using (Level) renaming (suc to lsuc; zero to lzero)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
 
--- Nella HoTT i tipi puri si dichiarano come 'Type' e non come 'Set'
-Type : (ℓ : Level) → Set (suc ℓ)
+-- Applichiamo il successore di livello corretto 'lsuc'
+Type : (ℓ : Level) → Set (lsuc ℓ)
 Type ℓ = Set ℓ
 
 -- ========================================================================
@@ -20,10 +21,10 @@ Type ℓ = Set ℓ
 _≡_ : {ℓ : Level} {A : Type ℓ} → A → A → Type ℓ
 _≡_ = Path
 
-data ⊥ : Type zero where
+data ⊥ : Type lzero where
   -- Il tipo vuoto non possiede costruttori interni
 
--- La funzione di eliminazione (principio di esplosione) a colonna zero
+-- La funzione di eliminazione (principio di esplosione)
 ⊥-elim : {ℓ : Level} {A : Type ℓ} → ⊥ → A
 ⊥-elim ()
 
@@ -34,7 +35,7 @@ tautologia-identita x i = x
 -- 1. CATEGORIA SIMPLICIALE Δ_inj (Mappe di Faccia Strette)
 -- ========================================================================
 
-data InserimentoFaccia : ℕ → ℕ → Type zero where
+data InserimentoFaccia : ℕ → ℕ → Type lzero where
   faccia-zero : {n : ℕ} → InserimentoFaccia n (suc n)
   faccia-succ : {n m : ℕ} → InserimentoFaccia n m → InserimentoFaccia (suc n) (suc m)
 
@@ -54,7 +55,7 @@ teorema-treccia-simpliciale (faccia-succ f) (faccia-succ g) i = faccia-succ (teo
 -- 2. FILTRO LAMBDA (Rilevatore Topologico di Inconsistenze)
 -- ========================================================================
 
-data RefluGeometrico {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) : Type zero where
+data RefluGeometrico {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) : Type lzero where
   anomalia-flusso : (comp-faccia f (faccia-succ g) ≡ comp-faccia (faccia-succ g) f → ⊥) → RefluGeometrico f g
 
 Filtro-λ : {n : ℕ} {f : InserimentoFaccia (suc n) (suc (suc n))} {g : InserimentoFaccia n (suc n)}
@@ -65,20 +66,20 @@ Filtro-λ (anomalia-flusso violazione-omotopica) = violazione-omotopica (teorema
 -- 3. TORRE DI KAN SEMISIMPLICIALE STRUTTURATA (Modello Geometrico Reale)
 -- ========================================================================
 
-record FibratoMorfico {ℓ : Level} (n : ℕ) : Type (suc ℓ) where
+record FibratoMorfico {ℓ : Level} (n : ℕ) : Type (lsuc ℓ) where
   field
     StratoMateria : {m : ℕ} → InserimentoFaccia m n → Type ℓ
     trasporto-kan : {m : ℕ} {op1 op2 : InserimentoFaccia m n}
       → op1 ≡ op2 → StratoMateria op1 → StratoMateria op2
 
-record FiguraSatura {ℓ : Level} (n : ℕ) : Type (suc ℓ) where
+record FiguraSatura {ℓ : Level} (n : ℕ) : Type (lsuc ℓ) where
   constructor SaturationEngine
   field
     materia-strutturata : FibratoMorfico {ℓ} n
     controllo-reflu : {m : ℕ} (f : InserimentoFaccia (suc (suc m)) n) (g : InserimentoFaccia (suc m) (suc (suc m)))
       → RefluGeometrico {m} (faccia-succ (faccia-succ g)) (faccia-succ g) → ⊥
 
-record FlussoModale {ℓ : Level} (n : ℕ) : Type (suc ℓ) where
+record FlussoModale {ℓ : Level} (n : ℕ) : Type (lsuc ℓ) where
   constructor Configurazione
   field
     materia-cristallina : FibratoMorfico {ℓ} n
@@ -87,7 +88,7 @@ record FlussoModale {ℓ : Level} (n : ℕ) : Type (suc ℓ) where
 -- 4. EQUIVALENZA OMUTOPICA DEL PROTOCOLLO (HoTT Equivalence)
 -- ========================================================================
 
-record _≃_ {ℓ : Level} (A B : Type (suc ℓ)) : Type (suc ℓ) where
+record _≃_ {ℓ : Level} (A B : Type (lsuc ℓ)) : Type (lsuc ℓ) where
   field
     to : A → B
     from : B → A
@@ -106,10 +107,10 @@ FlussoGnomonicoUniversale n = record
 -- 5. DEFINIZIONE SCIENTIFICA DI LIVELLO SST (Torre di Coerenza Induttiva)
 -- ========================================================================
 
-record SST-Level (n : ℕ) : Type (suc zero) where
+record SST-Level (n : ℕ) : Type (lsuc lzero) where
   constructor CoherenceLevel
   field
-    coerenza-faccia : {m : ℕ} (f : InserimentoFaccia m n) → FibratoMorfico {zero} m
+    coerenza-faccia : {m : ℕ} (f : InserimentoFaccia m n) → FibratoMorfico {lzero} m
     stabilità-flusso : {m : ℕ} (f : InserimentoFaccia (suc m) (suc (suc m))) (g : InserimentoFaccia m (suc m)) 
                      → RefluGeometrico f g → ⊥
 
@@ -128,7 +129,6 @@ Symmetry-1/3 {n} ipot-induttiva = record
   ; stabilità-flusso = λ f g anom → Filtro-λ anom
   }
 
--- Risolto l'errore esplicitando l'argomento implicito {n}
 PSIU-Inductive-Hierarchy : (n : ℕ) → SST-Level n
 PSIU-Inductive-Hierarchy zero = Base-Coherence
 PSIU-Inductive-Hierarchy (suc n) = Symmetry-1/3 {n} (PSIU-Inductive-Hierarchy n)
@@ -137,7 +137,7 @@ PSIU-Inductive-Hierarchy (suc n) = Symmetry-1/3 {n} (PSIU-Inductive-Hierarchy n)
 -- 6. CALCOLO GEOMETRICO SULL'INTERVALLO CUBICO I
 -- ========================================================================
 
-record RiempitoreKan (ℓ : Level) (A : Type ℓ) : Type (suc ℓ) where
+record RiempitoreKan (ℓ : Level) (A : Type ℓ) : Type (lsuc ℓ) where
   constructor KanFillerEngine
   field
     riempimento-cubico : (i : I) (φ : I) (u : ∀ (j : I) → Partial φ A) (base : A [ φ ↦ u zero ]) → A
