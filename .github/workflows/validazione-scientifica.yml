@@ -1,4 +1,4 @@
-name: " Validazione Scientifica Integrale e Definitiva"
+name: "validazione-scientifica"
 
 on:
   push:
