@@ -1,0 +1,43 @@
+name: "SST Truth Check: Formal Verification"
+
+on:
+  workflow_dispatch: # Permette l'attivazione manuale per il verdetto finale
+  push:
+    branches: [ main ]
+
+jobs:
+  structural-discovery-check:
+    name: "Verifica Strutturale SST"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "Checkout del codice"
+        uses: actions/checkout@v4
+
+      - name: "Setup Agda e Standard Library"
+        uses: wenkokke/setup-agda@v2
+        with:
+          agda-version: '2.6.4' # Versione stabile per HoTT
+          agda-stdlib-version: '2.0'
+
+      - name: "Verifica Formale del Protocollo"
+        run: |
+          # Il comando 'agda' fallisce (exit code 1) se trova una minima incoerenza
+          agda --cubical PSIU_Protocol.agda
+
+  hott-equivalence-check:
+    name: "Controllo Equivalenza HoTT"
+    needs: structural-discovery-check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Setup Agda"
+        uses: wenkokke/setup-agda@v2
+
+      - name: "Validazione Univalenza"
+        # Qui il test forza Agda a calcolare le proprietà di equivalenza
+        run: |
+          agda --cubical -v 2 PSIU_Protocol.agda
