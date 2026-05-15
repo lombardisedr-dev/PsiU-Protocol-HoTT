@@ -1,8 +1,0 @@
-      - name: "FINAL CERTIFICATION: Complete SST Theory"
-        run: |
-          # Generiamo l'interfaccia HTML del codice per mostrare ogni singolo tipo verificato
-          agda --safe --without-K --html Psi_Protocol_implementation_2.agda
-          
-          # Creiamo un hash unico del successo (il sigillo di garanzia)
-          sha256sum Psi_Protocol_implementation_2.agda > verification_seal.txt
-          echo "Teoria verificata con successo al 100%. Sigillo creato."
