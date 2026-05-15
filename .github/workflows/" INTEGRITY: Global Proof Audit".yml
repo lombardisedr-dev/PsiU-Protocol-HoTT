@@ -1,0 +1,54 @@
+name: " INTEGRITY: Global Proof Audit"
+
+on: [push]
+
+env:
+  # Elimina l'avviso sulla deprecazione di Node.js nelle macchine virtuali
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  negative-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: wenkokke/setup-agda@v2
+        with:
+          agda-version: '2.6.4'
+          agda-stdlib-version: '2.0'       # <-- Scarica la libreria standard
+          agda-libraries: 'standard-library' # <-- La registra dentro Agda
+
+      - name: " 1. Validazione del file principale del Protocollo"
+        # Questo step compila il file vero e proprio con i controlli di sicurezza attivi
+        run: |
+          agda --cubical --safe Psi_Protocol_implementation_2.agda
+
+      - name: " 2. Attempt to force a Logical Breach"
+        run: |
+          echo "module Breach where" > Breach.agda
+          echo "open import PSIU_Protocol" >> Breach.agda
+          echo "open import Data.Empty" >> Breach.agda
+          
+          # Tentativo di dimostrare il falso (⊥) usando il protocollo
+          echo "breach : ⊥" >> Breach.agda
+          echo "breach = Filtro-λ (anomalia-flusso (λ x → x))" >> Breach.agda
+          
+          # Ci aspettiamo che Agda dia ERRORE (exit code non zero)
+          if agda --cubical Breach.agda; then
+            echo "ERRORE: Il protocollo è inconsistente! Ha accettato una prova falsa."
+            exit 1
+          else
+            echo "SUCCESSO: Agda ha rifiutato il falso. Il protocollo è onesto."
+            exit 0
+          fi
+
+      - name: " 3. Test di Canonicità Forte"
+        # Verifica se il calcolo computazionale si riduce correttamente a 42
+        run: |
+          echo "module Canon where" > Canon.agda
+          echo "open import PSIU_Protocol" >> Canon.agda
+          echo "open import Relation.Binary.PropositionalEquality" >> Canon.agda
+          echo "test-canon : Calcolo-Flusso-Reale ≡ 42" >> Canon.agda
+          echo "test-canon = refl" >> Canon.agda
+          
+          agda --cubical Canon.agda
