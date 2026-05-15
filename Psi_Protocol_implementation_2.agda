@@ -2,12 +2,14 @@
 
 module Psi_Protocol_implementation_2 where
 
+-- Importazioni native e fondamentali di Cubical Agda
 open import Agda.Primitive.Cubical renaming (primIntervalInv to ~_; primHComp to hcomp; primTransp to transp)
 open import Agda.Builtin.Cubical.Path
 open import Agda.Builtin.Cubical.Sub
 open import Level using (Level; suc; zero)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
 
+-- Nella HoTT i tipi puri si dichiarano come 'Type' e non come 'Set'
 Type : (ℓ : Level) → Set (suc ℓ)
 Type ℓ = Set ℓ
 
@@ -19,7 +21,9 @@ _≡_ : {ℓ : Level} {A : Type ℓ} → A → A → Type ℓ
 _≡_ = Path
 
 data ⊥ : Type zero where
+  -- Il tipo vuoto non possiede costruttori interni
 
+-- La funzione di eliminazione (principio di esplosione) a colonna zero
 ⊥-elim : {ℓ : Level} {A : Type ℓ} → ⊥ → A
 ⊥-elim ()
 
@@ -58,10 +62,9 @@ Filtro-λ : {n : ℕ} {f : InserimentoFaccia (suc n) (suc (suc n))} {g : Inserim
 Filtro-λ (anomalia-flusso violazione-omotopica) = violazione-omotopica (teorema-treccia-simpliciale _ _)
 
 -- ========================================================================
--- 3. TORRE DI KAN SEMISIMPLICIALE STRUTTURATA (Definizione Matematica Reale)
+-- 3. TORRE DI KAN SEMISIMPLICIALE STRUTTURATA (Modello Geometrico Reale)
 -- ========================================================================
 
--- Un fibrato morfico modella l'estensione dei complessi di Kan tramite trasporti omotopici espliciti
 record FibratoMorfico {ℓ : Level} (n : ℕ) : Type (suc ℓ) where
   field
     StratoMateria : {m : ℕ} → InserimentoFaccia m n → Type ℓ
@@ -103,8 +106,6 @@ FlussoGnomonicoUniversale n = record
 -- 5. DEFINIZIONE SCIENTIFICA DI LIVELLO SST (Torre di Coerenza Induttiva)
 -- ========================================================================
 
--- Definizione non fittizia: il livello SST n è un record dipendente che mappa 
--- ricorsivamente la coerenza di Kan su tutte le facce della dimensione corrente
 record SST-Level (n : ℕ) : Type (suc zero) where
   constructor CoherenceLevel
   field
@@ -127,9 +128,10 @@ Symmetry-1/3 {n} ipot-induttiva = record
   ; stabilità-flusso = λ f g anom → Filtro-λ anom
   }
 
+-- Risolto l'errore esplicitando l'argomento implicito {n}
 PSIU-Inductive-Hierarchy : (n : ℕ) → SST-Level n
 PSIU-Inductive-Hierarchy zero = Base-Coherence
-PSIU-Inductive-Hierarchy (suc n) = Symmetry-1/3 (PSIU-Inductive-Hierarchy n)
+PSIU-Inductive-Hierarchy (suc n) = Symmetry-1/3 {n} (PSIU-Inductive-Hierarchy n)
 
 -- ========================================================================
 -- 6. CALCOLO GEOMETRICO SULL'INTERVALLO CUBICO I
@@ -156,5 +158,3 @@ Dato-Test-4D = 42
 
 Calcolo-Flusso-Reale : Dato-Test-4D ≡ Dato-Test-4D
 Calcolo-Flusso-Reale = tautologia-identita Dato-Test-4D
-
-
