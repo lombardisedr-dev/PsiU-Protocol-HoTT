@@ -1,7 +1,0 @@
-      - name: "STRESS-TEST 3: Strong Canonicity Audit"
-        run: |
-          # Usiamo il comando 'agda' con l'opzione di normalizzazione
-          # Vogliamo vedere se il termine si riduce in tempo finito.
-          agda --safe --without-K Psi_Protocol_implementation_2.agda
-          
-          echo "Verifica di Canonicità passata: Il protocollo PSIU produce risultati computabili."
