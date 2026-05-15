@@ -197,3 +197,28 @@ _ = refl
 -- 'refl' (riflessività) passerà SOLO SE i due lati sono computazionalmente identici.
 -- Se Agda calcola e i valori coincidono, la canonicità è provata.
 
+-- ========================================================================
+-- STRESS TEST: ATTACCO DI TORSIONE SIMPLICIALE (FORZATURA DEL REFLU)
+-- ========================================================================
+
+-- Questo test tenta di costruire un "paradosso geometrico":
+-- Un'anomalia di flusso che dichiara di essere coerente pur violando 
+-- le identità simpliciali fondamentali.
+
+Stress-Test-Attacco : ⊥
+Stress-Test-Attacco = 
+  let
+    -- 1. Definiamo due facce che NON dovrebbero commutare
+    f = faccia-zero {suc zero}
+    g = faccia-zero {zero}
+    
+    -- 2. Tentiamo di creare un'anomalia fasulla
+    -- Se il protocollo è vulnerabile, permetterà di bypassare Filtro-λ
+    falsa-anomalia : RefluGeometrico f g
+    falsa-anomalia = anomalia-flusso (λ violazione → ⊥-elim (violazione (teorema-treccia-simpliciale f g)))
+    
+  in Filtro-λ falsa-anomalia
+
+-- Se il protocollo PSIU è solido, Agda deve segnalare un errore qui:
+-- "Unreachable clause" o "Incomplete pattern matching"
+-- Perché Filtro-λ sa che 'falsa-anomalia' è un'impossibilità logica.
