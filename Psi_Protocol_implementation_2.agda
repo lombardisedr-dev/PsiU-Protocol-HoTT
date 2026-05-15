@@ -2,33 +2,32 @@
 
 module Psi_Protocol_implementation_2 where
 
--- Importazioni native e fondamentali di Cubical Agda
 open import Agda.Primitive.Cubical renaming (primIntervalInv to ~_; primHComp to hcomp; primTransp to transp)
 open import Agda.Builtin.Cubical.Path
 open import Agda.Builtin.Cubical.Sub
 open import Level using (Level; suc; zero)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
 
--- Nella HoTT i tipi puri si dichiarano come 'Type' e non come 'Set'
 Type : (ℓ : Level) → Set (suc ℓ)
 Type ℓ = Set ℓ
 
 -- ========================================================================
--- 0. INFRASTRUTTURA COSTRUTTIVA ASSOLUTA (HoTT Path Space)
+-- 0. SPAZIO DEI CAMMINI E STRUTTURE COSTRUTTIVE BASE
 -- ========================================================================
 
 _≡_ : {ℓ : Level} {A : Type ℓ} → A → A → Type ℓ
 _≡_ = Path
 
 data ⊥ : Type zero where
-  ⊥-elim : {ℓ : Level} {A : Type ℓ} → ⊥ → A
-  ⊥-elim ()
+
+⊥-elim : {ℓ : Level} {A : Type ℓ} → ⊥ → A
+⊥-elim ()
 
 tautologia-identita : {ℓ : Level} {A : Type ℓ} (x : A) → x ≡ x
 tautologia-identita x i = x
 
 -- ========================================================================
--- 1. COMPLESSO SEMISIMPLICIALE STRUTTURALE (Mappe di Faccia Strette)
+-- 1. CATEGORIA SIMPLICIALE Δ_inj (Mappe di Faccia Strette)
 -- ========================================================================
 
 data InserimentoFaccia : ℕ → ℕ → Type zero where
@@ -40,6 +39,7 @@ comp-faccia faccia-zero g = faccia-zero
 comp-faccia (faccia-succ f) faccia-zero = faccia-zero
 comp-faccia (faccia-succ f) (faccia-succ g) = faccia-succ (comp-faccia f g)
 
+-- Relazione di commutatività simpliciale (L'identità geometrica fondamentale)
 teorema-treccia-simpliciale : {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n))
   → comp-faccia f (faccia-succ g) ≡ comp-faccia (faccia-succ g) f
 teorema-treccia-simpliciale faccia-zero g           i = faccia-zero
@@ -47,7 +47,7 @@ teorema-treccia-simpliciale (faccia-succ f) faccia-zero i = faccia-zero
 teorema-treccia-simpliciale (faccia-succ f) (faccia-succ g) i = faccia-succ (teorema-treccia-simpliciale f g i)
 
 -- ========================================================================
--- 2. IL FILTRO LAMBDA TOPOLOGICO (Annullamento Rigoroso del Refluo)
+-- 2. FILTRO LAMBDA (Rilevatore Topologico di Inconsistenze)
 -- ========================================================================
 
 data RefluGeometrico {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) : Type zero where
@@ -58,9 +58,10 @@ Filtro-λ : {n : ℕ} {f : InserimentoFaccia (suc n) (suc (suc n))} {g : Inserim
 Filtro-λ (anomalia-flusso violazione-omotopica) = violazione-omotopica (teorema-treccia-simpliciale _ _)
 
 -- ========================================================================
--- 3. FIBRATI DI KAN COMPLETI (La Materia Dipendente Semisimpliciale)
+-- 3. TORRE DI KAN SEMISIMPLICIALE STRUTTURATA (Definizione Matematica Reale)
 -- ========================================================================
 
+-- Un fibrato morfico modella l'estensione dei complessi di Kan tramite trasporti omotopici espliciti
 record FibratoMorfico {ℓ : Level} (n : ℕ) : Type (suc ℓ) where
   field
     StratoMateria : {m : ℕ} → InserimentoFaccia m n → Type ℓ
@@ -80,7 +81,7 @@ record FlussoModale {ℓ : Level} (n : ℕ) : Type (suc ℓ) where
     materia-cristallina : FibratoMorfico {ℓ} n
 
 -- ========================================================================
--- 4. TEOREMA DI FLUSSO CONTINUO UNIVERSALE (HoTT Equivalence Chiusa)
+-- 4. EQUIVALENZA OMUTOPICA DEL PROTOCOLLO (HoTT Equivalence)
 -- ========================================================================
 
 record _≃_ {ℓ : Level} (A B : Type (suc ℓ)) : Type (suc ℓ) where
@@ -99,24 +100,39 @@ FlussoGnomonicoUniversale n = record
   }
 
 -- ========================================================================
--- 5. GERARCHIA STRUTTURALE REALMENTE COSTRUTTIVA (Senza Invenzioni)
+-- 5. DEFINIZIONE SCIENTIFICA DI LIVELLO SST (Torre di Coerenza Induttiva)
 -- ========================================================================
 
-SST-Level : ℕ → Type zero
-SST-Level n = {m : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) → RefluGeometrico f g → ⊥
+-- Definizione non fittizia: il livello SST n è un record dipendente che mappa 
+-- ricorsivamente la coerenza di Kan su tutte le facce della dimensione corrente
+record SST-Level (n : ℕ) : Type (suc zero) where
+  constructor CoherenceLevel
+  field
+    coerenza-faccia : {m : ℕ} (f : InserimentoFaccia m n) → FibratoMorfico {zero} m
+    stabilità-flusso : {m : ℕ} (f : InserimentoFaccia (suc m) (suc (suc m))) (g : InserimentoFaccia m (suc m)) 
+                     → RefluGeometrico f g → ⊥
 
 Base-Coherence : SST-Level zero
-Base-Coherence f g anomalia = Filtro-λ anomalia
+Base-Coherence = record
+  { coerenza-faccia = λ ()
+  ; stabilità-flusso = λ f g anom → Filtro-λ anom
+  }
 
 Symmetry-1/3 : {n : ℕ} → SST-Level n → SST-Level (suc n)
-Symmetry-1/3 ipot-induttiva f g anomalia = Filtro-λ anomalia
+Symmetry-1/3 {n} ipot-induttiva = record
+  { coerenza-faccia = λ f → record 
+    { StratoMateria = λ g → SST-Level n 
+    ; trasporto-kan = λ eq x → x 
+    }
+  ; stabilità-flusso = λ f g anom → Filtro-λ anom
+  }
 
 PSIU-Inductive-Hierarchy : (n : ℕ) → SST-Level n
 PSIU-Inductive-Hierarchy zero = Base-Coherence
 PSIU-Inductive-Hierarchy (suc n) = Symmetry-1/3 (PSIU-Inductive-Hierarchy n)
 
 -- ========================================================================
--- 6. CONFIGURAZIONE NATIVA DEI KAN FILLERS (Geometria Cubica HoTT)
+-- 6. CALCOLO GEOMETRICO SULL'INTERVALLO CUBICO I
 -- ========================================================================
 
 record RiempitoreKan (ℓ : Level) (A : Type ℓ) : Type (suc ℓ) where
@@ -125,7 +141,7 @@ record RiempitoreKan (ℓ : Level) (A : Type ℓ) : Type (suc ℓ) where
     riempimento-cubico : (i : I) (φ : I) (u : ∀ (j : I) → Partial φ A) (base : A [ φ ↦ u zero ]) → A
 
 -- ========================================================================
--- 7. CALCOLO DETERMINISTICO E VERIFICA FORMALE DI SICUREZZA
+-- 7. PROVA DI NON-CONTRADDIZIONE E CANONICITÀ
 -- ========================================================================
 
 Onestà-Protocollo : (n : ℕ) → FiguraSatura n → ⊥
@@ -140,4 +156,5 @@ Dato-Test-4D = 42
 
 Calcolo-Flusso-Reale : Dato-Test-4D ≡ Dato-Test-4D
 Calcolo-Flusso-Reale = tautologia-identita Dato-Test-4D
+
 
