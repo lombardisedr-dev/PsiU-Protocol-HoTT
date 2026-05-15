@@ -6,7 +6,7 @@ module Psi_Protocol_implementation where
 open import Agda.Primitive.Cubical renaming (primIntervalInv to ~_; primHComp to hcomp; primTransp to transp)
 open import Agda.Builtin.Cubical.Path
 open import Agda.Builtin.Cubical.Sub
--- RISOLTO IL CONFLITTO: Rinominiamo esplicitamente i costruttori di livello
+-- Risolto il conflitto dei livelli
 open import Level using (Level) renaming (suc to lsuc; zero to lzero)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
 
@@ -18,8 +18,7 @@ Type ℓ = Set ℓ
 -- 0. SPAZIO DEI CAMMINI E STRUTTURE COSTRUTTIVE BASE
 -- ========================================================================
 
-_≡_ : {ℓ : Level} {A : Type ℓ} → A → A → Type ℓ
-_≡_ = Path
+-- NOTA: La ridefinizione di _≡_ è stata eliminata poiché già importata nativamente.
 
 data ⊥ : Type lzero where
   -- Il tipo vuoto non possiede costruttori interni
@@ -93,7 +92,7 @@ record _≃_ {ℓ : Level} (A B : Type (lsuc ℓ)) : Type (lsuc ℓ) where
     to : A → B
     from : B → A
     to-from : (x : B) → to (from x) ≡ x
-    from-to : (x : A) → from (to x) ≡ x
+    from-to : (x : A) → from (to x) i ≡ x i -- Adattato per estensionalità Path nativa
 
 FlussoGnomonicoUniversale : {ℓ : Level} (n : ℕ) → (FiguraSatura {ℓ} n) ≃ (FlussoModale {ℓ} n)
 FlussoGnomonicoUniversale n = record
@@ -104,7 +103,7 @@ FlussoGnomonicoUniversale n = record
   }
 
 -- ========================================================================
--- 5. DEFINIZIONE SCIENTIFICA DI LIVELLO SST (Torre di Coerenza Induttiva)
+-- 5. DEFINIZIONE SCIENTIFICA DI LIVELLO SST (Torre di Coherence Induttiva)
 -- ========================================================================
 
 record SST-Level (n : ℕ) : Type (lsuc lzero) where
