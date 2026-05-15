@@ -1,0 +1,18 @@
+name: "VALIDATION: Kan Lifting & Data Recovery"
+on: [push]
+
+jobs:
+  recovery-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: wenkokke/setup-agda@v2
+        with:
+          agda-version: '2.6.4'
+          node-version: '24' # Risolve il warning di deprecazione
+
+      - name: "Verify Kan Filler Uniqueness"
+        run: |
+          # Verifica che per ogni CorniSimpliciali esista un RiempitoreKan
+          # basandosi sulle definizioni nel tuo file .agda
+          agda --cubical -v 2 Psi_Protocol_implementation_2.agda
