@@ -1,6 +1,6 @@
 {-# OPTIONS --cubical --safe #-}
 
-module Psi_Protocol_implementation_2 where
+module Psi_Protocol_implementation where
 
 -- Importazioni native e fondamentali di Cubical Agda
 open import Agda.Primitive.Cubical renaming (primIntervalInv to ~_; primHComp to hcomp; primTransp to transp)
