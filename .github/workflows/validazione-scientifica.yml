@@ -25,7 +25,7 @@ jobs:
 
       - name: " Step 3: Audit di Purezza e Sicurezza Matematica"
         run: |
-          agda --cubical --safe Psi_Protocol_implementation_2.agda
+          agda --cubical --safe Psi_Protocol_implementation.agda
 
       - name: " Step 4: Test di Onestà Logica (Tentativo di Violazione)"
         # Modificato per gestire l'argomento vuoto (λ ()) coerente con la firma di RefluGeometrico
