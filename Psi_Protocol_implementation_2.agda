@@ -250,3 +250,15 @@ Calcolo-Flusso-Reale =
 -- Questo comando obbliga Agda a stampare il risultato durante il check
 _ : Calcolo-Flusso-Reale ≡ tautologia-identita 42
 _ = refl
+-- ========================================================================
+-- TEST DI ONESTÀ LOGICA: TENTATIVO DI DIMOSTRARE L'ASSURDO
+-- ========================================================================
+
+-- Se il protocollo PSIU fosse un "imbroglio", potremmo estrarre 
+-- una prova del falso (⊥) da una FiguraSatura valida.
+Onestà-Protocollo : (n : ℕ) → FiguraSatura n → ⊥
+Onestà-Protocollo n satura = {!!} 
+
+-- Se provi a scrivere: 
+-- Onestà-Protocollo n (SaturationEngine mat ctrl) = ctrl _ _ (anomalia-flusso (λ x → x))
+-- Agda ti darà ERRORE. 
