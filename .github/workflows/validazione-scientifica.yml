@@ -28,12 +28,13 @@ jobs:
           agda --cubical --safe Psi_Protocol_implementation_2.agda
 
       - name: " Step 4: Test di Onestà Logica (Tentativo di Violazione)"
+        # Modificato per gestire l'argomento vuoto (λ ()) coerente con la firma di RefluGeometrico
         run: |
           echo "module Breach where" > Breach.agda
           echo "open import Psi_Protocol_implementation_2" >> Breach.agda
           echo "open import Data.Empty" >> Breach.agda
           echo "breach : ⊥" >> Breach.agda
-          echo "breach = Filtro-λ (anomalia-flusso (λ x → x))" >> Breach.agda
+          echo "breach = Filtro-λ (anomalia-flusso (λ ()))" >> Breach.agda
           
           if agda --cubical Breach.agda; then
             echo "VERDETTO FALLIMENTARE: Il protocollo ha accettato il falso logico!"
