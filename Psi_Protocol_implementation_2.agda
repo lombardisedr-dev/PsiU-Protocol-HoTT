@@ -21,8 +21,8 @@ _≡_ : {ℓ : Level} {A : Type ℓ} → A → A → Type ℓ
 _≡_ = Path
 
 data ⊥ : Type zero where
-⊥-elim : {ℓ : Level} {A : Type ℓ} → ⊥ → A
-⊥-elim ()
+  ⊥-elim : {ℓ : Level} {A : Type ℓ} → ⊥ → A
+  ⊥-elim ()
 
 tautologia-identita : {ℓ : Level} {A : Type ℓ} (x : A) → x ≡ x
 tautologia-identita x i = x
@@ -102,8 +102,6 @@ FlussoGnomonicoUniversale n = record
 -- 5. GERARCHIA STRUTTURALE REALMENTE COSTRUTTIVA (Senza Invenzioni)
 -- ========================================================================
 
--- Esplicitiamo la stabilità intrinseca di ogni livello n: non esistono reflui geometrici.
--- Questa non è una simulazione, ma un tipo logico effettivo.
 SST-Level : ℕ → Type zero
 SST-Level n = {m : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) → RefluGeometrico f g → ⊥
 
@@ -113,7 +111,6 @@ Base-Coherence f g anomalia = Filtro-λ anomalia
 Symmetry-1/3 : {n : ℕ} → SST-Level n → SST-Level (suc n)
 Symmetry-1/3 ipot-induttiva f g anomalia = Filtro-λ anomalia
 
--- Dimostrazione induttiva universale e reale per ogni dimensione n
 PSIU-Inductive-Hierarchy : (n : ℕ) → SST-Level n
 PSIU-Inductive-Hierarchy zero = Base-Coherence
 PSIU-Inductive-Hierarchy (suc n) = Symmetry-1/3 (PSIU-Inductive-Hierarchy n)
@@ -122,8 +119,6 @@ PSIU-Inductive-Hierarchy (suc n) = Symmetry-1/3 (PSIU-Inductive-Hierarchy n)
 -- 6. CONFIGURAZIONE NATIVA DEI KAN FILLERS (Geometria Cubica HoTT)
 -- ========================================================================
 
--- Un riempitore di Kan legittimo nella HoTT non è una costante vuota. Deve mappare 
--- le operazioni primitive cubiche d'intervallo per calcolare cammini e contorni omotopici.
 record RiempitoreKan (ℓ : Level) (A : Type ℓ) : Type (suc ℓ) where
   constructor KanFillerEngine
   field
@@ -133,7 +128,6 @@ record RiempitoreKan (ℓ : Level) (A : Type ℓ) : Type (suc ℓ) where
 -- 7. CALCOLO DETERMINISTICO E VERIFICA FORMALE DI SICUREZZA
 -- ========================================================================
 
--- Dimostrazione costruttiva completa che il protocollo non ammette contraddizioni logiche
 Onestà-Protocollo : (n : ℕ) → FiguraSatura n → ⊥
 Onestà-Protocollo n (SaturationEngine mat ctrl) = 
   let f = faccia-zero {suc zero}
@@ -141,9 +135,9 @@ Onestà-Protocollo n (SaturationEngine mat ctrl) =
       anomalia-falsa = anomalia-flusso (λ violazione → violazione (teorema-treccia-simpliciale f g))
   in Filtro-λ anomalia-falsa
 
--- Canonicità computazionale effettiva
 Dato-Test-4D : ℕ
 Dato-Test-4D = 42
 
 Calcolo-Flusso-Reale : Dato-Test-4D ≡ Dato-Test-4D
 Calcolo-Flusso-Reale = tautologia-identita Dato-Test-4D
+
