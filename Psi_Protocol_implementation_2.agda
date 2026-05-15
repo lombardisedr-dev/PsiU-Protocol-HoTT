@@ -262,3 +262,13 @@ Onestà-Protocollo n satura = {!!}
 -- Se provi a scrivere: 
 -- Onestà-Protocollo n (SaturationEngine mat ctrl) = ctrl _ _ (anomalia-flusso (λ x → x))
 -- Agda ti darà ERRORE. 
+-- Verifica finale di Calcolabilità (Canonicità)
+-- Se questo compila, il trasporto lungo l'univalenza è computazionale.
+verifica-trasporto-identita : {x : FiguraSatura} → transport (λ i → univalenza-protocollo i) x ≡ transport refl x
+verifica-trasporto-identita = refl
+
+-- Test della J-rule sul protocollo
+-- Dimostra che l'induzione sui cammini del protocollo non crea "stuck terms"
+test-coerenza-j : {A : Type ℓ} {x : A} (P : (y : A) → x ≡ y → Type ℓ) (d : P x refl) → 
+                 J-rule-protocollo P d refl ≡ d
+test-coerenza-j P d = refl
