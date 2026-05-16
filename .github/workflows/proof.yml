@@ -23,20 +23,35 @@ jobs:
 
       - name: 3. Controllo Assenza di Assiomi Arbitrari (Anti-Postulate)
         run: |
+          echo "=== VERIFICA RIGORE: Analisi Statica del Codice ==="
           ERRORS=0
+          
           if grep -rn "postulate" *.agda; then
-            echo "❌ ERRORE: Il codice usa postulati non dimostrati."
-            exit 1
+            echo "❌ ERRORE CRITICO: Il codice usa postulati non dimostrati."
+            ERRORS=$((ERRORS + 1))
           fi
+          
           if grep -rn "{-# TERMINATING" *.agda || grep -rn "{-# NON_TERMINATING" *.agda; then
-            echo "❌ ERRORE: Rilevato bypass del controllo di terminazione."
-            exit 1
+            echo "❌ ERRORE CRITICO: Rilevato bypass del controllo di terminazione."
+            ERRORS=$((ERRORS + 1))
           fi
 
-      - name: 4. Type-Checking Cubico Puro (--safe)
+          if [ $ERRORS -ne 0 ]; then
+            exit 1
+          else
+            echo "✅ SUPERATO: Il codice non contiene assiomi vuoti o scorciatoie."
+          fi
+
+      - name: 4. Type-Checking Cubico Puro Autonomo (--safe)
         run: |
-          # Compilazione diretta senza flag di libreria, perché il file è autosufficiente
-          agda --safe Psi_Protocol_implementation.agda
+          echo "=== VERIFICA MATEMATICA: Avvio del Compilatore Agda ==="
+          # Il flag --no-libraries impedisce ad Agda di cercare la standard-library nel sistema,
+          # costringendolo a elaborare esclusivamente il codice locale presente nel file.
+          agda --safe --no-libraries Psi_Protocol_implementation.agda
+          
           echo "========================================================="
           echo "🎉 VITTORIA LOGICA: DIMOSTRAZIONE FORMALE VALIDA AL 100% 🎉"
           echo "========================================================="
+          echo "Il compilatore Agda ha certificato che la struttura SST"
+          echo "e le proprietà omotopiche cubiche inserite sono"
+          echo "matematicamente coerenti e prive di contraddizioni."
