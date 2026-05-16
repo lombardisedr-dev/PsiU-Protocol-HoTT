@@ -16,19 +16,19 @@ jobs:
       - name: 1. Clonazione Repository
         uses: actions/checkout@v4
 
-      - name: 2. Installazione Ufficiale Agda e Standard Library
-        uses: agda/agda-setup-action@v2
-        with:
-          agda-version: '2.6.4.3'
-          agda-stdlib-version: '2.0'
+      - name: 2. Installazione di Agda e dei Sorgenti di Sistema
+        run: |
+          echo "=== Installazione di Agda ==="
+          sudo apt-get update
+          sudo apt-get install -y agda agda-stdlib
 
-      - name: 3. Controllo Statico Costruttivo (Anti-Postulate)
+      - name: 3. Controllo Assenza di Assiomi Arbitrari (Anti-Postulate)
         run: |
           echo "=== VERIFICA RIGORE: Analisi Statica del Codice ==="
           ERRORS=0
           
           if grep -rn "postulate" *.agda; then
-            echo "❌ ERRORE CRITICO: Il codice usa postulati non dimostrati."
+            echo "❌ ERRORE CRITICO: Il codice usa postulati non dimostrati. Validazione fallita."
             ERRORS=$((ERRORS + 1))
           fi
           
@@ -40,12 +40,12 @@ jobs:
           if [ $ERRORS -ne 0 ]; then
             exit 1
           else
-            echo "✅ SUPERATO: Il codice non contiene assiomi vuoti o scorciatoie."
+            echo "✅ SUPERATO: Il codice è costruttivo al 100% (nessun assioma vuoto)."
           fi
 
       - name: 4. Type-Checking Cubico Certificato (--safe)
         run: |
           echo "=== VERIFICA MATEMATICA: Avvio del Compilatore Agda ==="
-          # Esegue il controllo puro. Il file .agda-lib locale indicherà ad Agda
-          # di agganciarsi alla standard-library ufficiale configurata dall'azione al punto 2.
-          agda --safe Psi_Protocol_implementation.agda
+          # Utilizziamo il flag standard '-i' per indicare al compilatore dove si trovano i sorgenti
+          # della libreria standard installata stabilmente da Ubuntu (/usr/share/agda-stdlib/src/).
+          agda --safe -i . -i /usr/share/agda-stdlib/src/ Psi_Protocol_implementation.agda
