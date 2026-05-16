@@ -1,0 +1,41 @@
+name: "HoTT Proof Verification"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  hott-proof-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Configura Ambiente Agda
+      uses: agda/setup-agda@v2
+      with:
+        agda-version: '2.6.4.3'
+
+    # 1. VERIFICA CORE: Esegue il type-checking standard del protocollo PsiU
+    - name: Standard HoTT Proof Check
+      run: |
+        agda Psi_Protocol_implementation.agda
+
+    # 2. CONTROLLO DI CONSISTENZA LOGICA: Verifica l'assenza di postulati estranei e la validità strutturale
+    - name: Safe HoTT Proof Check
+      run: |
+        agda --safe --termination-check Psi_Protocol_implementation.agda
+
+    # 3. GENERAZIONE DEI DOCUMENTI: Crea l'ipertesto navigabile delle prove omotopiche
+    - name: Generate HoTT Proof HTML Documentation
+      run: |
+        agda --html Psi_Protocol_implementation.agda
+
+    # 4. ARCHIVIAZIONE DEI RISULTATI
+    - name: Upload HoTT Proof Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: HoTT-Proof-PsiU-Protocol
+        path: html/
