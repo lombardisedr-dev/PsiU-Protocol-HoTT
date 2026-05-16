@@ -7,12 +7,11 @@ module Psi_Protocol_implementation where
 -- ========================================================================
 
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
--- Aggiungiamo esplicitamente refl e il tipo Path (≡)
-open import Agda.Builtin.Cubical.Path renaming (primPathP to PathP)
+-- Import standard senza renaming problematici
+open import Agda.Builtin.Cubical.Path 
 open import Agda.Builtin.Cubical.Sub renaming (Sub to _[_↦_]; primSubOut to outS)
 open import Level using (Level) renaming (suc to lsuc; zero to lzero)
 
--- Importazione rigorosa dei naturali e operatori di coerenza
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_; _<_; _≤_; z≤n; s≤s)
 
 -- Definizione esplicita di refl per Cubical Agda
@@ -22,7 +21,6 @@ refl {x = x} = λ i → x
 Type : (ℓ : Level) → Set (lsuc ℓ)
 Type ℓ = Set ℓ
 
--- Strutture di base della teoria dei tipi
 record ⊤-type {ℓ : Level} : Type ℓ where
   constructor unit-val
 
@@ -39,7 +37,6 @@ data InserimentoFaccia : ℕ → ℕ → Type lzero where
   f-succ : {n m : ℕ} → InserimentoFaccia n m → InserimentoFaccia (suc n) (suc m)
   f-id   : {n : ℕ} → InserimentoFaccia n n
 
--- Composizione rigorosa: risolve il problema "n != m" tramite unificazione esplicita
 comp-f : {n m k : ℕ} → InserimentoFaccia m k → InserimentoFaccia n m → InserimentoFaccia n k
 comp-f f-id       g            = g
 comp-f f          f-id         = f
@@ -48,17 +45,17 @@ comp-f f-zero     (f-succ g)   = f-zero
 comp-f (f-succ f) f-zero       = f-zero 
 comp-f (f-succ f) (f-succ g)   = f-succ (comp-f f g)
 
--- Teorema di coerenza (Identità Simpliciale d_i d_j = d_{j-1} d_i)
+-- Corretto il nome: era 'teorema-coherence', ora è 'teorema-coerenza' ovunque
 teorema-coerenza : {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n))
   → comp-f f (f-succ g) ≡ comp-f (f-succ g) f
 teorema-coerenza f-zero     g          i = f-zero
-teorema-coherence (f-succ f) f-zero     i = f-zero
+teorema-coerenza (f-succ f) f-zero     i = f-zero
 teorema-coerenza (f-succ f) (f-succ g) i = f-succ (teorema-coerenza f g i)
 teorema-coerenza f-id       g          i = f-succ g
 teorema-coerenza (f-succ f) f-id       i = f-succ f
 
 -- ========================================================================
--- 3. COMPLESSO SEMISIMPLICIALE (SST - Fibrato di Kan)
+-- 3. COMPLESSO SEMISIMPLICIALE (SST)
 -- ========================================================================
 
 record ComplessoSemisimpliciale {ℓ : Level} : Type (lsuc ℓ) where
@@ -68,7 +65,6 @@ record ComplessoSemisimpliciale {ℓ : Level} : Type (lsuc ℓ) where
     coerenza-bordo : {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) →
                      (λ x → d (f-succ g) (d f x)) ≡ (λ x → d f (d (f-succ g) x))
 
--- Base del complesso per il livello zero (Trivial SST)
 Base-SST : {ℓ : Level} → ComplessoSemisimpliciale {ℓ}
 Base-SST = record
   { S = λ _ → ⊤-type
@@ -77,7 +73,7 @@ Base-SST = record
   }
 
 -- ========================================================================
--- 4. FILTRO LAMBDA E PROTOCOLLO PSIU
+-- 4. FILTRO LAMBDA E FIGURA SATURA
 -- ========================================================================
 
 record Filtro-λ {ℓ : Level} (C : ComplessoSemisimpliciale {ℓ}) : Type ℓ where
