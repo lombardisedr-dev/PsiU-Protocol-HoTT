@@ -1,9 +1,10 @@
 {-# OPTIONS --cubical --safe #-}
 
-module Psi_Protocol_implementation where
+-- Rinominato in Psi_Protocol_implementation_2 per combaciare con i test Step 4, 5, 6
+module Psi_Protocol_implementation_2 where
 
 -- ========================================================================
--- 1. FONDAMENTA (Standard Agda 2.6.4 / Std-Lib 2.0)
+-- 1. FONDAMENTA (Standard Agda 2.6.4 / Cubical)
 -- ========================================================================
 
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
@@ -13,7 +14,7 @@ open import Level using (Level) renaming (suc to lsuc; zero to lzero)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_; _<_; _≤_; z≤n; s≤s)
 open import Data.Empty renaming (⊥ to ⊥-type)
 
--- Alias per la coerenza con i test di onestà
+-- Alias per la coerenza con i test di onestà logica
 ⊥ = ⊥-type
 
 refl : {ℓ : Level} {A : Set ℓ} {x : A} → x ≡ x
@@ -26,7 +27,7 @@ tautologia-identita : (n : ℕ) → n ≡ n
 tautologia-identita n = refl
 
 -- ========================================================================
--- 2. CATEGORIA Δ_inj (Unificazione Rigorosa)
+-- 2. CATEGORIA Δ_inj (Visione Accademica Rigorosa)
 -- ========================================================================
 
 data InserimentoFaccia : ℕ → ℕ → Type lzero where
