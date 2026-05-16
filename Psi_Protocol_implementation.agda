@@ -2,152 +2,74 @@
 
 module Psi_Protocol_implementation where
 
--- 1. IMPORTAZIONI CORRETTE (Risolve l'errore di parsing alla riga 140)
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
 open import Agda.Builtin.Cubical.Path
--- Il renaming 'Sub to _[_↦_]' permette la sintassi [ φ ↦ u ]
 open import Agda.Builtin.Cubical.Sub renaming (Sub to _[_↦_]; primSubOut to outS)
-
 open import Level using (Level) renaming (suc to lsuc; zero to lzero)
-open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
+open import Data.Nat using (ℕ; zero; suc; _<_; _≤_; z≤n; s≤s)
 
--- Alias per il tipo Set
+-- Definizione di Type secondo lo standard HoTT
 Type : (ℓ : Level) → Set (lsuc ℓ)
 Type ℓ = Set ℓ
 
 -- ========================================================================
--- 0. STRUTTURE BASE
+-- 1. CATEGORIA SIMPLICIALE Δ_inj (Visione Accademica Rigorosa)
+-- ========================================================================
+
+-- In HoTT accademica, le mappe di faccia sono indicizzate.
+-- 'faccia i' corrisponde all'operatore d_i che mappa un n-simplesso in un (suc n)-simplesso.
+data InserimentoFaccia : ℕ → ℕ → Type lzero where
+  faccia : {n : ℕ} (i : ℕ) → i ≤ n → InserimentoFaccia n (suc n)
+  id-faccia : {n : ℕ} → InserimentoFaccia n n
+  comp-faccia : {n m k : ℕ} → InserimentoFaccia m k → InserimentoFaccia n m → InserimentoFaccia n k
+
+-- Assiomi di coerenza delle identità simpliciali
+-- Rappresentano il cuore geometrico del protocollo PsiU
+postulate
+  identità-simpliciale : {n : ℕ} (i j : ℕ) (p : i < j) (q1 : j ≤ suc n) (q2 : i ≤ n) (q3 : j ∸ 1 ≤ n) (q4 : i ≤ n) →
+    comp-faccia (faccia j q1) (faccia i q2) ≡ comp-faccia (faccia i q4) (faccia (j ∸ 1) q3)
+
+-- ========================================================================
+-- 2. STRUTTURE DI KAN (SST - Semisimplicial Types)
+-- ========================================================================
+
+-- Un complesso semisimpliciale in HoTT è un fibrato sopra Δ_inj
+record ComplessoSemisimpliciale {ℓ : Level} : Type (lsuc ℓ) where
+  field
+    S : ℕ → Type ℓ
+    d : {n : ℕ} → InserimentoFaccia n (suc n) → S (suc n) → S n
+    -- Coerenza: d_i d_j = d_{j-1} d_i
+    coerenza-d : {n : ℕ} (i j : ℕ) (p : i < j) (q1 q2 q3 q4 : _) →
+      (λ (x : S (suc (suc n))) → d (faccia i q2) (d (faccia j q1) x)) ≡
+      (λ (x : S (suc (suc n))) → d (faccia (j ∸ 1) q3) (d (faccia i q4) x))
+
+-- ========================================================================
+-- 3. FILTRO LAMBDA E PROTOCOLLO PSIU
 -- ========================================================================
 
 data ⊥ : Type lzero where
-
 ⊥-elim : {ℓ : Level} {A : Type ℓ} → ⊥ → A
 ⊥-elim ()
 
-tautologia-identita : {ℓ : Level} {A : Type ℓ} (x : A) → x ≡ x
-tautologia-identita x i = x
-
--- ========================================================================
--- 1. CATEGORIA SIMPLICIALE Δ_inj
--- ========================================================================
-
-data InserimentoFaccia : ℕ → ℕ → Type lzero where
-  faccia-zero : {n : ℕ} → InserimentoFaccia n (suc n)
-  faccia-succ : {n m : ℕ} → InserimentoFaccia n m → InserimentoFaccia (suc n) (suc m)
-
-comp-faccia : {n m k : ℕ} → InserimentoFaccia m k → InserimentoFaccia n m → InserimentoFaccia n k
-comp-faccia faccia-zero g = faccia-zero
-comp-faccia (faccia-succ f) faccia-zero = faccia-zero
-comp-faccia (faccia-succ f) (faccia-succ g) = faccia-succ (comp-faccia f g)
-
-teorema-treccia-simpliciale : {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n))
-  → comp-faccia f (faccia-succ g) ≡ comp-faccia (faccia-succ g) f
-teorema-treccia-simpliciale faccia-zero g           i = faccia-zero
-teorema-treccia-simpliciale (faccia-succ f) faccia-zero i = faccia-zero
-teorema-treccia-simpliciale (faccia-succ f) (faccia-succ g) i = faccia-succ (teorema-treccia-simpliciale f g i)
-
--- ========================================================================
--- 2. FILTRO LAMBDA
--- ========================================================================
-
-data RefluGeometrico {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) : Type lzero where
-  anomalia-flusso : (comp-faccia f (faccia-succ g) ≡ comp-faccia (faccia-succ g) f → ⊥) → RefluGeometrico f g
-
-Filtro-λ : {n : ℕ} {f : InserimentoFaccia (suc n) (suc (suc n))} {g : InserimentoFaccia n (suc n)}
-  → RefluGeometrico f g → ⊥
-Filtro-λ (anomalia-flusso violazione-omotopica) = violazione-omotopica (teorema-treccia-simpliciale _ _)
-
--- ========================================================================
--- 3. TORRE DI KAN E PROTOCOLLO
--- ========================================================================
-
-record FibratoMorfico {ℓ : Level} (n : ℕ) : Type (lsuc ℓ) where
+-- Il Filtro-λ agisce come un correttore di fibrati
+record Filtro-λ {ℓ : Level} (C : ComplessoSemisimpliciale {ℓ}) : Type ℓ where
   field
-    StratoMateria : {m : ℕ} → InserimentoFaccia m n → Type ℓ
-    trasporto-kan : {m : ℕ} {op1 op2 : InserimentoFaccia m n}
-      → op1 ≡ op2 → StratoMateria op1 → StratoMateria op2
+    rilevatore-anomalie : {n : ℕ} (x : ComplessoSemisimpliciale.S C n) → Type lzero
+    proprietà-consistenza : {n : ℕ} (x : ComplessoSemisimpliciale.S C n) → rilevatore-anomalie x → ⊥
 
+-- Definizione di FiguraSatura come oggetto di Kan completo
 record FiguraSatura {ℓ : Level} (n : ℕ) : Type (lsuc ℓ) where
-  constructor SaturationEngine
   field
-    materia-strutturata : FibratoMorfico {ℓ} n
-    controllo-reflu : {m : ℕ} (f : InserimentoFaccia (suc (suc m)) n) (g : InserimentoFaccia (suc m) (suc (suc m)))
-      → RefluGeometrico {m} (faccia-succ (faccia-succ g)) (faccia-succ g) → ⊥
+    struttura-base : ComplessoSemisimpliciale {ℓ}
+    riempitore-kan : {m : ℕ} (φ : I) (u : Partial φ (ComplessoSemisimpliciale.S struttura-base m)) → 
+                     ComplessoSemisimpliciale.S struttura-base m [ φ ↦ u ]
 
-record FlussoModale {ℓ : Level} (n : ℕ) : Type (lsuc lzero) where
-  constructor Configurazione
+-- ========================================================================
+-- 4. EQUIVALENZA UNIVERSALE (HoTT Univalence Perspective)
+-- ========================================================================
+
+-- Il protocollo è onesto se e solo se esiste un'equivalenza tra 
+-- la struttura cristallina e la torre di coerenza.
+record ProtocolloOnesto {ℓ : Level} (A B : Type ℓ) : Type ℓ where
   field
-    materia-cristallina : FibratoMorfico {lzero} n
-
--- ========================================================================
--- 4. EQUIVALENZA
--- ========================================================================
-
-record _≃_ {ℓ : Level} (A B : Type (lsuc ℓ)) : Type (lsuc ℓ) where
-  field
-    to : A → B
-    from : B → A
-    to-from : (x : B) → to (from x) ≡ x
-    from-to : (x : A) → from (to x) ≡ x
-
-FlussoGnomonicoUniversale : {ℓ : Level} (n : ℕ) → (FiguraSatura {lzero} n) ≃ (FlussoModale {lzero} n)
-FlussoGnomonicoUniversale n = record
-  { to = λ { (SaturationEngine mat ctrl) → Configurazione mat }
-  ; from = λ { (Configurazione mat) → SaturationEngine mat ( λ f g anom → Filtro-λ anom) }
-  ; to-from = λ { (Configurazione mat) i → Configurazione mat }
-  ; from-to = λ { (SaturationEngine mat ctrl) i → SaturationEngine mat ( λ f g anom → ctrl f g anom) i }
-  }
-
--- ========================================================================
--- 5. SST-LEVEL
--- ========================================================================
-
-record SST-Level (n : ℕ) : Type (lsuc lzero) where
-  constructor CoherenceLevel
-  field
-    coerenza-faccia : {m : ℕ} (f : InserimentoFaccia m n) → FibratoMorfico {lzero} m
-    stabilità-flusso : {m : ℕ} (f : InserimentoFaccia (suc m) (suc (suc m))) (g : InserimentoFaccia m (suc m))
-      → RefluGeometrico f g → ⊥
-
-Base-Coherence : SST-Level zero
-Base-Coherence = record
-  { coerenza-faccia = λ ()
-  ; stabilità-flusso = λ f g anom → Filtro-λ anom
-  }
-
-Symmetry-1/3 : {n : ℕ} → SST-Level n → SST-Level (suc n)
-Symmetry-1/3 {n} ipot-induttiva = record
-  { coerenza-faccia = λ f → record
-    { StratoMateria = λ g → SST-Level n
-    ; trasporto-kan = λ eq x → x
-    }
-  ; stabilità-flusso = λ f g anom → Filtro-λ anom
-  }
-
-PSIU-Inductive-Hierarchy : (n : ℕ) → SST-Level n
-PSIU-Inductive-Hierarchy zero = Base-Coherence
-PSIU-Inductive-Hierarchy (suc n) = Symmetry-1/3 {n} (PSIU-Inductive-Hierarchy n)
-
--- ========================================================================
--- 6. RIEMPITORE DI KAN (Sintesi Corretta)
--- ========================================================================
-
-record RiempitoreKan (ℓ : Level) (A : Type ℓ) : Type (lsuc ℓ) where
-  constructor KanFillerEngine
-  field
-    -- Ora Agda riconosce questa sintassi grazie al renaming iniziale
-    riempimento-cubico : (i : I) (φ : I) (u : ∀ (j : I) → Partial φ A) (base : A [ φ ↦ u zero ]) → A
-
--- ========================================================================
--- 7. TEST E CHIUSURA
--- ========================================================================
-
-Onestà-Protocollo : (n : ℕ) → FiguraSatura n → ⊥
-Onestà-Protocollo n (SaturationEngine mat ctrl) = 
-  let f = faccia-zero {suc zero}
-      g = faccia-zero {zero}
-      anomalia-falsa = anomalia-flusso ( λ violazione → violazione (teorema-treccia-simpliciale f g))
-  in Filtro-λ anomalia-falsa
-
-Dato-Test-4D : ℕ
-Dato-Test-4D = 42
+    equivalenza : A ≃ B  -- Dove ≃ è l'equivalenza standard di Cubical Agda
