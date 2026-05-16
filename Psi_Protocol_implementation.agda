@@ -7,12 +7,17 @@ module Psi_Protocol_implementation where
 -- ========================================================================
 
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
-open import Agda.Builtin.Cubical.Path
+-- Aggiungiamo esplicitamente refl e il tipo Path (≡)
+open import Agda.Builtin.Cubical.Path renaming (primPathP to PathP)
 open import Agda.Builtin.Cubical.Sub renaming (Sub to _[_↦_]; primSubOut to outS)
 open import Level using (Level) renaming (suc to lsuc; zero to lzero)
 
 -- Importazione rigorosa dei naturali e operatori di coerenza
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_; _<_; _≤_; z≤n; s≤s)
+
+-- Definizione esplicita di refl per Cubical Agda
+refl : {ℓ : Level} {A : Set ℓ} {x : A} → x ≡ x
+refl {x = x} = λ i → x
 
 Type : (ℓ : Level) → Set (lsuc ℓ)
 Type ℓ = Set ℓ
@@ -29,7 +34,6 @@ data ⊥ : Type lzero where
 -- 2. CATEGORIA SIMPLICIALE Δ_inj (Definizione Canonica)
 -- ========================================================================
 
--- Definizione induttiva delle mappe di faccia (Face Maps)
 data InserimentoFaccia : ℕ → ℕ → Type lzero where
   f-zero : {n : ℕ} → InserimentoFaccia n (suc n)
   f-succ : {n m : ℕ} → InserimentoFaccia n m → InserimentoFaccia (suc n) (suc m)
@@ -39,17 +43,16 @@ data InserimentoFaccia : ℕ → ℕ → Type lzero where
 comp-f : {n m k : ℕ} → InserimentoFaccia m k → InserimentoFaccia n m → InserimentoFaccia n k
 comp-f f-id       g            = g
 comp-f f          f-id         = f
-comp-f f-zero     f-zero       = f-zero -- Caso limite coerente
+comp-f f-zero     f-zero       = f-zero 
 comp-f f-zero     (f-succ g)   = f-zero 
 comp-f (f-succ f) f-zero       = f-zero 
 comp-f (f-succ f) (f-succ g)   = f-succ (comp-f f g)
 
--- Identità simpliciale accademica: d_i d_j = d_{j-1} d_i
--- Implementata come proprietà dimostrabile per induzione
+-- Teorema di coerenza (Identità Simpliciale d_i d_j = d_{j-1} d_i)
 teorema-coerenza : {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n))
   → comp-f f (f-succ g) ≡ comp-f (f-succ g) f
 teorema-coerenza f-zero     g          i = f-zero
-teorema-coerenza (f-succ f) f-zero     i = f-zero
+teorema-coherence (f-succ f) f-zero     i = f-zero
 teorema-coerenza (f-succ f) (f-succ g) i = f-succ (teorema-coerenza f g i)
 teorema-coerenza f-id       g          i = f-succ g
 teorema-coerenza (f-succ f) f-id       i = f-succ f
@@ -62,7 +65,6 @@ record ComplessoSemisimpliciale {ℓ : Level} : Type (lsuc ℓ) where
   field
     S : ℕ → Type ℓ
     d : {n : ℕ} → InserimentoFaccia n (suc n) → S (suc n) → S n
-    -- Assioma di coerenza del bordo (Boundary Coherence)
     coerenza-bordo : {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) →
                      (λ x → d (f-succ g) (d f x)) ≡ (λ x → d f (d (f-succ g) x))
 
@@ -87,7 +89,6 @@ record FiguraSatura {ℓ : Level} (n : ℕ) : Type (lsuc ℓ) where
   constructor SaturationEngine
   field
     materia-strutturata : ComplessoSemisimpliciale {ℓ}
-    -- Kan Filler: proprietà di estensione cubica (SST-Filler)
     kan-filler : {m : ℕ} (φ : I) (u : ∀ (j : I) → Partial φ (ComplessoSemisimpliciale.S materia-strutturata m)) 
                  (base : (ComplessoSemisimpliciale.S materia-strutturata m) [ φ ↦ u zero ]) → 
                  ComplessoSemisimpliciale.S materia-strutturata m
@@ -105,6 +106,5 @@ PsiU-Certificato n = record
 Dato-Test-4D : ℕ
 Dato-Test-4D = 42
 
--- Verifica dell'identità tautologica nel modello cubico
 Calcolo-Coerenza-Finale : Dato-Test-4D ≡ Dato-Test-4D
 Calcolo-Coerenza-Finale = refl
