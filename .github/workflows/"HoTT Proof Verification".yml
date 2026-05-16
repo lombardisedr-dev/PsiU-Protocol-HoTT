@@ -13,8 +13,9 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
+    # CORREZIONE: Usiamo l'azione ufficiale corretta 'agda/agda-setup-action'
     - name: Configura Ambiente Agda
-      uses: agda/setup-agda@v2
+      uses: agda/agda-setup-action@v1
       with:
         agda-version: '2.6.4.3'
 
