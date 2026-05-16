@@ -9,51 +9,43 @@ on:
 
 jobs:
   proof:
-    name: Verifica Formale e Ispezione Assiomatica
+    name: Validazione Matematica Rigorosa (HoTT / SST)
     runs-on: ubuntu-latest
 
     steps:
       - name: 1. Clonazione Repository
         uses: actions/checkout@v4
 
-      - name: 2. Configurazione Libreria Standard Nativa
-        run: |
-          echo "=== Installazione di Agda ==="
-          sudo apt-get update
-          sudo apt-get install -y agda agda-stdlib
+      - name: 2. Installazione Ufficiale Agda e Standard Library
+        uses: agda/agda-setup-action@v2
+        with:
+          agda-version: '2.6.4.3'
+          agda-stdlib-version: '2.0'
 
-          echo "=== Configurazione dei percorsi di sistema ==="
-          mkdir -p ~/.agda
-          
-          # Colleghiamo Agda alla libreria standard già installata da Ubuntu
-          echo "/usr/share/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
-          echo "standard-library" > ~/.agda/defaults
-          
-          echo "✅ Libreria standard nativa configurata con successo."
-
-      - name: 3. Controllo Anti-Scorciatoie (Linting Sintattico)
+      - name: 3. Controllo Statico Costruttivo (Anti-Postulate)
         run: |
-          echo "=== LIVELLO 1: Controllo stringente sulle stringhe vietate ==="
+          echo "=== VERIFICA RIGORE: Analisi Statica del Codice ==="
           ERRORS=0
           
           if grep -rn "postulate" *.agda; then
-            echo "❌ ERRORE: Rilevato l'uso di 'postulate'. Le dimostrazioni devono essere costruttive."
+            echo "❌ ERRORE CRITICO: Il codice usa postulati non dimostrati."
             ERRORS=$((ERRORS + 1))
           fi
           
           if grep -rn "{-# TERMINATING" *.agda || grep -rn "{-# NON_TERMINATING" *.agda; then
-            echo "❌ ERRORE: Rilevata disattivazione manuale del controllo di terminazione."
+            echo "❌ ERRORE CRITICO: Rilevato bypass del controllo di terminazione."
             ERRORS=$((ERRORS + 1))
           fi
 
           if [ $ERRORS -ne 0 ]; then
             exit 1
           else
-            echo "✅ Superato: Nessuna scorciatoia sintattica rilevata."
+            echo "✅ SUPERATO: Il codice non contiene assiomi vuoti o scorciatoie."
           fi
 
-      - name: 4. Compilazione e Type-Checking Rigido (--safe)
+      - name: 4. Type-Checking Cubico Certificato (--safe)
         run: |
-          echo "=== LIVELLO 2: Controllo dei Tipi in Modalità Sicura Costruttiva ==="
+          echo "=== VERIFICA MATEMATICA: Avvio del Compilatore Agda ==="
+          # Esegue il controllo puro. Il file .agda-lib locale indicherà ad Agda
+          # di agganciarsi alla standard-library ufficiale configurata dall'azione al punto 2.
           agda --safe Psi_Protocol_implementation.agda
-          echo "✅ IDONEITÀ FORMALE: Dimostrazione completata con successo al 100%."
