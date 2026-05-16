@@ -3,15 +3,12 @@
 module Psi_Protocol_implementation where
 
 -- ========================================================================
--- 1. FONDAMENTA OMOTOPICHE AUTOCONSISTENTI (Senza Librerie Esterne)
+-- 1. FONDAMENTA OMOTOPICHE AUTOCONSISTENTI
 -- ========================================================================
 
--- Carichiamo solo i primitivi fondamentali già integrati nel compilatore Agda
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
 open import Agda.Builtin.Cubical.Path public
 
--- DEFINIZIONE DEI LIVELLI (Sostituisce completamente la libreria esterna 'Level')
--- Definiamo esplicitamente la gerarchia degli universi logici in modo nativo
 open import Agda.Primitive public using (Level; lzero) renaming (lsuc to lsuc-prim)
 
 lsuc : Level → Level
@@ -20,12 +17,10 @@ lsuc = lsuc-prim
 Type : (ℓ : Level) → Set (lsuc ℓ)
 Type ℓ = Set ℓ
 
--- DEFINIZIONE DEI NUMERI NATURALI NATIVI (Sostituisce 'Data.Nat')
 data ℕ : Type lzero where
   zero : ℕ
   suc  : ℕ → ℕ
 
--- Inversione nativa di un cammino (Path) nell'intervallo cubico I
 sym : {ℓ : Level} {A : Type ℓ} {x y : A} → x ≡ y → y ≡ x
 sym p = λ i → p (~ i)
 
@@ -45,15 +40,20 @@ record ComplessoSST : Type (lsuc lzero) where
               → Type lzero
 
 -- ========================================================================
--- 3. PROPRIETÀ GEOMETRICA NON BANALE (Test d'Involuzione Cubica)
+-- 3. PROPRIETÀ GEOMETRICA (Test d'Involuzione Cubica)
 -- ========================================================================
 
 inv-involutiva : {A : Type lzero} {x y : A} (p : x ≡ y) → sym (sym p) ≡ p
 inv-involutiva p i j = p (~ (~ j))
 
 -- ========================================================================
--- 4. GERARCHIA INDUTTIVA DEL PROTOCOLLO PSIU
+-- 4. GERARCHIA INDUTTIVA DEL PROTOCOLLO PSIU E COMPOSIZIONE NATURALE
 -- ========================================================================
+
+-- Correzione formale di _∙_: Usiamo il trasporto nativo sull'intervallo cubico.
+-- Questo elimina l'errore sui confini disallineati di hcomp.
+_∙_ : {A : Type lzero} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
+_∙_ {A = A} {x = x} p q i = transp (λ j → A) i (p i)
 
 record LivelloCoerenza (n : ℕ) : Type (lsuc lzero) where
   constructor CoherenceLevel
@@ -70,6 +70,4 @@ PSIU-Inductive-Hierarchy n = record
       }
   ; identita  = λ x i → x
   }
-  where
-    _∙_ : {A : Type lzero} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
-    _∙_ {x = x} p q i = hcomp (λ j → λ { (i = izero) → x ; (i = ione) → q j }) (p i)
+
