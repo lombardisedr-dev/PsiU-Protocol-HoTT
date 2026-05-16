@@ -16,15 +16,18 @@ jobs:
       - name: 1. Clonazione Repository
         uses: actions/checkout@v4
 
-      - name: 2. Installazione di Agda, Standard Library e HoTT
-        uses: hiartan/setup-agda@v2
-        with:
-          agda-version: '2.6.4.3'
-          # Installa e registra automaticamente le dipendenze richieste
-          agda-stdlib-version: '2.0'
-          agda-defaults: |
-            standard-library
-            hott
+      - name: 2. Installazione di Agda e Standard Library
+        run: |
+          echo "=== Installazione pacchetti di sistema ==="
+          sudo apt-get update
+          sudo apt-get install -y agda agda-stdlib
+
+          echo "=== Configurazione dell'ambiente Agda ==="
+          mkdir -p ~/.agda
+          
+          # Registra la libreria standard nel sistema locale del runner
+          echo "/usr/share/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
+          echo "standard-library" > ~/.agda/defaults
 
       - name: 3. Controllo Anti-Scorciatoie (Linting Sintattico)
         run: |
@@ -37,7 +40,7 @@ jobs:
             ERRORS=$((ERRORS + 1))
           fi
           
-          # Cerca se sono state usate direttive per disattivare i controlli di terminazione (evita loop logici infiniti)
+          # Cerca se sono state usate direttive per disattivare i controlli di terminazione
           if grep -rn "{-# TERMINATING" *.agda || grep -rn "{-# NON_TERMINATING" *.agda; then
             echo "❌ ERRORE: Rilevata disattivazione manuale del controllo di terminazione."
             ERRORS=$((ERRORS + 1))
@@ -52,14 +55,11 @@ jobs:
       - name: 4. Compilazione e Type-Checking Rigido (--safe)
         run: |
           echo "=== LIVELLO 2: Controllo dei Tipi in Modalità Sicura Costruttiva ==="
-          # Crea il file locale di configurazione librerie se non presente
-          echo "standard-library" > libraries
-          echo "hott" >> libraries
           
           # Il flag --safe costringe il compilatore a verificare che:
           # - Non ci siano postulati non dichiarati
-          # - Tutte le funzioni siano totalmente dimostrate e terminino
-          # - Non vengano usati paradossi logici sulla gerarchia degli universi (HoTT)
+          # - Tutte le funzioni siano totalmente dimostrate e terminino correttamente
+          # - Non vengano usati paradossi logici sulla gerarchia degli universi
           agda --safe Psi_Protocol_implementation.agda
 
       - name: 5. Generazione Report Scientifico Interno
@@ -68,4 +68,4 @@ jobs:
           echo "=== LIVELLO 3: Analisi di Copertura ed Esportazione Interfaccia ==="
           # Genera la documentazione ipertestuale per ispezionare visivamente ogni tipo/teorema risolto
           agda --html Psi_Protocol_implementation.agda
-          echo "Verifica formale completata con successo al 100%."
+          echo "✅ Verifica formale completata con successo al 100%."
