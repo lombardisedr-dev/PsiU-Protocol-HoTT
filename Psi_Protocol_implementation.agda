@@ -1,7 +1,7 @@
 {-# OPTIONS --cubical --safe #-}
 
--- Rinominato in Psi_Protocol_implementation_2 per combaciare con i test Step 4, 5, 6
-module Psi_Protocol_implementation_2 where
+-- Il nome del modulo DEVE coincidere con il nome del file per passare lo Step 3
+module Psi_Protocol_implementation where
 
 -- ========================================================================
 -- 1. FONDAMENTA (Standard Agda 2.6.4 / Cubical)
@@ -14,7 +14,7 @@ open import Level using (Level) renaming (suc to lsuc; zero to lzero)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_; _<_; _≤_; z≤n; s≤s)
 open import Data.Empty renaming (⊥ to ⊥-type)
 
--- Alias per la coerenza con i test di onestà logica
+-- Alias per la coerenza con i test di onestà logica (Step 4)
 ⊥ = ⊥-type
 
 refl : {ℓ : Level} {A : Set ℓ} {x : A} → x ≡ x
