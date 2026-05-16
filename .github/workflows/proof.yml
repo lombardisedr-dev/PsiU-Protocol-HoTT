@@ -1,0 +1,63 @@
+name: Proof
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  proof:
+    name: Verifica Formale e Ispezione Assiomatica
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Clonazione Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Installazione di Agda e Standard Library
+        run: |
+          echo "=== Installazione pacchetti di sistema ==="
+          sudo apt-get update
+          sudo apt-get install -y agda git
+
+          echo "=== Configurazione dell'ambiente Agda ==="
+          mkdir -p ~/.agda
+          mkdir -p ~/agda-libs
+
+          echo "=== Download sicuro della Standard Library ==="
+          git clone --depth=1 --branch=v2.0 https://github.com ~/agda-libs/agda-stdlib
+          
+          STDLIB_PATH=$(find ~/agda-libs -name "standard-library.agda-lib" | head -n 1)
+          echo "$STDLIB_PATH" > ~/.agda/libraries
+          echo "standard-library" > ~/.agda/defaults
+          
+          echo "✅ Libreria standard configurata correttamente in: $STDLIB_PATH"
+
+      - name: 3. Controllo Anti-Scorciatoie (Linting Sintattico)
+        run: |
+          echo "=== LIVELLO 1: Controllo stringente sulle stringhe vietate ==="
+          ERRORS=0
+          
+          if grep -rn "postulate" *.agda; then
+            echo "❌ ERRORE: Rilevato l'uso di 'postulate'. Le dimostrazioni devono essere costruttive."
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          if grep -rn "{-# TERMINATING" *.agda || grep -rn "{-# NON_TERMINATING" *.agda; then
+            echo "❌ ERRORE: Rilevata disattivazione manuale del controllo di terminazione."
+            ERRORS=$((ERRORS + 1))
+          fi
+
+          if [ $ERRORS -ne 0 ]; then
+            exit 1
+          else
+            echo "✅ Superato: Nessuna scorciatoia sintattica rilevata."
+          fi
+
+      - name: 4. Compilazione e Type-Checking Rigido (--safe)
+        run: |
+          echo "=== LIVELLO 2: Controllo dei Tipi in Modalità Sicura Costruttiva ==="
+          agda --safe Psi_Protocol_implementation.agda
+          echo "✅ IDONEITÀ FORMALE: Dimostrazione completata con successo al 100%."
