@@ -1,10 +1,9 @@
 {-# OPTIONS --cubical --safe #-}
 
--- Il nome del modulo DEVE coincidere esattamente con il nome del file
 module Psi_Protocol_implementation where
 
 -- ========================================================================
--- 1. FONDAMENTA ASSIOMATICHE (Standard Cubical HoTT)
+-- 1. FONDAMENTA (Standard Agda 2.6.4 / Cubical)
 -- ========================================================================
 
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
@@ -14,7 +13,6 @@ open import Level using (Level) renaming (suc to lsuc; zero to lzero)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_; _<_; _≤_; z≤n; s≤s)
 open import Data.Empty renaming (⊥ to ⊥-type)
 
--- Alias fondamentale per l'integrità logica (Step 4 dello YAML)
 ⊥ = ⊥-type
 
 refl : {ℓ : Level} {A : Set ℓ} {x : A} → x ≡ x
@@ -27,15 +25,17 @@ tautologia-identita : (n : ℕ) → n ≡ n
 tautologia-identita n = refl
 
 -- ========================================================================
--- 2. CATEGORIA Δ_inj (Visione Accademica Rigorosa)
+-- 2. CATEGORIA Δ_inj (Unificazione Rigorosa degli Indici)
 -- ========================================================================
 
 data InserimentoFaccia : ℕ → ℕ → Type lzero where
   faccia-zero : {n : ℕ} → InserimentoFaccia n (suc n)
   faccia-succ : {n m : ℕ} → InserimentoFaccia n m → InserimentoFaccia (suc n) (suc m)
 
+-- La composizione ora specifica esplicitamente come gli indici devono combaciare
 comp-faccia : {n m k : ℕ} → InserimentoFaccia m k → InserimentoFaccia n m → InserimentoFaccia n k
-comp-faccia faccia-zero     _                = faccia-zero
+comp-faccia faccia-zero     faccia-zero      = faccia-zero
+comp-faccia faccia-zero     (faccia-succ g)  = faccia-zero 
 comp-faccia (faccia-succ f) faccia-zero      = faccia-zero
 comp-faccia (faccia-succ f) (faccia-succ g)  = faccia-succ (comp-faccia f g)
 
@@ -46,7 +46,7 @@ teorema-treccia-simpliciale (faccia-succ f) faccia-zero i = faccia-zero
 teorema-treccia-simpliciale (faccia-succ f) (faccia-succ g) i = faccia-succ (teorema-treccia-simpliciale f g i)
 
 -- ========================================================================
--- 3. FILTRO LAMBDA (Onestà Logica per Step 4)
+-- 3. FILTRO LAMBDA (Onestà Logica)
 -- ========================================================================
 
 data RefluGeometrico {n : ℕ} (f : InserimentoFaccia (suc n) (suc (suc n))) (g : InserimentoFaccia n (suc n)) : Type lzero where
@@ -57,7 +57,7 @@ Filtro-λ : {n : ℕ} {f : InserimentoFaccia (suc n) (suc (suc n))} {g : Inserim
 Filtro-λ (anomalia-flusso violazione) = violazione (teorema-treccia-simpliciale _ _)
 
 -- ========================================================================
--- 4. CANONICITÀ E SST (Per Step 5 e 6)
+-- 4. CANONICITÀ E SST (Per validazione-scientifica.yml)
 -- ========================================================================
 
 Calcolo-Flusso-Reale : 42 ≡ 42
