@@ -16,25 +16,28 @@ jobs:
       - name: 1. Clonazione Repository
         uses: actions/checkout@v4
 
-      - name: 2. Installazione di Agda e Configurazione Ambiente Locale
+      - name: 2. Installazione di Agda e Standard Library Reale
         run: |
           echo "=== Installazione pacchetti di sistema ==="
           sudo apt-get update
-          sudo apt-get install -y agda
+          sudo apt-get install -y agda git
 
-          echo "=== Creazione e mappatura delle cartelle ==="
+          echo "=== Configurazione delle cartelle di sistema ==="
           mkdir -p ~/.agda
+          mkdir -p ~/agda-libs
+
+          echo "=== Download sicuro e pulito della Standard Library ==="
+          # L'URL tra virgolette impedisce errori di troncamento della stringa nella shell di GitHub
+          git clone --depth 1 "https://github.com" ~/agda-libs/agda-stdlib
           
-          # Creiamo un file .agda-lib locale finto e vuoto per soddisfare il compilatore
-          # senza dover scaricare centinaia di megabyte da repository esterni instabili
-          mkdir -p ~/agda-local-lib
-          echo "name: standard-library" > ~/agda-local-lib/standard-library.agda-lib
+          # Trova il file di configurazione reale della libreria scaricata
+          STDLIB_PATH=$(find ~/agda-libs/agda-stdlib -name "standard-library.agda-lib" | head -n 1)
           
-          # Registriamo la libreria finta nell'ambiente globale del runner
-          echo "$HOME/agda-local-lib/standard-library.agda-lib" > ~/.agda/libraries
+          # Registra la libreria in modo che Agda possa trovare il modulo 'Level'
+          echo "$STDLIB_PATH" > ~/.agda/libraries
           echo "standard-library" > ~/.agda/defaults
           
-          echo "✅ Ambiente isolato configurato con successo."
+          echo "✅ Libreria standard configurata in: $STDLIB_PATH"
 
       - name: 3. Controllo Anti-Scorciatoie (Linting Sintattico)
         run: |
@@ -60,6 +63,5 @@ jobs:
       - name: 4. Compilazione e Type-Checking Rigido (--safe)
         run: |
           echo "=== LIVELLO 2: Controllo dei Tipi in Modalità Sicura Costruttiva ==="
-          # Eseguiamo il controllo formale reale sul tuo file sorgente
           agda --safe Psi_Protocol_implementation.agda
           echo "✅ IDONEITÀ FORMALE: Dimostrazione completata con successo al 100%."
