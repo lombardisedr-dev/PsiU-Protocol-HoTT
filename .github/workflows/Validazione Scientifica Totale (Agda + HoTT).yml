@@ -20,14 +20,23 @@ jobs:
         run: |
           echo "=== Installazione pacchetti di sistema ==="
           sudo apt-get update
-          sudo apt-get install -y agda agda-stdlib
+          sudo apt-get install -y agda wget unzip
 
           echo "=== Configurazione dell'ambiente Agda ==="
           mkdir -p ~/.agda
+          mkdir -p ~/agda-libs
+
+          echo "=== Download della Standard Library ufficiale ==="
+          # Scarica la versione stabile 2.0 della Standard Library da GitHub
+          wget https://github.com -O ~/agda-libs/stdlib.zip
+          unzip ~/agda-libs/stdlib.zip -d ~/agda-libs/
           
-          # Registra la libreria standard nel sistema locale del runner
-          echo "/usr/share/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
+          # Individua dinamicamente il percorso del file .agda-lib e lo mappa nelle preferenze
+          STDLIB_PATH=$(find ~/agda-libs -name "standard-library.agda-lib" | head -n 1)
+          echo "$STDLIB_PATH" > ~/.agda/libraries
           echo "standard-library" > ~/.agda/defaults
+          
+          echo "✅ Libreria standard configurata correttamente in: $STDLIB_PATH"
 
       - name: 3. Controllo Anti-Scorciatoie (Linting Sintattico)
         run: |
