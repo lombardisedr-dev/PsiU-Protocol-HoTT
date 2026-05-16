@@ -16,28 +16,20 @@ jobs:
       - name: 1. Clonazione Repository
         uses: actions/checkout@v4
 
-      - name: 2. Installazione di Agda e Standard Library Reale
+      - name: 2. Configurazione Libreria Standard Nativa
         run: |
-          echo "=== Installazione pacchetti di sistema ==="
+          echo "=== Installazione di Agda ==="
           sudo apt-get update
-          sudo apt-get install -y agda git
+          sudo apt-get install -y agda agda-stdlib
 
-          echo "=== Configurazione delle cartelle di sistema ==="
+          echo "=== Configurazione dei percorsi di sistema ==="
           mkdir -p ~/.agda
-          mkdir -p ~/agda-libs
-
-          echo "=== Download sicuro e pulito della Standard Library ==="
-          # L'URL tra virgolette impedisce errori di troncamento della stringa nella shell di GitHub
-          git clone --depth 1 "https://github.com" ~/agda-libs/agda-stdlib
           
-          # Trova il file di configurazione reale della libreria scaricata
-          STDLIB_PATH=$(find ~/agda-libs/agda-stdlib -name "standard-library.agda-lib" | head -n 1)
-          
-          # Registra la libreria in modo che Agda possa trovare il modulo 'Level'
-          echo "$STDLIB_PATH" > ~/.agda/libraries
+          # Colleghiamo Agda alla libreria standard già installata da Ubuntu
+          echo "/usr/share/agda-stdlib/standard-library.agda-lib" > ~/.agda/libraries
           echo "standard-library" > ~/.agda/defaults
           
-          echo "✅ Libreria standard configurata in: $STDLIB_PATH"
+          echo "✅ Libreria standard nativa configurata con successo."
 
       - name: 3. Controllo Anti-Scorciatoie (Linting Sintattico)
         run: |
