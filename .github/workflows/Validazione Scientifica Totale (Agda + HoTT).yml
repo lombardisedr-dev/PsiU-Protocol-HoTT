@@ -1,0 +1,71 @@
+name: Validazione Scientifica Totale (Agda + HoTT)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  comprehensive-check:
+    name: Verifica Formale e Ispezione Assiomatica
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Clonazione Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Installazione di Agda, Standard Library e HoTT
+        uses: hiartan/setup-agda@v2
+        with:
+          agda-version: '2.6.4.3'
+          # Installa e registra automaticamente le dipendenze richieste
+          agda-stdlib-version: '2.0'
+          agda-defaults: |
+            standard-library
+            hott
+
+      - name: 3. Controllo Anti-Scorciatoie (Linting Sintattico)
+        run: |
+          echo "=== LIVELLO 1: Controllo stringente sulle stringhe vietate ==="
+          ERRORS=0
+          
+          # Cerca se sono stati usati postulati non dimostrati
+          if grep -rn "postulate" *.agda; then
+            echo "❌ ERRORE: Rilevato l'uso di 'postulate'. Le dimostrazioni devono essere costruttive."
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          # Cerca se sono state usate direttive per disattivare i controlli di terminazione (evita loop logici infiniti)
+          if grep -rn "{-# TERMINATING" *.agda || grep -rn "{-# NON_TERMINATING" *.agda; then
+            echo "❌ ERRORE: Rilevata disattivazione manuale del controllo di terminazione."
+            ERRORS=$((ERRORS + 1))
+          fi
+
+          if [ $ERRORS -ne 0 ]; then
+            exit 1
+          else
+            echo "✅ Superato: Nessuna scorciatoia sintattica rilevata."
+          fi
+
+      - name: 4. Compilazione e Type-Checking Rigido (--safe)
+        run: |
+          echo "=== LIVELLO 2: Controllo dei Tipi in Modalità Sicura Costruttiva ==="
+          # Crea il file locale di configurazione librerie se non presente
+          echo "standard-library" > libraries
+          echo "hott" >> libraries
+          
+          # Il flag --safe costringe il compilatore a verificare che:
+          # - Non ci siano postulati non dichiarati
+          # - Tutte le funzioni siano totalmente dimostrate e terminino
+          # - Non vengano usati paradossi logici sulla gerarchia degli universi (HoTT)
+          agda --safe Psi_Protocol_implementation.agda
+
+      - name: 5. Generazione Report Scientifico Interno
+        if: success()
+        run: |
+          echo "=== LIVELLO 3: Analisi di Copertura ed Esportazione Interfaccia ==="
+          # Genera la documentazione ipertestuale per ispezionare visivamente ogni tipo/teorema risolto
+          agda --html Psi_Protocol_implementation.agda
+          echo "Verifica formale completata con successo al 100%."
