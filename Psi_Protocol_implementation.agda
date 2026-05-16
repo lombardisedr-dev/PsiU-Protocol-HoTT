@@ -7,11 +7,13 @@ module Psi_Protocol_implementation where
 -- ========================================================================
 
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
-open import Agda.Builtin.Cubical.Path
+-- L'aggiunta di 'public' risolve l'errore "Not in scope: ≡" nello Step 5
+open import Agda.Builtin.Cubical.Path public 
 open import Agda.Builtin.Cubical.Sub renaming (Sub to _[_↦_]; primSubOut to outS)
 open import Level using (Level) renaming (suc to lsuc; zero to lzero)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_; _<_; _≤_)
 open import Data.Empty renaming (⊥ to ⊥-type)
+
 
 ⊥ = ⊥-type
 
