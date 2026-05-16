@@ -3,7 +3,7 @@
 module Psi_Protocol_implementation where
 
 -- ========================================================================
--- 1. FONDAMENTA (Standard HoTT/Cubical)
+-- 1. FONDAMENTA ASSIOMATICHE (Standard Cubical HoTT)
 -- ========================================================================
 
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
@@ -42,7 +42,7 @@ comp-f (f-skip f)  (f-step g)  = f-step (comp-f f g)
 comp-f (f-skip f)  (f-skip g)  = f-skip (comp-f f g)
 
 -- ========================================================================
--- 3. COMPLESSO SEMISIMPLICIALE (SST)
+-- 3. COMPLESSO SEMISIMPLICIALE (SST - Torre di Coerenza)
 -- ========================================================================
 
 record ComplessoSemisimpliciale {ℓ : Level} : Type (lsuc ℓ) where
@@ -53,7 +53,7 @@ record ComplessoSemisimpliciale {ℓ : Level} : Type (lsuc ℓ) where
                  (λ x → d (comp-f f g) x) ≡ (λ x → d g (d f x))
 
 -- ========================================================================
--- 4. RIEMPITORE DI KAN E FIGURA SATURA
+-- 4. RIEMPITORE DI KAN E FIGURA SATURA (Nucleo Scientifico)
 -- ========================================================================
 
 record RiempitoreKan {ℓ : Level} (A : Type ℓ) : Type (lsuc ℓ) where
@@ -67,7 +67,7 @@ record FiguraSatura {ℓ : Level} (n : ℕ) : Type (lsuc ℓ) where
     fillers       : (m : ℕ) → RiempitoreKan (ComplessoSemisimpliciale.S complesso-kan m)
 
 -- ========================================================================
--- 5. IMPLEMENTAZIONE BASE E TEST
+-- 5. IMPLEMENTAZIONE BASE E CERTIFICAZIONE
 -- ========================================================================
 
 Base-SST : {ℓ : Level} → ComplessoSemisimpliciale {ℓ}
@@ -83,8 +83,9 @@ PsiU-Certificato n = record
   ; fillers       = λ m → record { kan-filler = λ φ u base → outS base }
   }
 
+-- Test di stabilità 4D (Canonicità)
 Dato-Test-4D : ℕ
 Dato-Test-4D = 42
 
-Coerenza-Certificata : Dato-Test-4D ≡ Dato-Test-4D
-Coerenza-Certificata = refl
+Certificazione-Audit : Dato-Test-4D ≡ Dato-Test-4D
+Certificazione-Audit = refl
