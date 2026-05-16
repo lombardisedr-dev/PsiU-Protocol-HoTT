@@ -9,6 +9,9 @@ module Psi_Protocol_implementation where
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
 open import Agda.Builtin.Cubical.Path public
 
+-- IMPORTANTE: Importiamo l'intervallo e l'inversione (~), izero, ione primitivi
+open import Agda.Builtin.Cubical.Interval public
+
 open import Agda.Primitive public using (Level; lzero) renaming (lsuc to lsuc-prim)
 
 lsuc : Level → Level
@@ -21,6 +24,7 @@ data ℕ : Type lzero where
   zero : ℕ
   suc  : ℕ → ℕ
 
+-- L'operatore ~ è ora visibile grazie all'importazione di Agda.Builtin.Cubical.Interval
 sym : {ℓ : Level} {A : Type ℓ} {x y : A} → x ≡ y → y ≡ x
 sym p = λ i → p (~ i)
 
@@ -50,16 +54,15 @@ inv-involutiva p i j = p (~ (~ j))
 -- 4. GERARCHIA INDUTTIVA DEL PROTOCOLLO PSIU E COMPOSIZIONE NATURALE
 -- ========================================================================
 
--- Correzione formale di _∙_: Usiamo il trasporto nativo sull'intervallo cubico.
--- Questo elimina l'errore sui confini disallineati di hcomp.
+-- Composizione geometrica dei cammini corretta per Cubical Agda puro
 _∙_ : {A : Type lzero} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
-_∙_ {A = A} {x = x} p q i = transp (λ j → A) i (p i)
+_∙_ {A = A} {x = x} p q i = hcomp (λ j → λ { (i = izero) → x ; (i = ione) → q j }) (p i)
 
 record LivelloCoerenza (n : ℕ) : Type (lsuc lzero) where
   constructor CoherenceLevel
   field
     struttura : ComplessoSST
-    identita  : (p : ComplessoSST.Punti struttura) → p ≡ p
+    identita  : (p : ComplessoSST.Punti structure) → p ≡ p
 
 PSIU-Inductive-Hierarchy : (n : ℕ) → LivelloCoerenza n
 PSIU-Inductive-Hierarchy n = record
@@ -70,4 +73,3 @@ PSIU-Inductive-Hierarchy n = record
       }
   ; identita  = λ x i → x
   }
-
