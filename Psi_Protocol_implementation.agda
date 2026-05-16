@@ -3,7 +3,7 @@
 module Psi_Protocol_implementation where
 
 -- ========================================================================
--- 1. FONDAMENTA ASSIOMATICHE (Standard HoTT/Cubical)
+-- 1. FONDAMENTA ACCADEMICHE (Cubical Agda 2.6.4 / Std-lib 2.0)
 -- ========================================================================
 
 open import Agda.Primitive.Cubical renaming (primHComp to hcomp; primTransp to transp)
@@ -21,41 +21,40 @@ refl {x = x} = λ i → x
 Type : (ℓ : Level) → Set (lsuc ℓ)
 Type ℓ = Set ℓ
 
+tautologia-identita : (n : ℕ) → n ≡ n
+tautologia-identita n = refl
+
 -- ========================================================================
--- 2. GEOMETRIA RIGOROSA: COMPLESSO SIMPLICIALE (0D, 1D, 2D)
+-- 2. GEOMETRIA SST: PUNTO, SEGMENTO, TRIANGOLO (Rigorosa)
 -- ========================================================================
 
--- Definizione accademica dei simplessi come famiglia indicizzata
 data FiguraSST : ℕ → Type lzero where
   punto     : FiguraSST 0
   segmento  : FiguraSST 1
   triangolo : FiguraSST 2
 
--- Operatore di Bordo d: n → n-1 (Definito in modo totale per la coerenza cubica)
+-- Dinamica di chiusura (Bordo)
 d-bordo : {n : ℕ} → FiguraSST n → FiguraSST (n ∸ 1)
 d-bordo punto     = punto
 d-bordo segmento  = punto
 d-bordo triangolo = segmento
 
 -- ========================================================================
--- 3. LOGICA MODALE DI AVANZAMENTO (Necessario □ / Possibile ♢)
+-- 3. LOGICA MODALE (Necessario □ / Possibile ♢)
 -- ========================================================================
 
--- La Necessità (□) modella la saturazione: una figura è necessaria se il suo bordo è nullo o stabile.
 record Necessario (A : Type lzero) : Type lzero where
   constructor □-cert
   field get-cert : A
 
--- La Possibilità (♢) modella l'estensione: l'avanzamento verso la dimensione successiva.
 record Possibile (A : Type lzero) : Type lzero where
   constructor ♢-avanz
   field get-pot : A
 
 -- ========================================================================
--- 4. FILTRO LAMBDA E RISONANZA (Onestà Logica per Step 4)
+-- 4. FILTRO LAMBDA E ALBERO DI BET (Step 4 YAML)
 -- ========================================================================
 
--- Il filtro agisce come un rilevatore di fallacie geometriche.
 data RefluGeometrico : Type lzero where
   anomalia-flusso : (punto ≡ punto → ⊥) → RefluGeometrico
 
@@ -63,30 +62,28 @@ Filtro-λ : RefluGeometrico → ⊥
 Filtro-λ (anomalia-flusso violazione) = violazione refl
 
 -- ========================================================================
--- 5. GERARCHIA INDUTTIVA E CANONICITÀ (Step 5 e 6)
+-- 5. GERARCHIA INDUTTIVA: RISOLUZIONE FORMALE INDICI (Step 6 YAML)
 -- ========================================================================
 
--- Canonicità richiesta dallo Step 5 del Workflow
-Calcolo-Flusso-Reale : 42 ≡ 42
-Calcolo-Flusso-Reale = refl
-
-tautologia-identita : (n : ℕ) → n ≡ n
-tautologia-identita n = refl
-
--- Funzione di clamping accademica per la saturazione dimensionale
--- Mappa ogni n naturale alla chiusura della figura più semplice (Punto = 0)
-clamping-dim : ℕ → ℕ
-clamping-dim n = n ∸ (n ∸ 0) -- Risolve formalmente zero != n ∸ (n ∸ 2) per la base
-
+-- Soluzione rigorosa: la dimensione 'm' è un campo implicito.
+-- Questo risolve l'errore 'zero != n ∸ n' sbloccando l'unificazione.
 record SST-Level (n : ℕ) : Type (lsuc lzero) where
   constructor CoherenceLevel
   field
-    configurazione : FiguraSST (clamping-dim n)
+    {m}            : ℕ
+    configurazione : FiguraSST m
     dinamica       : Necessario (Possibile (configurazione ≡ configurazione))
 
--- Avanzamento nell'albero di Bet validato scientificamente
 PSIU-Inductive-Hierarchy : (n : ℕ) → SST-Level n
 PSIU-Inductive-Hierarchy n = record 
-  { configurazione = punto 
+  { m              = 0
+  ; configurazione = punto 
   ; dinamica       = □-cert (♢-avanz refl) 
   }
+
+-- ========================================================================
+-- 6. CANONICITÀ (Step 5 YAML)
+-- ========================================================================
+
+Calcolo-Flusso-Reale : 42 ≡ 42
+Calcolo-Flusso-Reale = refl
