@@ -1,0 +1,39 @@
+name: "Stress Test Protocollo PSIU"
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Permette l'avvio manuale per i test
+
+jobs:
+  agda-stress-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Agda
+        uses: agda/setup-agda@v1
+        with:
+          agda-version: '2.6.4' # Versione stabile con supporto Cubical
+
+      - name: Install Cubical Library
+        run: |
+          git clone https://github.com ~/agda-cubical
+          echo "~/agda-cubical/cubical.agda-lib" >> ~/.agda/libraries
+
+      - name: Verifica Formale e Coerenza
+        run: |
+          # Test di compilazione standard con flag safe
+          agda --cubical --safe Psi_Protocol_implementation.agda
+          
+      - name: Stress Test Gerarchia (n=1000)
+        run: |
+          # Creiamo un file temporaneo che istanzia un livello alto di coerenza
+          echo "module StressTest where" > Stress.agda
+          echo "open import Psi_Protocol_implementation" >> Stress.agda
+          echo "test : LivelloCoerenza 1000" >> Stress.agda
+          echo "test = PSIU-Inductive-Hierarchy 1000" >> Stress.agda
+          
+          # Lanciamo il controllo: se passa in tempi brevi, l'architettura è geniale.
+          # Se va in "Out of Memory" o fallisce, abbiamo trovato il limite.
+          agda --cubical --safe Stress.agda
