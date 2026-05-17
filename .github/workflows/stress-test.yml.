@@ -26,7 +26,7 @@ jobs:
           # Test di compilazione standard con flag safe
           agda --cubical --safe Psi_Protocol_implementation.agda
           
-      - name: Stress Test Gerarchia (n=10000)
+      - name: Stress Test Gerarchia (n=1000)
         run: |
           # Creiamo un file temporaneo che istanzia un livello alto di coerenza
           echo "module StressTest where" > Stress.agda
