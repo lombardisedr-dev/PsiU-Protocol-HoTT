@@ -1,0 +1,21 @@
+name: "Valutazione Scientifica Geometria"
+
+on: [push, workflow_dispatch]
+
+jobs:
+  check-geometry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: wenkokke/setup-agda@v2
+        with:
+          agda-version: '2.6.4'
+      - name: Install Cubical
+        run: |
+          git clone https://github.com ~/agda-cubical
+          mkdir -p ~/.agda
+          echo "~/agda-cubical/cubical.agda-lib" > ~/.agda/libraries
+      - name: Test Coerenza Geometrica
+        run: |
+          # Verifichiamo se la struttura permette operazioni geometriche
+          agda --cubical --safe Verifica_Geometria_Reale.agda
