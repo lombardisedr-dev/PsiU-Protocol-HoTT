@@ -1,14 +1,24 @@
 {-# OPTIONS --cubical --safe #-}
 
+{-# OPTIONS --cubical --safe #-}
 module Psi_Protocol_implementation where
-
 open import Agda.Primitive.Cubical
 open import Agda.Builtin.Cubical.Path
 open import Agda.Builtin.Nat
 
--- 1. IL MOTORE DELLA NECESSITÀ (Composizione reale)
-_∙_ : {A : Set} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
-_∙_ {x = x} p q i = hcomp (λ j → λ where (i = i0) → x ; (i = i1) → q j) (p i)
+-- Correzione formale: i segmenti connettono correttamente i vertici (v0-v1, v1-v2, v0-v2)
+record ComplessoSST : Set1 where
+  field
+    Punti     : Set
+    Segmenti  : Punti → Punti → Set
+    Triangoli : (v0 v1 v2 : Punti) 
+                (s01 : Segmenti v0 v1) 
+                (s12 : Segmenti v1 v2) 
+                (s02 : Segmenti v0 v2) → Set
+
+-- Strutture di risonanza (tetraedro) e gerarchia induttiva invariate
+-- (Rimuovere o commentare le parti non necessarie qui per brevità)
+
 
 -- 2. LA STRUTTURA SST RIGOROSA
 record ComplessoSST : Set1 where
