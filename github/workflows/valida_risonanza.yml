@@ -1,4 +1,4 @@
-name: Validazione_Risonanza_SST
+name: "valida_risonanza"
 
 on: [push]
 
