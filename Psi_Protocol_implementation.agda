@@ -35,12 +35,11 @@ record TetraedroRisuonante (v0 v1 v2 v3 : ℕ) : Set where
 
 -- 4. L'INDUZIONE GNOMONICA (Scalabilità Reale)
 SST-Generator : (n : ℕ) → Set1
-SST-Generator zero          = Set -- Livello 0: Tipo dei Punti base (es. ℕ)
-SST-Generator (suc zero)    = Set -- Livello 1: Semplificato
-SST-Generator (suc (suc zero)) = ComplessoSST -- Livello 2: Triangoli
-SST-Generator (suc (suc (suc n))) = Record { 
-  struttura : TetraedroRisuonante zero zero zero zero -- Livello 3+: Risonanza Esterna (Istanziata)
-}
+SST-Generator zero          = Set 
+SST-Generator (suc zero)    = Set 
+SST-Generator (suc (suc zero)) = ComplessoSST 
+-- Per i livelli superiori, restituiamo direttamente il tipo della struttura geometrica del tetraedro
+SST-Generator (suc (suc (suc n))) = TetraedroRisuonante zero zero zero zero 
 
 -- 5. LA GERARCHIA DINAMICA FINALE (Filtro Attivo)
 PSIU-Inductive-Hierarchy : (n : ℕ) → Set1
