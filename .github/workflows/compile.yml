@@ -11,27 +11,15 @@ jobs:
       - name: Checkout del codice
         uses: actions/checkout@v4
 
-      # 1. Installa Agda in modo nativo e sicuro tramite l'Action ufficiale della comunità
-      - name: Installa Agda
+      # Installa Agda e scarica in automatico la libreria cubica ufficiale accoppiata
+      - name: Installa Agda e Cubical
         uses: wenkokke/setup-agda@v2
         with:
           agda-version: "2.6.4.3"
+          agda-libraries: |
+            https://github.com
 
-      # 2. Scarica la libreria Cubical ufficiale richiesta dalla HoTT
-      - name: Scarica la libreria Cubical
-        run: |
-          git clone https://github.com $HOME/cubical
-          cd $HOME/cubical
-          git checkout v0.6
-
-      # 3. Registra i percorsi nei file di configurazione locali
-      - name: Configura librerie Agda
-        run: |
-          mkdir -p $HOME/.agda
-          echo "$HOME/cubical/cubical.agda-lib" >> $HOME/.agda/libraries
-          echo "cubical" >> $HOME/.agda/defaults
-
-      # 4. Esegue il controllo dei tipi (Type-Check) sul tuo protocollo
+      # Esegue il controllo dei tipi (Type-Check) sul tuo protocollo
       - name: Verifica Tipo (Type-Check)
         run: |
           agda --cubical Psi_Protocol_implementation.agda
