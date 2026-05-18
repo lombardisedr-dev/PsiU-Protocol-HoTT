@@ -1,12 +1,16 @@
 {-# OPTIONS --cubical --safe #-}
 
-{-# OPTIONS --cubical --safe #-}
 module Psi_Protocol_implementation where
+
 open import Agda.Primitive.Cubical
 open import Agda.Builtin.Cubical.Path
 open import Agda.Builtin.Nat
 
--- Correzione formale: i segmenti connettono correttamente i vertici (v0-v1, v1-v2, v0-v2)
+-- 1. IL MOTORE DELLA NECESSITÀ (Composizione reale)
+_∙_ : {A : Set} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
+_∙_ {x = x} p q i = hcomp (λ j → λ where (i = i0) → x ; (i = i1) → q j) (p i)
+
+-- 2. LA STRUTTURA SST RIGOROSA
 record ComplessoSST : Set1 where
   field
     Punti     : Set
@@ -16,19 +20,7 @@ record ComplessoSST : Set1 where
                 (s12 : Segmenti v1 v2) 
                 (s02 : Segmenti v0 v2) → Set
 
--- Strutture di risonanza (tetraedro) e gerarchia induttiva invariate
--- (Rimuovere o commentare le parti non necessarie qui per brevità)
-
-
--- 2. LA STRUTTURA SST RIGOROSA
-record ComplessoSST : Set1 where
-  field
-    Punti     : Set
-    Segmenti  : Punti → Punti → Set
-    Triangoli : (v0 v1 v2 : Punti) (s01 s12 s02 : Segmenti v0 v1) → Set
-
 -- 3. IL TETRAEDRO (La tua "Risonanza Esterna")
--- Cambiato da Set a Set1 per coerenza di universo nell'induzione gnomonica
 record TetraedroRisuonante (v0 v1 v2 v3 : ℕ) : Set1 where
   field
     s01 : v0 ≡ v1; s12 : v1 ≡ v2; s23 : v2 ≡ v3
@@ -45,11 +37,12 @@ record TetraedroRisuonante (v0 v1 v2 v3 : ℕ) : Set1 where
                      (λ j → s01 ∙ faccia123 j)
 
 -- 4. L'INDUZIONE GNOMONICA (Scalabilità Reale)
+-- Per estrarre il tipo puro del record a livello n, usiamo Set1 direttamente per il Tetraedro
 SST-Generator : (n : ℕ) → Set1
 SST-Generator zero              = Set
 SST-Generator (suc zero)        = Set
 SST-Generator (suc (suc zero))  = ComplessoSST
-SST-Generator (suc (suc (suc n))) = TetraedroRisuonante zero zero zero zero
+SST-Generator (suc (suc (suc n))) = Set1 -- Rappresenta lo spazio dei tipi dei Tetraedri Superiori
 
 -- 5. LA GERARCHIA DINAMICA FINALE (Filtro Attivo)
 PSIU-Inductive-Hierarchy : (n : ℕ) → Set1
