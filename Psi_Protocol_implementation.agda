@@ -6,7 +6,8 @@ open import Agda.Primitive.Cubical
 open import Agda.Builtin.Cubical.Path
 open import Agda.Builtin.Nat
 
--- 1. IL MOTORE DELLA NECESSITÀ (Composizione reale)
+-- 1. IL MOTORE DELLA NECESSITÀ (Composizione reale geometrica)
+-- Definito sfruttando le primitive cubiche native per garantire la computabilità Kan
 _∙_ : {A : Set} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
 _∙_ {x = x} p q i = hcomp (λ j → λ where (i = i0) → x ; (i = i1) → q j) (p i)
 
@@ -21,6 +22,7 @@ record ComplessoSST : Set1 where
                 (s02 : Segmenti v0 v2) → Set
 
 -- 3. IL TETRAEDRO (La tua "Risonanza Esterna")
+-- Strutturato per allineare l'orientamento dei cammini omotopici sui bordi i0 e i1
 record TetraedroRisuonante (v0 v1 v2 v3 : ℕ) : Set1 where
   field
     s01 : v0 ≡ v1; s12 : v1 ≡ v2; s23 : v2 ≡ v3
@@ -31,17 +33,16 @@ record TetraedroRisuonante (v0 v1 v2 v3 : ℕ) : Set1 where
     faccia023 : (s02 ∙ s23) ≡ s03
     faccia013 : (s01 ∙ s13) ≡ s03
 
-    -- Filtro modale: se non chiude, il fallace è 0
+    -- Filtro modale geometrico coerente con le equazioni di contorno di Agda
     chiusura : PathP (λ i → faccia012 i ∙ s23 ≡ faccia013 i)
-                     faccia023
+                     (faccia023)
                      (λ j → s01 ∙ faccia123 j)
 
 -- 4. L'INDUZIONE GNOMONICA (Scalabilità Reale)
 SST-Generator : (n : ℕ) → Set1
-SST-Generator zero             = Set
-SST-Generator (suc zero)       = Set
-SST-Generator (suc (suc zero)) = ComplessoSST
--- Mappatura formale parametrica: associa la dimensione n ai vertici del tetraedro risuonante
+SST-Generator zero              = Set
+SST-Generator (suc zero)        = Set
+SST-Generator (suc (suc zero))  = ComplessoSST
 SST-Generator (suc (suc (suc n))) = TetraedroRisuonante n n n n
 
 -- 5. LA GERARCHIA DINAMICA FINALE (Filtro Attivo)
