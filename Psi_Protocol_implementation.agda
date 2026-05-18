@@ -18,7 +18,8 @@ record ComplessoSST : Set1 where
     Triangoli : (v0 v1 v2 : Punti) (s01 s12 s02 : Segmenti v0 v1) → Set
 
 -- 3. IL TETRAEDRO (La tua "Risonanza Esterna")
-record TetraedroRisuonante (v0 v1 v2 v3 : ℕ) : Set where
+-- Cambiato da Set a Set1 per coerenza di universo nell'induzione gnomonica
+record TetraedroRisuonante (v0 v1 v2 v3 : ℕ) : Set1 where
   field
     s01 : v0 ≡ v1; s12 : v1 ≡ v2; s23 : v2 ≡ v3
     s02 : v0 ≡ v2; s13 : v1 ≡ v3; s03 : v0 ≡ v3
@@ -35,11 +36,10 @@ record TetraedroRisuonante (v0 v1 v2 v3 : ℕ) : Set where
 
 -- 4. L'INDUZIONE GNOMONICA (Scalabilità Reale)
 SST-Generator : (n : ℕ) → Set1
-SST-Generator zero          = Set 
-SST-Generator (suc zero)    = Set 
-SST-Generator (suc (suc zero)) = ComplessoSST 
--- Per i livelli superiori, restituiamo direttamente il tipo della struttura geometrica del tetraedro
-SST-Generator (suc (suc (suc n))) = TetraedroRisuonante zero zero zero zero 
+SST-Generator zero              = Set
+SST-Generator (suc zero)        = Set
+SST-Generator (suc (suc zero))  = ComplessoSST
+SST-Generator (suc (suc (suc n))) = TetraedroRisuonante zero zero zero zero
 
 -- 5. LA GERARCHIA DINAMICA FINALE (Filtro Attivo)
 PSIU-Inductive-Hierarchy : (n : ℕ) → Set1
