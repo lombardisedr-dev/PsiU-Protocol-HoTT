@@ -7,12 +7,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Usiamo l'immagine Docker ufficiale mantenuta dalla comunità di Agda
+    # Usiamo l'immagine ufficiale stabile di Agda 2.6.4.3
     container:
-      image: agda/cubical:v2.7.0
+      image: agda/agda:2.6.4.3
     steps:
       - name: Checkout del codice
         uses: actions/checkout@v4
+
+      - name: Installa Git nel container
+        run: |
+          apt-get update && apt-get install -y git
+
+      - name: Scarica la libreria Cubical ufficiale
+        run: |
+          git clone https://github.com $HOME/cubical
+          cd $HOME/cubical
+          # Sincronizziamo la libreria con la versione esatta di Agda per evitare incompatibilità
+          git checkout v0.6
+
+      - name: Configura i percorsi delle librerie per Agda
+        run: |
+          mkdir -p $HOME/.agda
+          echo "$HOME/cubical/cubical.agda-lib" >> $HOME/.agda/libraries
+          echo "cubical" >> $HOME/.agda/defaults
 
       - name: Verifica Tipo (Type-Check)
         run: |
