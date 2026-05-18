@@ -39,12 +39,19 @@ record TetraedroRisuonante (A : Set) (v0 v1 v2 v3 : A) : Set where
 estrai-faccia-SST : {A : Set} {v0 v1 v2 : A} → ComplessoSST A v0 v1 v2 → PathP (λ i → v0 ≡ ComplessoSST.s12 _ i) (ComplessoSST.s01 _) (ComplessoSST.s02 _)
 estrai-faccia-SST c = ComplessoSST.triangolo012 c
 
+-- Tipi d'appoggio per sollevare gli scheletri geometrici a Set1
+record InvolucroSST (n : ℕ) : Set1 where
+  field istanza-sst : ComplessoSST ℕ 0 0 0
+
+record InvolucroTetraedro (n : ℕ) : Set1 where
+  field istanza-tetraedro : TetraedroRisuonante ℕ n n n n
+
 -- 5. L'INDUZIONE GNOMONICA (L'universo stratificato della teoria)
 SST-Generator : (n : ℕ) → Set1
 SST-Generator zero              = Set
 SST-Generator (suc zero)        = Set
-SST-Generator (suc (suc zero))  = record { tipo-sst = ComplessoSST ℕ 0 0 0 }
-SST-Generator (suc (suc (suc n))) = record { tipo-struttura = TetraedroRisuonante ℕ n n n n }
+SST-Generator (suc (suc zero))  = InvolucroSST 0
+SST-Generator (suc (suc (suc n))) = InvolucroTetraedro n
 
 -- 6. LA GERARCHIA DINAMICA FINALE (L'attivatore formale del filtro)
 PSIU-Inductive-Hierarchy : (n : ℕ) → Set1
