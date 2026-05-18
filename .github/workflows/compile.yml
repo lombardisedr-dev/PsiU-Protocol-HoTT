@@ -11,16 +11,25 @@ jobs:
       - name: Checkout del codice
         uses: actions/checkout@v4
 
-      # L'unica Action ufficiale per configurare Agda e la libreria Cubical in un colpo solo
-      - name: Setup Agda & Cubical
-        uses: wenkokke/setup-agda-action@v0.2.1
+      # L'unica Action ufficiale approvata e mantenuta dal team di Agda
+      - name: Setup Agda
+        uses: agda/setup-action@v1
         with:
           agda-version: "2.6.4"
-          # Specifichiamo la libreria cubica ufficiale tramite la sintassi nativa dell'Action
-          agda-libraries: |
-            cubical
 
-      # Esegue il controllo dei tipi (Type-Check) sul tuo protocollo omotopico
+      # Scarica la libreria Cubical ufficiale in modo esplicito
+      - name: Scarica la libreria Cubical
+        run: |
+          git clone --depth 1 --branch v0.6 https://github.com $HOME/cubical
+
+      # Registra i percorsi per il compilatore nativo
+      - name: Configura librerie Agda
+        run: |
+          mkdir -p $HOME/.agda
+          echo "$HOME/cubical/cubical.agda-lib" >> $HOME/.agda/libraries
+          echo "cubical" >> $HOME/.agda/defaults
+
+      # Esegue il controllo dei tipi (Type-Check) sul tuo protocollo
       - name: Verifica Tipo (Type-Check)
         run: |
           agda --cubical Psi_Protocol_implementation.agda
