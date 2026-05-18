@@ -11,25 +11,25 @@ jobs:
       - name: Checkout del codice
         uses: actions/checkout@v4
 
-      # L'unica Action ufficiale approvata e mantenuta dal team di Agda
+      # 1. Installa Agda usando l'azione corretta e ufficiale dell'organizzazione
       - name: Setup Agda
-        uses: agda/setup-action@v1
+        uses: agda/agda-setup-action@v1
         with:
-          agda-version: "2.6.4"
+          agda-version: '2.8.0'
 
-      # Scarica la libreria Cubical ufficiale in modo esplicito
+      # 2. Scarica la libreria Cubical ufficiale richiesta dalla HoTT
       - name: Scarica la libreria Cubical
         run: |
-          git clone --depth 1 --branch v0.6 https://github.com $HOME/cubical
+          git clone --depth 1 https://github.com $HOME/cubical
 
-      # Registra i percorsi per il compilatore nativo
+      # 3. Registra i percorsi in modo trasparente sul server Linux nativo
       - name: Configura librerie Agda
         run: |
           mkdir -p $HOME/.agda
           echo "$HOME/cubical/cubical.agda-lib" >> $HOME/.agda/libraries
           echo "cubical" >> $HOME/.agda/defaults
 
-      # Esegue il controllo dei tipi (Type-Check) sul tuo protocollo
+      # 4. Esegue il controllo formale dei tipi (Type-Check) sul tuo modulo
       - name: Verifica Tipo (Type-Check)
         run: |
           agda --cubical Psi_Protocol_implementation.agda
