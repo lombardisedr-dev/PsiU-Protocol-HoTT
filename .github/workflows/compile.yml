@@ -7,22 +7,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Usiamo l'immagine Docker ufficiale mantenuta dalla comunità di Agda
+    container:
+      image: agda/cubical:v2.7.0
     steps:
       - name: Checkout del codice
         uses: actions/checkout@v4
-
-      - name: Installa Agda e dipendenze
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y agda
-          # Scarica la libreria Cubica ufficiale richiesta da Egbert Rijke e dalla HoTT
-          git clone https://github.com $HOME/cubical
-
-      - name: Configura librerie Agda
-        run: |
-          mkdir -p $HOME/.agda
-          echo "$HOME/cubical/cubical.agda-lib" >> $HOME/.agda/libraries
-          echo "cubical" >> $HOME/.agda/defaults
 
       - name: Verifica Tipo (Type-Check)
         run: |
