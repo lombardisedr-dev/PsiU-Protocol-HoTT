@@ -1,0 +1,21 @@
+name: Compilazione Psi-Protocol
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del codice
+        uses: actions/checkout@v4
+
+      - name: Installa Agda
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y agda agda-stdlib
+
+      - name: Verifica Tipo (Type-Check)
+        run: |
+          agda --cubical Psi_Protocol_implementation.agda
