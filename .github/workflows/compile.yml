@@ -11,13 +11,13 @@ jobs:
       - name: Checkout del codice
         uses: actions/checkout@v4
 
-      # 1. Installa Agda usando l'azione corretta e ufficiale dell'organizzazione
+      # 1. Installa Agda usando l'azione ufficiale dell'organizzazione
       - name: Setup Agda
         uses: agda/agda-setup-action@v1
         with:
           agda-version: '2.8.0'
 
-      # 2. Scarica la libreria Cubical ufficiale richiesta dalla HoTT
+      # 2. Scarica la libreria Cubical ufficiale con l'URL completo e corretto
       - name: Scarica la libreria Cubical
         run: |
           git clone --depth 1 https://github.com $HOME/cubical
