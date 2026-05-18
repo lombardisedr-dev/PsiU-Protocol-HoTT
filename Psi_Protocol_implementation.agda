@@ -43,8 +43,8 @@ estrai-faccia-SST c = ComplessoSST.triangolo012 c
 SST-Generator : (n : ℕ) → Set1
 SST-Generator zero              = Set
 SST-Generator (suc zero)        = Set
-SST-Generator (suc (suc zero))  = Record { tipo-sst : ComplessoSST ℕ n n n }
-SST-Generator (suc (suc (suc n))) = Record { tipo-struttura : TetraedroRisuonante ℕ n n n n }
+SST-Generator (suc (suc zero))  = record { tipo-sst = ComplessoSST ℕ 0 0 0 }
+SST-Generator (suc (suc (suc n))) = record { tipo-struttura = TetraedroRisuonante ℕ n n n n }
 
 -- 6. LA GERARCHIA DINAMICA FINALE (L'attivatore formale del filtro)
 PSIU-Inductive-Hierarchy : (n : ℕ) → Set1
