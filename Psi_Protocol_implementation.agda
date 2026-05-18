@@ -42,3 +42,15 @@ PSIU-Inductive-Hierarchy n = record {
     Segmenti = λ x y → x ≡ y ; 
     Triangoli = λ v0 v1 v2 s01 s12 s02 → (s01 ∙ s12) ≡ s02 
   } }
+-- 5. L'INDUZIONE GNOMONICA (Scalabilità Reale)
+-- Questa funzione genera la struttura di coerenza per qualsiasi n.
+SST-Generator : (n : ℕ) → Set1
+SST-Generator zero = ℕ  -- Livello 0: Punti
+SST-Generator (suc zero) = ℕ -- Semplificato: Punti per segmenti
+SST-Generator (suc (suc zero)) = ComplessoSST -- Livello 2: Triangoli
+SST-Generator (suc (suc (suc n))) = TetraedroRisuonante _ _ _ _ -- Livello 3+: Risonanza Esterna
+
+-- AGGIORNAMENTO DELLA GERARCHIA FINALE
+-- Sostituisci la vecchia definizione con questa per attivare il filtro
+PSIU-Inductive-Hierarchy : (n : ℕ) → Set1
+PSIU-Inductive-Hierarchy n = SST-Generator n
