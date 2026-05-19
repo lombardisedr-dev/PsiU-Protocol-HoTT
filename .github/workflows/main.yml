@@ -1,0 +1,7 @@
+    - name: Commit and Push results
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add output_tautology/*
+        git commit -m "Aggiornamento automatico nuclei e grafici [Skip CI]" || echo "No changes to commit"
+        git push
