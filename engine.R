@@ -15,7 +15,7 @@ if (file.exists("input_potential.csv")) {
 }
 
 # 2. MOTORE DI CALCOLO (Vettorializzazione)
-# Calcoliamo lo scostamento per ogni singolo punto nel dataset (che siano 4 o 1 milione)
+# Calcolo lo scostamento per ogni singolo punto nel dataset (che siano 4 o 1 milione)
 S$scostamento <- abs(S$ratio - target_gnomonic)
 S$library_status <- cut(S$scostamento,
   breaks = c(-Inf, threshold_necessity, threshold_possibility, Inf),
@@ -25,7 +25,7 @@ S$library_status <- cut(S$scostamento,
 png("psi_u_resonance_map.png", width = 1200, height = 700, res = 120)
 col_palette <- c("#2ecc71", "#f1c40f", "#95a5a6")
 
-# Usiamo l'indice di riga come asse X per assicurarci di vedere TUTTI i campioni
+# Uso l'indice di riga come asse X per assicurarci di vedere TUTTI i campioni
 plot(1:nrow(S), S$ratio, 
      col = col_palette[S$library_status],
      pch = 20, 
