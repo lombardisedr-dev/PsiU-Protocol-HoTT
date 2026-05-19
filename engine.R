@@ -31,14 +31,21 @@ test_box <- t.test(S$ratio, mu = target_gnomonic)
 threshold <- quantile(S$dist_ident, 0.10)
 nucleo <- S[S$dist_ident <= threshold, ]
 
-# 5. Output Risultati
-write.csv(S, "results_full_data.csv", row.names=F)
-write.csv(nucleo, "results_core_identified.csv", row.names=F)
+# --- 4. CREAZIONE MULTILIBRARY DI RISONANZA ---
+# Definisco le Library in base allo scostamento numerico dal target (1/3)
+S$scostamento <- abs(S$ratio - target_gnomonic)
 
-report <- data.frame(
-  Metric = c("Samples", "Mean_Ratio", "P_Value", "Modale_Status"),
-  Value = c(nrow(S), round(mean(S$ratio),4), round(test_box$p.value,4), 
-            if(test_box$p.value > 0.05) "NECESSARY (Box)" else "ACCIDENTAL (Possibility)")
-)
-write.csv(report, "results_summary_report.csv", row.names=F)
-cat("Analisi conclusa. Verdetto in 'results_summary_report.csv'.\n")
+S$library_status <- cut(S$scostamento, 
+                       breaks = c(-Inf, 0.01, 0.10, Inf), 
+                       labels = c("Library_1 (Necessità)", 
+                                  "Library_0 (Possibilità)", 
+                                  "Library_-1 (Rumore)"))
+
+# Aggiungo il grado di intensità (0 a 1)
+S$intensita_risonanza <- round(exp(-S$scostamento * 10), 4)
+
+# --- 5. AGGIORNAMENTO OUTPUT ---
+# Il nucleo ora contiene solo la Library 1
+nucleo <- S[S$library_status == "Library_1 (Necessità)", ]
+
+
