@@ -1,4 +1,3 @@
-![Cristallizzazione Aurea](output_tautology/resonance_crystallization.png)
 # --- VISUALIZZAZIONE DEL NUCLEO TAUTOLOGICO ---
 # Questo script genera il grafico della cristallizzazione aurea
 
