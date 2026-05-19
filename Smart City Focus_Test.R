@@ -33,5 +33,5 @@ analyze_urban_resonance <- function(pm25_data) {
 dati_aria <- c(120, 122, 121, 450, 430, 115) 
 test_city <- analyze_urban_resonance(dati_aria)
 
-# Forza la scrittura del file per vederlo nello ZIP
+# Salva il file fisico
 write.csv(test_city, "smart_city_results_REALI.csv", row.names=FALSE)
