@@ -1,51 +1,32 @@
-# ==============================================================================
-# PROGETTO: PSIU-PROTOCOL (HoTT-Inspired Data Analysis)
-# MOTORE  : GNOMONIC RESONANCE SIEVE (Phi Engine)
-# DESCRIZIONE: Calcolo della Risonanza Aurea e Visualizzazione Cristallizzata
-# ==============================================================================
-
+# PSIU-PROTOCOL: GNOMONIC RESONANCE ENGINE (v1.0)
 library(ggplot2)
 
-# --- 1. ACQUISIZIONE E NORMALIZZAZIONE DATI ---
+# A. DATA INGESTION
 url <- "https://githubusercontent.com"
-if (!file.exists("input_real_world.csv")) {
-  download.file(url, "input_real_world.csv")
-}
-data_real <- read.csv("input_real_world.csv")
+if (!file.exists("input_real_world.csv")) download.file(url, "input_real_world.csv")
+data <- read.csv("input_real_world.csv")
 
-# Normalizzazione Gnomonica (0-1)
-data_real$ratio <- data_real$Radiation / max(data_real$Radiation)
-data_real$id <- 1:nrow(data_real)
-
-# --- 2. CALCOLO DELLA RISONANZA AUREA (PHI) ---
+# B. NORMALIZZAZIONE E CALCOLO PHI
+data$ratio <- data$Radiation / max(data$Radiation)
+data$id <- 1:nrow(data)
 phi <- (sqrt(5) - 1) / 2 
-epsilon <- 0.03 
-data_real$resonance <- exp(-abs(data_real$ratio - phi) / epsilon)
+epsilon <- 0.03
 
-# Cristallizzazione del Nucleo (Soglia 0.6)
-nucleo_aureo_reale <- data_real[data_real$resonance > 0.6, ]
+# C. CRISTALLIZZAZIONE
+data$resonance <- exp(-abs(data$ratio - phi) / epsilon)
+nucleo <- data[data$resonance > 0.6, ]
 
-# Salvataggio Dati
+# D. OUTPUT
 if (!dir.exists("output_tautology")) dir.create("output_tautology")
-write.csv(nucleo_aureo_reale, "output_tautology/golden_core_real.csv", row.names = FALSE)
+write.csv(nucleo, "output_tautology/golden_core.csv", row.names = FALSE)
 
-# --- 3. GENERAZIONE GRAFICO DI CRISTALLIZZAZIONE ---
-plot_resonance <- ggplot(data_real, aes(x = id, y = ratio)) +
-  geom_point(color = "grey80", alpha = 0.3, size = 0.5) +
-  geom_point(data = nucleo_aureo_reale, aes(x = id, y = ratio), 
-             color = "#D4AF37", size = 1.2, alpha = 0.8) +
-  geom_hline(yintercept = phi, linetype = "dashed", color = "#D4AF37", alpha = 0.5) +
+# E. VISUALIZZAZIONE
+plot <- ggplot(data, aes(x = id, y = ratio)) +
+  geom_point(color = "grey80", alpha = 0.2, size = 0.5) +
+  geom_point(data = nucleo, aes(x = id, y = ratio), color = "#D4AF37", size = 1) +
+  geom_hline(yintercept = phi, linetype = "dashed", color = "#D4AF37") +
   theme_minimal() +
-  labs(
-    title = "Gnomon-Resonance Sieve: Analisi della Cristallizzazione",
-    subtitle = paste("Dataset: Solare | Target: Sezione Aurea (Phi) | Nucleo:", nrow(nucleo_aureo_reale), "punti"),
-    x = "Sequenza Temporale (ID)",
-    y = "Ratio di Risonanza",
-    caption = "PsiU-Protocol-HoTT | Validazione Tautologica"
-  )
+  labs(title = "PsiU-Protocol: Golden Resonance", subtitle = "Crystallized Nucleus")
 
-# Salvataggio Immagine
-ggsave("output_tautology/resonance_crystallization.png", plot_resonance, width = 10, height = 6, dpi = 300)
-
-cat("Processo completato. Nucleo e Grafico salvati in 'output_tautology/'.\n")
-
+ggsave("output_tautology/resonance_chart.png", plot, width = 10, height = 6)
+cat("Cristallizzazione completata.\n")
