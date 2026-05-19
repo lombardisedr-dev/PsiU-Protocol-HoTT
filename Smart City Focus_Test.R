@@ -28,3 +28,4 @@ analyze_urban_resonance <- function(pm25_data) {
 dati_aria <- c(120, 122, 121, 450, 430, 115) # 450 è un picco accidentale
 test_city <- analyze_urban_resonance(dati_aria)
 print(test_city)
+write.csv(test_city, "smart_city_results.csv", row.names=FALSE)
