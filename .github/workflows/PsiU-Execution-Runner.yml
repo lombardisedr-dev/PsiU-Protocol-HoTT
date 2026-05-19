@@ -1,0 +1,21 @@
+name: PsiU-Execution-Runner
+on: [push, workflow_dispatch]
+jobs:
+  run-protocol:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Permette di scrivere i file nel repo
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+      - name: Run Engine
+        run: Rscript engine.R
+      - name: Commit and Push Results
+        run: |
+          git config --global user.name "PsiU-Bot"
+          git config --global user.email "bot@psiu-protocol.io"
+          git add results_*.csv
+          git commit -m "Auto-Update: Nucleo Tautologico [skip ci]" || echo "No changes"
+          git push
