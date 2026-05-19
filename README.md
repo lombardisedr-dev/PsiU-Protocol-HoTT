@@ -8,9 +8,11 @@ Questi punti rappresentano i momenti di massima coerenza armonica del sistema, d
 
 ![Analisi di Risonanza](output_tautology/resonance_chart.png)
 
+https://doi.org/10.5281/zenodo.20285648
+
 **Stato del Protocollo:** Validato con successo.
 
-EVERY COPYRIGHT IS [MIT] - Licensing and Copyright: This software is released under the MIT License. Copyright (c) 2026 [Roberto Lombardi/lombardisedr-dev]. Although the record is Open Access via Zenodo, any use, redistribution, or modification must retain the original copyright notice and attribution to the author.
+EVERY COPYRIGHT IS [MIT] - Licensing and Copyright: This software is released under the MIT License. Copyright (c) 2026 [Roberto Lombardi/lombardisedr-dev]. Although the record is Open Access via Zenodo/Github, any use, redistribution, or modification must retain the original copyright notice and attribution to the author.
 
 🇬🇧 English VersionPsiU-Protocol: Gnomonic Resonance SieveA tautological extraction engine inspired by Homotopy Type Theory (HoTT).The PsiU protocol leverages exponential resonance functions to isolate harmonic structures within complex datasets. Through the "gnomonic sieve," the system filters chaotic noise to crystallize a core of data resonating with universal constants such as the Golden Ratio (\(\phi \)).
 
