@@ -21,7 +21,7 @@ EVERY COPYRIGHT IS [MIT] - Licensing and Copyright: This software is released un
 PsiU-Protocol: Smart City Gnomonic Resonance
 ### *Tautological Extraction & Resilience Narrative*
 
-[![Crystallizing Harmonic Nucleus](https://github.com)](https://github.com)
+https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/runs/26097388413/job/76738682000
 
 ## 📜 Project Vision
 The **PsiU-Protocol** is a conceptual framework and extraction engine inspired by **Homotopy Type Theory (HoTT)** and **Gnomonic Geometry**. It moves beyond traditional data analysis to identify the "harmonic heartbeat" of complex systems.
