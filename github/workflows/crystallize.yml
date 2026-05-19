@@ -1,27 +1,38 @@
-name: J-Rule Resonance Filter
+name: J-Rule-Resonance-Filter
 
+# L'action si attiva a ogni push sul branch principale
 on:
   push:
-    paths:
-      - 'input_potential.csv' # Si attiva solo se carichi nuovi dati potenziali
+    branches:
+      - main
+      - master
 
 jobs:
-  filter:
+  resonance-process:
     runs-on: ubuntu-latest
+    # Permessi necessari per permettere al bot di "cristallizzare" i risultati
+    permissions:
+      contents: write
+
     steps:
-      - name: Accesso al Repository
-        uses: actions/checkout@v3
+      - name: 1. Estrazione dello Spazio (Checkout)
+        uses: actions/checkout@v4
 
-      - name: Configurazione R
+      - name: 2. Configurazione Ambiente R
         uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
 
-      - name: Esecuzione Filtro Baricentrico
-        run: Rscript engine.R
-
-      - name: Cristallizzazione nel Repository
+      - name: 3. Esecuzione Motore di Risonanza (engine.R)
         run: |
-          git config --local user.email "action@github.com"
+          Rscript engine.R
+
+      - name: 4. Cristallizzazione Tautologica (Git Commit & Push)
+        run: |
+          git config --local user.email "gnomonic-bot@github.com"
           git config --local user.name "Gnomonic-Bot"
-          git add output_tautology/resonant_core.csv
-          git commit -m "Trascrizione Tautologica: Cristallizzazione Sn+1 completata" || echo "Nessuna nuova risonanza"
+          # Aggiunge solo il nucleo purificato se esiste
+          git add output_tautology/resonant_core.csv || echo "Nessun file da aggiungere"
+          # Committa solo se ci sono cambiamenti reali (nuova risonanza)
+          git commit -m "Trascrizione Tautologica: Cristallizzazione Sn+1 completata" || echo "Nessuna nuova risonanza rilevata"
           git push
