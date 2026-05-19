@@ -1,4 +1,4 @@
- PsiU-Protocol: Gnomonic Resonance SieveA Tautological Extraction Engine Inspired by Homotopy Type Theory (HoTT)The PsiU-Protocol is a formal framework designed to identify the "harmonic heartbeat" of complex systems. By leveraging Homotopy Type Theory (HoTT) and Gnomonic Geometry, the engine filters chaotic noise to crystallize a core of data resonating with universal constants.
+ PsiU-Protocol: Gnomonic Resonance Sieve - A Tautological Extraction Engine Inspired by Homotopy Type Theory (HoTT)The PsiU-Protocol is a formal framework designed to identify the "harmonic heartbeat" of complex systems. By leveraging Homotopy Type Theory (HoTT) and Gnomonic Geometry, the engine filters chaotic noise to crystallize a core of data resonating with universal constants.
 
  Scientific Integrity & Stress Test ResultsTo avoid "hallucinations" and ensure total honesty, the protocol has been subjected to a Massive Stress Test using a dataset of pure stochastic noise.
  
