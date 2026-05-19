@@ -33,12 +33,12 @@ jobs:
             *.png
             *.pdf
           if-no-files-found: warn
-
+    
       - name: Auto-Commit Results
-        # Questo salva i file CSV direttamente nella tua cartella 'Code'
+        # Questo salva i file CSV E le immagini PNG direttamente nel tuo repository
         run: |
           git config --global user.name "PsiU-Bot"
           git config --global user.email "bot@psiu.com"
-          git add *.csv
-          git commit -m "Update: Protocol Resonance Analysis" || echo "No changes to commit"
+          git add *.csv *.png  # <-- Modificato qui: aggiunta l'estensione *.png
+          git commit -m "Update: Protocol Resonance Analysis and Maps" || echo "No changes to commit"
           git push
