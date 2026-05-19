@@ -1,0 +1,27 @@
+name: J-Rule Resonance Filter
+
+on:
+  push:
+    paths:
+      - 'input_potential.csv' # Si attiva solo se carichi nuovi dati potenziali
+
+jobs:
+  filter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Accesso al Repository
+        uses: actions/checkout@v3
+
+      - name: Configurazione R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Esecuzione Filtro Baricentrico
+        run: Rscript engine.R
+
+      - name: Cristallizzazione nel Repository
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Gnomonic-Bot"
+          git add output_tautology/resonant_core.csv
+          git commit -m "Trascrizione Tautologica: Cristallizzazione Sn+1 completata" || echo "Nessuna nuova risonanza"
+          git push
