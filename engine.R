@@ -1,5 +1,15 @@
-# --- MOTORE DI CRISTALLIZZAZIONE GNOMONICA ---
-# Questo script analizza i dati in input e applica il filtro 1/3
+# PROGETTO: PSIU-PROTOCOL (HoTT-Inspired Data Analysis)
+# MOTORE  : GNOMONIC RESONANCE SIEVE v1.2
+# AUTORE  : Roberto Lombardi 
+# LICENZA : [MIT]
+# 
+# DESCRIZIONE:
+# Implementazione della Funzione di Risonanza Baricentrica per l'estrazione
+# del "Nucleo Tautologico" (1/3 o Sezione Aurea) da dataset complessi.
+# Il sistema applica un filtro esponenziale per isolare i punti di equilibrio
+# strutturale, minimizzando il rumore attraverso la cristallizzazione gnomonica.
+# ==============================================================================
+
 
 if (!dir.exists("output_tautology")) dir.create("output_tautology")
 
