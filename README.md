@@ -15,8 +15,12 @@ The algorithm operates by calculating the **Scotoma** (logical offset) of each d
 To verify the protocol's robustness, we implemented an automated **"Truth Seeker" validation suite** via GitHub Actions. The engine was challenged with a blind dataset of **1,000 heterogeneous samples**.
 
 ### 2.1 Visualization of Results
-![Gnomonic Resonance Mapping](psi_u_resonance_map.png)
-*Figure 1: Resonance Mapping of 1,000 samples including structured signal, decoys, and white noise.*
+<p align="center">
+  <img src="psi_u_resonance_map.png" width="800" title="Gnomonic Resonance Mapping">
+  <br>
+  <em>Figure 1: Resonance Mapping of 1,000 samples including structured signal, decoys, and white noise.</em>
+</p>
+
 
 ### 2.2 Technical Analysis
 *   **Signal Identification (Green Zone):** The protocol successfully isolated the 100 structured samples, identifying them as **Logical Necessity** with 100% precision.
