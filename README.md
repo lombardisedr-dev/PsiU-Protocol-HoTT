@@ -2,7 +2,7 @@
 
  Scientific Integrity & Stress Test ResultsTo avoid "hallucinations" and ensure total honesty, the protocol has been subjected to a Massive Stress Test using a dataset of pure stochastic noise.
  
- Latest Validation Verdict:ParameterValueTotal Samples10,000 (Uniform Distribution)Identified Nucleus199 points (1.99% of sample)P-Value0.00000Systemic StatusNON_CONVERGENT (Accidental)
+ Latest Validation Verdict:ParameterValueTotal Samples10,000 (Uniform Distribution);Identified Nucleus199 points (1.99% of sample);P-Value0.00000;Systemic StatusNON_CONVERGENT (Accidental)
  
  Epistemological Analysis:The test yielded a Non-Convergent result, which is the ultimate proof of the protocol's integrity. Despite isolating 199 potential resonance points, the engine correctly rejected the hypothesis of "Necessity" (\(\Box \)), classifying the dataset as accidental noise (\(\Diamond \)).
  This demonstrates that the PsiU-Protocol is a rigorous sensor capable of distinguishing between mere statistical noise and true gnomonic coherence. It does not "hallucinate" patterns where there is only chaos.🏛️ Formal Framework (HoTT Logic)The engine maps the numerical scotoma (offset) into a Multilibrary of Resonance:Library 1 (Necessity - \(\Box \)): High-fidelity resonance (\(<0.01\) offset).Library 0 (Possibility - \(\Diamond \)): Evolutionary tension (\(0.01 - 0.10\) offset).Library -1 (Accident/Noise): Structural entropy (\(>0.10\) offset).
