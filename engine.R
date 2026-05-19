@@ -6,12 +6,13 @@
 target_gnomonic <- 1/3
 
 # --- 1. GENERAZIONE DATASET DI STRESS (10.000 punti casuali) ---
-set.seed(999) # Per riproducibilità scientifica
+set.seed( 999) 
 S <- data.frame(
-  u = 1:10000, 
-  ratio = runif(10000, 0, 1)
+  u = 1: 10000,
+  ratio = runif( 10000, 0, 1) # Genera rumore casuale
 )
-write.csv(S, "input_potential.csv", row.names=F)
+write.csv( S, " input_potential.csv", row.names= F) # Sovrascrive il tuo file!
+
 
 # --- 2. ANALISI DI RISONANZA ---
 S$scostamento <- abs(S$ratio - target_gnomonic)
