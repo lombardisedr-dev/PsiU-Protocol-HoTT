@@ -1,16 +1,18 @@
 name: J-Rule-Resonance-Filter
 
-# L'action si attiva a ogni push sul branch principale
+# Si attiva al push, se carichi dati, o manualmente con il tasto "Play"
 on:
   push:
     branches:
       - main
       - master
+  workflow_dispatch:
 
 jobs:
   resonance-process:
     runs-on: ubuntu-latest
-    # Permessi necessari per permettere al bot di "cristallizzare" i risultati
+    
+    # Permessi necessari per scrivere il risultato nel repository
     permissions:
       contents: write
 
@@ -31,8 +33,9 @@ jobs:
         run: |
           git config --local user.email "gnomonic-bot@github.com"
           git config --local user.name "Gnomonic-Bot"
-          # Aggiunge solo il nucleo purificato se esiste
-          git add output_tautology/resonant_core.csv || echo "Nessun file da aggiungere"
-          # Committa solo se ci sono cambiamenti reali (nuova risonanza)
+          # Aggiunge il file di output se creato dallo script R
+          git add output_tautology/resonant_core.csv || echo "Nessun file trovato"
+          # Committa solo se ci sono variazioni (nuova verità risonante)
           git commit -m "Trascrizione Tautologica: Cristallizzazione Sn+1 completata" || echo "Nessuna nuova risonanza rilevata"
           git push
+
