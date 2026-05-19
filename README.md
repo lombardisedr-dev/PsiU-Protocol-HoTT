@@ -15,11 +15,11 @@ The algorithm projects data points onto a gnomonic space, targeting the constant
 To verify the protocol's robustness, we implemented an automated validation suite. The engine was challenged with a blind dataset of **1,000 heterogeneous samples**.
 
 ### 2.1 Visualization of Results
-<p align="center">
-  <img src="psi_u_resonance_map.png" width="800" title="Gnomonic Resonance Mapping">
-  <br>
-  <em>Figure 1: Resonance Mapping of 1,000 samples including structured signal (Necessity), decoys (Possibility), and white noise.</em>
-</p>
+
+![Gnomonic Resonance Mapping](psi_u_resonance_map.png)
+
+*Figure 1: Resonance Mapping of 1,000 samples including structured signal (Necessity), decoys (Possibility), and white noise.*
+
 
 ### 2.2 Technical Analysis
 *   **Signal Identification (Green Zone):** The protocol successfully isolated the structured samples, identifying them as **Logical Necessity** with 100% precision.
