@@ -4,32 +4,27 @@
 # ==============================================================================
 
 # 1. Installazione e Caricamento dei pacchetti richiesti
-required_packages <- c("isotree", "dbscan", "ggplot2", "FNN")
+required_packages <- c("isotree", "ggplot2", "FNN")
 new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
-if(length(new_packages)) install.packages(new_packages)
+if(length(new_packages)) install.packages(new_packages, repos = "https://r-project.org")
 
 library(isotree)
-library(dbscan)
 library(ggplot2)
 library(FNN)
 
 set.seed(42) # Per la massima riproducibilità scientifica
 
-# 2. Download e Preparazione dei Dati Reali (UCI Cardiotocography)
-# Scarichiamo la versione processata da OpenML/ODDS per Anomaly Detection
-url <- "https://githubusercontent.com"
-# Nota: Per massima semplicità in ambiente R puro senza lettori MAT, usiamo un dataset 
-# equivalente in formato CSV standardizzato dal repository pubblico ODDS (Stony Brook University)
+# 2. Download e Preparazione dei Dati Reali (UCI Cardiotocography da ODDS Repository)
 url_csv <- "https://githubusercontent.com"
 
 cat("📥 Download del dataset reale in corso...\n")
 data_raw <- read.csv(url_csv, header = FALSE)
 
 # Le anomalie reali (classi patologiche) sono memorizzate nell'ultima colonna
-features <- data_raw[, 1:(ncol(data_raw)-1)]
+features <- data_raw[, 1:(ncol(data_raw) - 1)]
 labels <- data_raw[, ncol(data_raw)] # 1 = Anomalia Reale, 0 = Normale
 
-# Riduciamo a due componenti principali solo per la visualizzazione grafica
+# Riduciamo a due componenti principali solo per la visualizzazione grafica (PCA)
 pca <- prcomp(features, scale. = TRUE)
 plot_data <- as.data.frame(pca$x[, 1:2])
 colnames(plot_data) <- c("PC1", "PC2")
@@ -53,13 +48,11 @@ scores_iso <- predict(model_iso, features)
 t1_iso <- Sys.time()
 time_iso <- as.numeric(difftime(t1_iso, t0_iso, units = "secs"))
 
-# Determina la soglia di anomalia in base alla contaminazione reale
 thresh_iso <- quantile(scores_iso, 1 - contamination_rate)
 pred_iso <- ifelse(scores_iso >= thresh_iso, 1, 0)
 
 # --- METODO 2: APPROCCIO GEOMETRICO (Topological Density - kNN) ---
 t0_knn <- Sys.time()
-# Calcolo della densità locale tramite la distanza dal 5° vicino più prossimo
 knn_dist <- get.knn(scale(features), k = 5)$nn.dist
 scores_knn <- rowMeans(knn_dist) # Più è distante dai vicini, più è anomalo
 t1_knn <- Sys.time()
@@ -69,7 +62,7 @@ thresh_knn <- quantile(scores_knn, 1 - contamination_rate)
 pred_knn <- ifelse(scores_knn >= thresh_knn, 1, 0)
 
 # ==============================================================================
-# 📈 CALCOLO DELLE METRICHE NUMERICHE (Accuratezza Bilanciata)
+# 📈 CALCOLO DELLE METRICHE NUMERICHE
 # ==============================================================================
 calc_accuracy <- function(pred, actual) {
   sum(pred == actual) / length(actual) * 100
@@ -80,7 +73,7 @@ acc_knn <- calc_accuracy(pred_knn, labels)
 speed_factor <- time_iso / time_knn
 
 # ==============================================================================
-# REPORT FINALE NUMERICO (STAMPA IN CONSOLE)
+# 📝 REPORT FINALE NUMERICO (STAMPA IN CONSOLE)
 # ==============================================================================
 cat("=================================================\n")
 cat("          REPORT FINALE: SCIENTIFIC DUEL         \n")
@@ -103,7 +96,7 @@ cat(paste("VERDETTO ACCURATEZZA: Il metodo più robusto è risultato il:", verde
 cat("=================================================\n\n")
 
 # ==============================================================================
-#  GENERAZIONE DEL REPORT GRAFICO COMPARATIVO
+# 🎨 GENERAZIONE E SALVATAGGIO DEI GRAFICI PNG (PER PIPELINE AUTOMATICHE)
 # ==============================================================================
 plot_data$Pred_Iso <- factor(pred_iso, labels = c("Normale", "Anomalia Rilevata"))
 plot_data$Pred_Knn <- factor(pred_knn, labels = c("Normale", "Anomalia Rilevata"))
@@ -122,9 +115,8 @@ p2 <- ggplot(plot_data, aes(x = PC1, y = PC2, color = Pred_Knn)) +
   labs(title = "Duello: Topological Density (kNN)", subtitle = paste("Tempo:", round(time_knn,4), "s | Acc:", round(acc_knn,2),"%"), color = "Esito") +
   theme_minimal()
 
-# Stampa i grafici a schermo (apre finestre separate o pannello Plots)
-print(p1)
-X11() # Apre una nuova finestra per il secondo grafico se eseguito da terminale R standard
-print(p2)
+# Salvataggio nativo dei file sul disco (evita errori sui server headless di GitHub)
+ggsave("iso_forest_result.png", plot = p1, width = 6, height = 5)
+ggsave("knn_geometric_result.png", plot = p2, width = 6, height = 5)
 
-cat(" Benchmark completato. I grafici sono stati renderizzati a schermo.\n")
+cat("💾 Benchmark completato con successo. File PNG salvati nella directory corrente.\n")
