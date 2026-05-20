@@ -8,7 +8,7 @@ Ogni push esegue uno stress test di **100.000 campioni altamente rumorosi** per 
 
 | Metrica Computazionale | PsiU-Protocol (Motore Logico HoTT) | Standard Industriale (Z-Score) |
 | :--- | :---: | :---: |
-| **Tempo di Elaborazione** | 0.011548 secondi | 0.006796 secondi |
+| **Tempo di Elaborazione** | 0.010743 secondi | 0.006255 secondi |
 | **Efficienza Rigetto Rumore (Entropia)** | **95.08%** | 0% |
 | **Sensibilità di Isolamento Strutturale** | **CHIRURGICA (Alta precisione)** | CIECA (Accetta il caos come normale) |
 
