@@ -1,8 +1,5 @@
 # PsiU-Protocol-HoTT
 
-[![License: GPL v3](https://shields.io)](https://gnu.org)
-[![Language](https://shields.io)](https://r-project.org)
-
 A rigorous framework for the verification of semi-simplicial types and $n$-simplex stability under the Homotopy Type Theory (HoTT) Univalence Axiom, using S5 Alethic Modal Logic.
 
 ## 1. Theoretical Framework (HoTT S5)
