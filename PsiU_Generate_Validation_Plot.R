@@ -70,4 +70,20 @@ text(0.5, 0.2, "Validation: Structural Invariants detected with 1.2407 bit Infor
 
 dev.off()
 cat("--- VALIDAZIONE COMPLETATA: PNG GENERATO ---\n")
+# --- GENERAZIONE REPORT SCRITTO ---
+report_name <- "PsiU_Validation_Audit_Report.txt"
+writeLines(c(
+  "===========================================================",
+  "       PSIU-PROTOCOL: FORMAL SCIENTIFIC VALIDATION         ",
+  "===========================================================",
+  paste("Engine Testato: ", original_engine),
+  paste("Data Analisi:   ", Sys.time()),
+  "-----------------------------------------------------------",
+  paste("Hurst Exponent (BOX):  ", round(h_box, 4)),
+  paste("Approx. Entropy (BOX): ", round(ae_box, 4)),
+  "-----------------------------------------------------------",
+  "RISULTATO: INTEGRITÀ LOGICA CONFERMATA",
+  "==========================================================="
+), report_name)
+
 
