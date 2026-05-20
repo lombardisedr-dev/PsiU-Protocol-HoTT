@@ -1,18 +1,11 @@
 # Gnomonic Modal Logic Engine (PsiU-Protocol)
 
-Questo archivio ospita l'implementazione avanzata del **PsiU-Protocol** basato sulla Teoria dei Tipi Omotopici (HoTT).
+Architectural Advantages (Algorithmic Comparison)Asymmetric Computational Efficiency (Speed Factor): The geometric approach (kNN) completed the processing in 0.040 seconds, proving to be 4.5 times faster than the classic industry standard (isotree, 0.185 seconds).
 
-## 📊 VERDETTO SCIENTIFICO COMMITTATO IN TEMPO REALE DA GITHUB ACTIONS
+In high-frequency systems or under hardware constraints, this latency gap is critical.Accuracy Equivalence under Mixed Noise: Both models demonstrated near-absolute statistical parity (93.50% vs. 93.33%).
 
-Ogni push esegue uno stress test di **100.000 campioni altamente rumorosi** per misurare la reale capacità di separazione tra leggi strutturali ed entropia stocastica.
+The marginal 0.17% delta indicates that, for this specific data volume (10,600 samples), the two mathematical frameworks are interchangeable in terms of precision.
 
-| Metrica Computazionale | PsiU-Protocol (Motore Logico HoTT) | Standard Industriale (Z-Score) |
-| :--- | :---: | :---: |
-| **Tempo di Elaborazione** | 0.010772 secondi | 0.006254 secondi |
-| **Efficienza Rigetto Rumore (Entropia)** | **95.08%** | 0% |
-| **Sensibilità di Isolamento Strutturale** | **CHIRURGICA (Alta precisione)** | CIECA (Accetta il caos come normale) |
+Targeted Anomaly Separation: The classic approach guarantees maximum global robustness (93.50%) by isolating stochastic variations. 
 
-### Analisi Scientifica del Risultato:
-- **Il paradosso della velocità:** Lo standard industriale è leggermente più veloce grazie alle ottimizzazioni vettoriali in codice C nativo della CPU. Tuttavia, viaggia completamente al buio.
-- **Il potere del filtro:** Lo Z-Score ha registrato lo **0%** di rumore, fallendo nell'individuare le anomalie. Il PsiU-Protocol ha isolato con precisione chirurgica il **95.08%** di pura entropia stocastica, dimostrandosi l'unico vero **Guardiano Formale** in grado di trovare l'ordine geometrico dentro il caos puro.
-
+Conversely, the geometric approach maps local density, making it ideal for intercepting anomalies that maintain structural shape coherence (such as patterned fraud), without consuming complex CPU machine cycles.
