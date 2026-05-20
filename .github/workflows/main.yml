@@ -12,25 +12,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup R Environment
+      - name: Setup R
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      - name: Install Dependencies
-        run: |
-          Rscript -e 'install.packages("ggplot2")'
+      - name: Install Libs
+        run: Rscript -e 'install.packages(c("ggplot2", "pracma"))'
 
-      - name: Execute PsiU Protocol & Generate Plot
-        # Esegue in sequenza: Motore Avanzato + Generatore Grafico
-        run: |
-          Rscript -e 'source("PsiU-Protocol ADVANCED IMPLEMENTATION.R")'
-          Rscript PsiU_Generate_Validation_Plot.R
+      - name: Generate Artifacts
+        run: Rscript PsiU_Generate_Validation_Plot.R
 
-      - name: Commit and Push Validation Artifacts
+      - name: Push Results
         run: |
           git config --global user.name "PsiU-Validator-Bot"
           git config --global user.email "bot@psiu-protocol.org"
           git add PsiU_HoTT_Scientific_Validation_UCI.png
-          git commit -m "Auto-Generation: Scientific Evidence Artifact [Skip CI]" || echo "No changes to commit"
+          git add PsiU_Validation_Audit_Report.txt
+          git commit -m "Fix: Generated Scientific Artifacts [Skip CI]" || echo "No changes"
           git push
