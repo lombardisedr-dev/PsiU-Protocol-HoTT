@@ -1,7 +1,7 @@
 =================================================
     REPORT DI RISONANZA E SCOSTAMENTO REALE (PsiU) 
 =================================================
-Data/Ora Analisi: 2026-05-20 13:02:05.339523
+Data/Ora Analisi: 2026-05-20 17:23:00.592696
 Campioni Clinici Modellati (UCI): 2126
 Stati Logici Generati: BOX=116 | DIAMOND=882 | NOISE=1128
 -------------------------------------------------
