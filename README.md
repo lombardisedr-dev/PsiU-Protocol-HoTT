@@ -9,9 +9,10 @@ Description
 This work presents the Gnomonic Modal Logic Engine, a high-speed inferential framework (processing time: ~45 seconds) designed to detect structural resonance and tautological truths within complex systems. By integrating modal logic operators with gnomonic growth principles, the engine provides a multi-dimensional analysis of systemic stability.
 The framework is validated through the PsiU-Protocol, as demonstrated in the following experimental modules:
  
-Theoretical Framework (HoTT S5)
+
 The PsiU-Protocol-HoTT uses Homotopy Type Theory (HoTT) and S5 Modal Logic to reduce logical entropy under the Univalence Axiom. It maps input data onto the Gnomonic Ratio 
  via a rigid geometric operator (create_path):
+ 
 Necessity (
 ) — BOX: Distance 
 . Absolute formal resonance.
