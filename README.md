@@ -11,6 +11,8 @@ The marginal 0.17% delta indicates that, for this specific data volume (10,600 s
 Targeted Anomaly Separation: The classic approach guarantees maximum global robustness (93.50%) by isolating stochastic variations. 
 Conversely, the geometric approach maps local density, making it ideal for intercepting anomalies that maintain structural shape coherence (such as patterned fraud), without consuming complex CPU machine cycles.
 
+
+
 REPORT FINALE: SCIENTIFIC DUEL          
 =================================================
 Data/Ora Elaborazione: 2026-05-20 07:43:41.041234
@@ -24,5 +26,6 @@ METODO 2: APPROCCIO GEOMETRICO (Topological Density - kNN)
   - Tempo di Calcolo: 0.040675 secondi
   - Rilevamento Anomalie/Rumore: 93.33%
 =================================================
+
 VERDETTO SCIENTIFICO CONCRETO:
 L'approccio statistico classico si è dimostrato più robusto.
