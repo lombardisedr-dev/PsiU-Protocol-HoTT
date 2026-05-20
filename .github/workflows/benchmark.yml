@@ -15,17 +15,15 @@ permissions:
 
 jobs:
   run-benchmark:
-    # Usiamo un'immagine Ubuntu con strumenti di sviluppo e R già inclusi
     runs-on: ubuntu-22.04
     
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # Installiamo R in modo istantaneo senza aggiornamenti di sistema bloccanti
     - name: Setup Native R
       run: |
-        sudo apt-get install -y r-base-core
+        sudo apt-get update && sudo apt-get install -y r-base-core
 
     - name: Execute Scientific Duel Script
       run: |
@@ -34,7 +32,7 @@ jobs:
     - name: Commit and Push Dynamic README Updates
       run: |
         git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@://github.com"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add README.md
         git diff-index --quiet HEAD || git commit -m "docs: aggiornati dati di benchmark reali nel README [Bot]"
         git push
