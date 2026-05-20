@@ -1,8 +1,8 @@
 # duello.R
-if (!requireNamespace("isolationForest", quietly = TRUE)) install.packages("isolationForest", repos="https://r-project.org")
-if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan", repos="https://r-project.org")
+if (!requireNamespace("isotree", quietly = TRUE)) install.packages("isotree", repos="https://cloud.r-project.org")
+if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan", repos="https://cloud.r-project.org")
 
-library(isolationForest)
+library(isotree)
 library(dbscan)
 
 genera_dataset_reale <- function() {
@@ -26,10 +26,11 @@ duello_scientifico <- function() {
   X <- dataset$X
   y_true <- dataset$y_true
   
-  # --- METODO 1: STANDARD INDUSTRIALE (Isolation Forest) ---
+  # --- METODO 1: STANDARD INDUSTRIALE (isotree) ---
   start_time <- Sys.time()
-  mod_classico <- isolationForest::isolationForest(X, ntree = 100)
-  pred_classico <- predict(mod_classico, X)
+  mod_classico <- isotree::isolation.forest(X, ntrees = 100)
+  # output_type = "score" garantisce un vettore di punteggi tra 0 e 1
+  pred_classico <- as.numeric(predict(mod_classico, X, output_type = "score"))
   soglia_classica <- quantile(pred_classico, 0.94)
   y_pred_classico <- pred_classico >= soglia_classica
   tempo_classico <- as.numeric(Sys.time() - start_time, units = "secs")
@@ -37,7 +38,7 @@ duello_scientifico <- function() {
 
   # --- METODO 2: APPROCCIO GEOMETRICO (Spazio Topologico/Densità k-NN) ---
   start_time <- Sys.time()
-  distanze_knn <- dbscan::kNNdist(X, k = 15)
+  distanze_knn <- as.numeric(dbscan::kNNdist(X, k = 15))
   soglia_geometrica <- quantile(distanze_knn, 0.94)
   y_pred_geometrico <- distanze_knn >= soglia_geometrica
   tempo_geometrico <- as.numeric(Sys.time() - start_time, units = "secs")
@@ -51,11 +52,11 @@ duello_scientifico <- function() {
     sprintf("Data/Ora Elaborazione: %s", Sys.time()),
     sprintf("Dimensione Dataset: %d campioni", nrow(X)),
     "-------------------------------------------------",
-    "METODO 1: STANDARD INDUSTRIALE (Isolation Forest)",
+    "METODO 1: STANDARD INDUSTRIALE (Isolation Forest - isotree)",
     sprintf("  - Tempo di Calcolo: %.6f secondi", tempo_classico),
     sprintf("  - Rilevamento Anomalie/Rumore: %.2f%%", acc_classico),
     "-------------------------------------------------",
-    "METODO 2: APPROCCIO GEOMETRICO (Topological Density)",
+    "METODO 2: APPROCCIO GEOMETRICO (Topological Density - kNN)",
     sprintf("  - Tempo di Calcolo: %.6f secondi", tempo_geometrico),
     sprintf("  - Rilevamento Anomalie/Rumore: %.2f%%", acc_geometrico),
     "=================================================",
@@ -71,9 +72,8 @@ duello_scientifico <- function() {
 
   # --- GENERAZIONE GRAFICO COMPARATIVO (PNG) ---
   png("duello_scientifico.png", width = 1200, height = 600, res = 120)
-  par(mfrow = c(1, 2)) # Divide la finestra in 2 colonne
+  par(mfrow = c(1, 2))
   
-  # Grafico 1: Classificazioni Isolation Forest
   plot(X, col = ifelse(y_pred_classico, "red", "black"), 
        pch = ifelse(y_pred_classico, 4, 20),
        cex = ifelse(y_pred_classico, 0.8, 0.5),
@@ -81,7 +81,6 @@ duello_scientifico <- function() {
        xlab = "X1", ylab = "X2")
   legend("topright", legend = c("Normale", "Anomalia/Rumore"), col = c("black", "red"), pch = c(20, 4))
   
-  # Grafico 2: Classificazioni Densità Geometrica
   plot(X, col = ifelse(y_pred_geometrico, "blue", "black"), 
        pch = ifelse(y_pred_geometrico, 17, 20),
        cex = ifelse(y_pred_geometrico, 0.8, 0.5),
@@ -94,5 +93,6 @@ duello_scientifico <- function() {
 }
 
 duello_scientifico()
+
 
 
