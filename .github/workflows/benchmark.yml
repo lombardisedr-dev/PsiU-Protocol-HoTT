@@ -31,3 +31,13 @@ jobs:
     - name: Execute Scientific Duel Script
       run: |
         Rscript run_scientific_duel.R
+
+    # --- NUOVO PASSO: SALVATAGGIO REALE DEGLI ARTIFACTS ---
+    - name: Publish PsiU Engine Artifacts Package
+      uses: actions/upload-artifact@v4
+      with:
+        name: PsiU-Core-Artifacts-Package
+        path: |
+          PsiU_Protocol_Engine.R
+          psi_u_resonance_map.png
+        retention-days: 7
