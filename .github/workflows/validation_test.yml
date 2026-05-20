@@ -1,0 +1,27 @@
+name: PsiU Stress Test Validation
+
+on: [push, pull_request]
+
+jobs:
+  stress-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: r-lib/actions/setup-r@v2
+
+      - name: Run Million Sample Stress Test
+        run: |
+          Rscript -e '
+          source("Standard_Engine_Ultimate.R")
+          set.seed(42)
+          data <- runif(1000000, 0, 1)
+          start <- Sys.time()
+          results <- psiu_engine(data)
+          end <- Sys.time()
+          found <- sum(results$State == "BOX_Necessity (□)")
+          cat("--- VALIDATION REPORT ---\n")
+          cat("Processed: 1.000.000 samples\n")
+          cat("Time:", as.numeric(end - start), "sec\n")
+          cat("Necessity Points Found:", found, "\n")
+          if(found < 1000 || found > 6000) stop("Statistical anomaly detected!")
+          '
