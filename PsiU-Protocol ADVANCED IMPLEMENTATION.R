@@ -108,14 +108,14 @@ risultati <- psiu_hott_engine(campioni_test)
 generate_resonance_map(risultati)
 generate_advanced_report(risultati)
 
-cat(\"\n--- STRESS TEST COMPLETATO ---\n\")
+cat("\n--- STRESS TEST COMPLETATO ---\n")
 print(table(risultati$Stato_Modale))
 '
 
-# --- 2. SCRITTURA FISICA DEL FILE .R SUL DISCO ---
+# --- 2. SCRITTURA FISICA DEL FILE .R SUL DISCO (Spazi Corretti) ---
 writeLines(r_engine_code, "PsiU_Protocol_Engine.R")
 
-# --- 3. COMPILAZIONE E GENERAZIONE AUTOMATICA DEGLI ARTIFACTS ---
+# --- 3. COMPILAZIONE E GENERAZIONE AUTOMATICA DEGLI ARTIFACTS (Spazi Corretti) ---
 source("PsiU_Protocol_Engine.R")
 
 # --- 4. VERIFICA DELLA CREAZIONE DEI FILE ---
