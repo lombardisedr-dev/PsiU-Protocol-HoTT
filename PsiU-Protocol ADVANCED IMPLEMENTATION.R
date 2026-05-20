@@ -2,6 +2,7 @@
 # PROJECT:  PsiU-Protocol (ADVANCED IMPLEMENTATION)
 # MODULE:   Homotopy Type Theory & Modal Logic Engine
 # AUTHOR:   ROBERTO LOMBARDI (Concept) / RE-ENGINEERED (2026)
+# LICENCE: MIT
 # =================================================================
 
 # --- 1. SETUP DELLE COSTANTI UNIVERSALI ---
