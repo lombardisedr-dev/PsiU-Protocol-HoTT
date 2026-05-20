@@ -19,7 +19,6 @@ A test with 1,000 heterogeneous samples was conducted.
 
 
 
-![Gnomonic Resonance Mapping](psi_u_resonance_map_validationtest.png.png)
 
 ### Technical Analysis of the Mapping:
 - **Left Cluster (Order):** Represents the extraction of coherent samples that satisfy the **Necessity Axiom (□)**. Even in a noisy environment, the engine locks onto the gnomonic attractor $G \approx 0.618$.
