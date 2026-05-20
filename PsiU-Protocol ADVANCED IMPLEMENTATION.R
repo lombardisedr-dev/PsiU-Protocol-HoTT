@@ -59,19 +59,16 @@ generate_resonance_map <- function(engine_results) {
   dev.off()
 }
 
-# --- NUOVA IMPLEMENTAZIONE: ANALISI DEGLI SCOSTAMENTI DAL RANGE, MODALITÀ E RISONANZA ---
 generate_advanced_report <- function(engine_results) {
   is_noise <- engine_results$Stato_Modale == "NOISE (Accident)"
   scostamenti_noise <- engine_results$Distanza_G[is_noise]
   scostamenti_normali <- engine_results$Distanza_G[!is_noise]
   
-  # 1. Scostamento medio dal Range di normalità (in unità Sigma dei campioni normali)
   media_normali <- mean(scostamenti_normali)
   sd_normali <- sd(scostamenti_normali)
   if (sd_normali == 0 || is.na(sd_normali)) sd_normali <- 1e-6
   scostamento_sigma <- mean((scostamenti_noise - media_normali) / sd_normali)
   
-  # 2. Modalità dello scostamento (Picco di massima densità empirica delle anomalie)
   if (length(scostamenti_noise) > 1) {
     dens_noise <- density(scostamenti_noise)
     modalita_valore <- dens_noise$x[which.max(dens_noise$y)]
@@ -79,7 +76,6 @@ generate_advanced_report <- function(engine_results) {
     modalita_valore <- mean(scostamenti_noise)
   }
   
-  # 3. Risonanza Strutturale delle anomalie (Coerenza geometrica locale sull'indice di dispersione)
   if (sum(is_noise) > 1) {
     dist_interne <- as.matrix(dist(engine_results$Valore_Grezzo[is_noise]))
     risonanza_indice <- 1 / mean(dist_interne[dist_interne > 0])
@@ -87,7 +83,6 @@ generate_advanced_report <- function(engine_results) {
     risonanza_indice <- 0
   }
   
-  # Scrittura strutturata del report analitico
   report_output <- c(
     "=================================================",
     "    REPORT DI RISONANZA E SCOSTAMENTO (PsiU-ADV) ",
@@ -98,7 +93,7 @@ generate_advanced_report <- function(engine_results) {
     "-------------------------------------------------",
     "METRICHE RIGOROSE DI SCOSTAMENTO DAL RANGE:",
     sprintf("  - Scostamento Medio dal Range: %.2f Sigma (Deviazioni Standard)", scostamento_sigma),
-    sprintf("  - Modalità dello Scostamento: %.6f (Punto critico di frequenza)", modalita_valore),
+    sprintf("  - Modalita dello Scostamento: %.6f (Punto critico di frequenza)", modalita_valore),
     sprintf("  - Indice di Risonanza Strutturale: %.6f (Pattern Geometrico)", risonanza_indice),
     "================================================="
   )
@@ -113,7 +108,7 @@ risultati <- psiu_hott_engine(campioni_test)
 generate_resonance_map(risultati)
 generate_advanced_report(risultati)
 
-cat("\\n--- STRESS TEST COMPLETATO ---\\n")
+cat(\"\n--- STRESS TEST COMPLETATO ---\n\")
 print(table(risultati$Stato_Modale))
 '
 
