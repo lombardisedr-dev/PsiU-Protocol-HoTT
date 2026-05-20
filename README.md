@@ -1,7 +1,5 @@
 # Gnomonic Modal Logic Engine (PsiU-Protocol)
 
-# Gnomonic Modal Logic Engine (PsiU-Protocol)
-
 This repository contains the advanced implementation of the **PsiU-Protocol** based on Homotopy Type Theory (HoTT).
 
 ## AUTOMATED CI/CD LIVE BENCHMARK VERDICT
