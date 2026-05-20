@@ -3,7 +3,7 @@ name: PsiU-Protocol Advanced HoTT Engine
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # Permette di avviare il test manualmente dall'interfaccia di GitHub
+  workflow_dispatch:
 
 jobs:
   run-hott-engine:
@@ -16,7 +16,7 @@ jobs:
     - name: Configura l'ambiente R
       uses: r-lib/actions/setup-r@v2
       with:
-        use-public-rspm: true # Sfrutta i binari precompilati per velocizzare l'installazione
+        use-public-rspm: true
 
     - name: Installa le dipendenze di sistema Linux
       run: |
@@ -29,13 +29,12 @@ jobs:
 
     - name: Genera il Motore Logico
       run: |
-        # Esegue lo script generatore presente nel tuo repository per posizionare l'Engine
-        # Se il tuo file di configurazione principale si chiama in un altro modo, modifica questa riga.
-        Rscript script_generatore.R || true 
+        # Esegue lo script generatore usando il nome esatto presente sul tuo repository
+        Rscript "PsiU-Protocol ADVANCED IMPLEMENTATION.R" || true 
 
     - name: Esegui Analisi su Dati Reali Storici (File Separato)
       run: |
-        # Lancia il file di test isolato che interroga il motore usando dati reali UCI
+        # Lancia il file di test isolato che contiene la logica autonoma
         Rscript run_scientific_real_datas.R
         cat report_scostamenti.txt
 
@@ -44,14 +43,13 @@ jobs:
       with:
         name: psiu-hott-real-data-artifacts
         path: |
-          PsiU_Protocol_Engine.R
           psi_u_resonance_map.png
           report_scostamenti.txt
 
     - name: Committa i Risultati Verificabili nel Repository
       run: |
         git config --global user.name "github-actions[bot]"
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.email "41898282+github-actions[bot]@://github.com"
         git add psi_u_resonance_map.png report_scostamenti.txt || true
         git commit -m "🔮 Auto-Update: Mappa di Risonanza e Logica Modale su Dati Reali" || true
         git push || true
