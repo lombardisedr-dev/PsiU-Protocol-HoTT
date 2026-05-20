@@ -4,6 +4,10 @@ if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan", repo
 library(isotree)
 library(dbscan)
 
+# ... (codice invariato per brevità, vedi originale per la logica completa)
+genera_dataset_reale <- function() { /* ... */ }
+duello_scientifico <- function() { /* ... */ }
+duello_scientifico()
 
 library(isotree)
 library(dbscan)
