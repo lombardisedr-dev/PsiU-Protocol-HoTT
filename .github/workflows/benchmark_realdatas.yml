@@ -1,0 +1,53 @@
+name: PsiU-Protocol Scientific Duel Benchmark
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Permette l'avvio manuale da GitHub
+
+jobs:
+  run-benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Controlla il codice sorgente
+      uses: actions/checkout@v4
+
+    - name: Configura l'ambiente R
+      uses: r-lib/actions/setup-r@v2
+      with:
+        use-public-rspm: true # Velocizza l'installazione dei pacchetti su Linux
+
+    - name: Installa le dipendenze di sistema Linux
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcurl4-openssl-dev libssl-dev cmake
+
+    - name: Installa i pacchetti R richiesti
+      run: |
+        Rscript -e 'install.packages(c("isotree", "ggplot2", "FNN"))'
+
+    - name: Esegui il Duello Scientifico
+      run: |
+        # Modifica il finale dello script per salvare i grafici come PNG anziché X11
+        sed -i 's/print(p1)/ggsave("iso_forest_result.png", plot = p1, width = 6, height = 5)/g' benchmark_duel.R
+        sed -i 's/X11().*print(p2)/ggsave("knn_geometric_result.png", plot = p2, width = 6, height = 5)/g' benchmark_duel.R
+        Rscript benchmark_duel.R > report_output.txt
+        cat report_output.txt
+
+    - name: Salva i grafici come artefatti del workflow
+      uses: actions/artifacts@v4
+      with:
+        name: benchmark-reports
+        path: |
+          report_output.txt
+          iso_forest_result.png
+          knn_geometric_result.png
+
+    - name: Committa i risultati aggiornati nel repository (Opzionale)
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@://github.com"
+        git add report_output.txt iso_forest_result.png knn_geometric_result.png || true
+        git commit -m "📊 Auto-Update: Report e Grafici del Duello Scientifico" || true
+        git push || true
