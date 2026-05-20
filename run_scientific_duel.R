@@ -1,13 +1,5 @@
-if (!requireNamespace("isotree", quietly = TRUE)) install.packages("isotree", repos="https://r-project.org")
-if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan", repos="https://r-project.org")
-
-library(isotree)
-library(dbscan)
-
-# ... (codice invariato per brevità, vedi originale per la logica completa)
-genera_dataset_reale <- function() { /* ... */ }
-duello_scientifico <- function() { /* ... */ }
-duello_scientifico()
+if (!requireNamespace("isotree", quietly = TRUE)) install.packages("isotree", repos="https://cloud.r-project.org")
+if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan", repos="https://cloud.r-project.org")
 
 library(isotree)
 library(dbscan)
@@ -36,7 +28,6 @@ duello_scientifico <- function() {
   # --- METODO 1: STANDARD INDUSTRIALE (isotree) ---
   start_time <- Sys.time()
   mod_classico <- isotree::isolation.forest(X, ntrees = 100)
-  # output_type = "score" garantisce un vettore di punteggi tra 0 e 1
   pred_classico <- as.numeric(predict(mod_classico, X, output_type = "score"))
   soglia_classica <- quantile(pred_classico, 0.94)
   y_pred_classico <- pred_classico >= soglia_classica
@@ -101,5 +92,6 @@ duello_scientifico <- function() {
 
 duello_scientifico()
 
+  
 
 
