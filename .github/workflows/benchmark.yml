@@ -19,20 +19,10 @@ jobs:
       with:
         r-version: '4.3.0'
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-
-    - name: Install Python Benchmark Dependencies
-      run: |
-        pip install numpy sklearn
-
     - name: Execute Scientific Duel Script
       run: |
         Rscript run_scientific_duel.R
 
-    # --- NUOVO PASSO: SALVATAGGIO REALE DEGLI ARTIFACTS ---
     - name: Publish PsiU Engine Artifacts Package
       uses: actions/upload-artifact@v4
       with:
