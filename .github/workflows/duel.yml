@@ -22,8 +22,8 @@ jobs:
 
       - name: Installa i pacchetti necessari
         run: |
-          # Usiamo il cloud ufficiale CRAN per garantire il download corretto dei pacchetti
-          install.packages(c("isotree", "dbscan"), repos="https://r-project.org")
+          # Sostituito con il cloud CRAN ufficiale funzionante
+          install.packages(c("isotree", "dbscan"), repos="https://cloud.r-project.org")
         shell: Rscript {0}
 
       - name: Diagnostica file e directory
@@ -50,3 +50,4 @@ jobs:
             report_finale.txt
             duello_scientifico.png
           retention-days: 7
+
