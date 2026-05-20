@@ -1,5 +1,8 @@
-if (!requireNamespace("isotree", quietly = TRUE)) install.packages("isotree", repos="https://cloud.r-project.org")
-if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan", repos="https://cloud.r-project.org")
+if (!requireNamespace("isotree", quietly = TRUE)) install.packages("isotree", repos="https://r-project.org")
+if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan", repos="https://r-project.org")
+
+library(isotree)
+library(dbscan)
 
 
 library(isotree)
