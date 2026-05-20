@@ -9,7 +9,7 @@ if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan")
 library(isotree)
 library(dbscan)
 
-# 1. CARICAMENTO DATI REALI (URL FISSA)
+# 1. CARICAMENTO DATI REALI (URL CORRETTO)
 cat("[1/4] Scaricamento dati reali (KDD Cup 10% subset)...\n")
 url <- "https://uci.edu"
 temp <- tempfile()
@@ -18,7 +18,7 @@ kdd_full <- read.csv(gzfile(temp), header = FALSE)
 
 # 2. PRE-PROCESSING
 set.seed(123)
-# Usiamo 7000 righe per assicurarci che l'Action sia veloce
+# Subset di 7.000 righe per efficienza operativa
 kdd <- kdd_full[sample(nrow(kdd_full), 7000), ]
 
 num_cols <- sapply(kdd, is.numeric)
@@ -65,3 +65,5 @@ cat(sprintf("ISOLATION FOREST:\n - Tempo: %.4fs\n - Recall: %.2f%%\n - F1-Score:
 cat("-------------------------------------------------\n")
 cat(sprintf("GEOMETRIC k-NN:\n - Tempo: %.4fs\n - Recall: %.2f%%\n - F1-Score: %.2f%%\n", tempo_knn, m_knn$rec, m_knn$f1))
 cat("=================================================\n")
+
+
