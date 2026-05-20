@@ -1,58 +1,98 @@
-# =================================================================
-# MODULE:   Scientific Duel (PsiU vs Industrial Standard)
-# AUTHOR:   ROBERTO LOMBARDI / RE-ENGINEERED BENCHMARK (2026)
-# =================================================================
+# duello.R
+if (!requireNamespace("isolationForest", quietly = TRUE)) install.packages("isolationForest", repos="https://r-project.org")
+if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan", repos="https://r-project.org")
 
-G <- 0.6180339887  
-BOX_THRESHOLD     <- 0.002  
-DIAMOND_THRESHOLD <- 0.010  
+library(isolationForest)
+library(dbscan)
 
-# --- MOTORE A TRASPORTO LOGICO (PsiU) ---
-psiu_engine_speed <- function(data) {
-  offset <- abs(data - G)
-  states <- ifelse(offset <= BOX_THRESHOLD, "Necessity",
-            ifelse(offset <= DIAMOND_THRESHOLD, "Possibility", "Noise"))
-  return(states)
+genera_dataset_reale <- function() {
+  set.seed(42)
+  # 10.000 campioni di base (comportamento normale)
+  normali <- matrix(rnorm(20000, mean = 0, sd = 1), ncol = 2)
+  # 500 campioni di rumore puramente stocastico (entropia)
+  rumore <- matrix(runif(1000, min = -10, max = 10), ncol = 2)
+  # 100 anomalie strutturali (un cerchio nascosto nel caos)
+  theta <- seq(0, 2 * pi, length.out = 100)
+  anomalie_strutturali <- cbind(5 * cos(theta), 5 * sin(theta))
+  anomalie_strutturali <- anomalie_strutturali + matrix(rnorm(200, mean = 0, sd = 0.1), ncol = 2)
+  
+  X <- rbind(normali, rumore, anomalie_strutturali)
+  y_true <- c(rep(FALSE, 10000), rep(TRUE, 500), rep(TRUE, 100))
+  return(list(X = X, y_true = y_true))
 }
 
-# --- GENERAZIONE DATASET MASSIVO (100.000 Campioni) ---
-set.seed(2026)
-n_samples <- 100000
-test_data <- runif(n_samples, min = 0.400, max = 0.800)
+duello_scientifico <- function() {
+  dataset <- genera_dataset_reale()
+  X <- dataset$X
+  y_true <- dataset$y_true
+  
+  # --- METODO 1: STANDARD INDUSTRIALE (Isolation Forest) ---
+  start_time <- Sys.time()
+  mod_classico <- isolationForest::isolationForest(X, ntree = 100)
+  pred_classico <- predict(mod_classico, X)
+  soglia_classica <- quantile(pred_classico, 0.94)
+  y_pred_classico <- pred_classico >= soglia_classica
+  tempo_classico <- as.numeric(Sys.time() - start_time, units = "secs")
+  acc_classico <- mean(y_pred_classico[y_true] == TRUE) * 100
 
-# --- ESECUZIONE BENCHMARK ---
-start_time_psiu <- Sys.time()
-res_psiu <- psiu_engine_speed(test_data)
-end_time_psiu <- Sys.time()
-duration_psiu <- as.numeric(difftime(end_time_psiu, start_time_psiu, units = "secs"))
+  # --- METODO 2: APPROCCIO GEOMETRICO (Spazio Topologico/Densità k-NN) ---
+  start_time <- Sys.time()
+  distanze_knn <- dbscan::kNNdist(X, k = 15)
+  soglia_geometrica <- quantile(distanze_knn, 0.94)
+  y_pred_geometrico <- distanze_knn >= soglia_geometrica
+  tempo_geometrico <- as.numeric(Sys.time() - start_time, units = "secs")
+  acc_geometrico <- mean(y_pred_geometrico[y_true] == TRUE) * 100
 
-start_time_ind <- Sys.time()
-mean_val <- mean(test_data)
-sd_val <- sd(test_data)
-z_scores <- abs((test_data - mean_val) / sd_val)
-res_industrial <- ifelse(z_scores > 2.5, "Anomaly/Noise", "Normal")
-end_time_ind <- Sys.time()
-duration_industrial <- as.numeric(difftime(end_time_ind, start_time_ind, units = "secs"))
+  # --- GENERAZIONE REPORT FINALE (Testo) ---
+  output <- c(
+    "=================================================",
+    "         REPORT FINALE: SCIENTIFIC DUEL          ",
+    "=================================================",
+    sprintf("Data/Ora Elaborazione: %s", Sys.time()),
+    sprintf("Dimensione Dataset: %d campioni", nrow(X)),
+    "-------------------------------------------------",
+    "METODO 1: STANDARD INDUSTRIALE (Isolation Forest)",
+    sprintf("  - Tempo di Calcolo: %.6f secondi", tempo_classico),
+    sprintf("  - Rilevamento Anomalie/Rumore: %.2f%%", acc_classico),
+    "-------------------------------------------------",
+    "METODO 2: APPROCCIO GEOMETRICO (Topological Density)",
+    sprintf("  - Tempo di Calcolo: %.6f secondi", tempo_geometrico),
+    sprintf("  - Rilevamento Anomalie/Rumore: %.2f%%", acc_geometrico),
+    "=================================================",
+    "VERDETTO SCIENTIFICO CONCRETO:",
+    if(acc_geometrico > acc_classico) {
+      "L'approccio geometrico ha isolato meglio le strutture spaziali nascoste."
+    } else {
+      "L'approccio statistico classico si è dimostrato più robusto."
+    }
+  )
+  writeLines(output)
+  writeLines(output, "report_finale.txt")
 
-psiu_noise_ratio <- mean(res_psiu == "Noise")
-ind_noise_ratio <- mean(res_industrial == "Anomaly/Noise")
+  # --- GENERAZIONE GRAFICO COMPARATIVO (PNG) ---
+  png("duello_scientifico.png", width = 1200, height = 600, res = 120)
+  par(mfrow = c(1, 2)) # Divide la finestra in 2 colonne
+  
+  # Grafico 1: Classificazioni Isolation Forest
+  plot(X, col = ifelse(y_pred_classico, "red", "black"), 
+       pch = ifelse(y_pred_classico, 4, 20),
+       cex = ifelse(y_pred_classico, 0.8, 0.5),
+       main = "Isolation Forest (Classico)", 
+       xlab = "X1", ylab = "X2")
+  legend("topright", legend = c("Normale", "Anomalia/Rumore"), col = c("black", "red"), pch = c(20, 4))
+  
+  # Grafico 2: Classificazioni Densità Geometrica
+  plot(X, col = ifelse(y_pred_geometrico, "blue", "black"), 
+       pch = ifelse(y_pred_geometrico, 17, 20),
+       cex = ifelse(y_pred_geometrico, 0.8, 0.5),
+       main = "Density-kNN (Geometrico)", 
+       xlab = "X1", ylab = "X2")
+  legend("topright", legend = c("Normale", "Anomalia/Rumore"), col = c("black", "blue"), pch = c(20, 17))
+  
+  dev.off()
+  cat("\n[INFO] Grafico 'duello_scientifico.png' e 'report_finale.txt' generati con successo.\n")
+}
 
-# --- GENERAZIONE DINAMICA DEL FILE README.MD ---
-readme_text <- paste0(
-"# Gnomonic Modal Logic Engine (PsiU-Protocol)\n\n",
-"Questo archivio ospita l'implementazione avanzata del **PsiU-Protocol** basato sulla Teoria dei Tipi Omotopici (HoTT).\n\n",
-"## 📊 VERDETTO SCIENTIFICO COMMITTATO IN TEMPO REALE DA GITHUB ACTIONS\n\n",
-"Ogni push esegue uno stress test di **100.000 campioni altamente rumorosi** per misurare la reale capacità di separazione tra leggi strutturali ed entropia stocastica.\n\n",
-"| Metrica Computazionale | PsiU-Protocol (Motore Logico HoTT) | Standard Industriale (Z-Score) |\n",
-"| :--- | :---: | :---: |\n",
-"| **Tempo di Elaborazione** | ", round(duration_psiu, 6), " secondi | ", round(duration_industrial, 6), " secondi |\n",
-"| **Efficienza Rigetto Rumore (Entropia)** | **", round(psiu_noise_ratio * 100, 2), "%** | ", round(ind_noise_ratio * 100, 2), "% |\n",
-"| **Sensibilità di Isolamento Strutturale** | **CHIRURGICA (Alta precisione)** | CIECA (Accetta il caos come normale) |\n\n",
-"### Analisi Scientifica del Risultato:\n",
-"- **Il paradosso della velocità:** Lo standard industriale è leggermente più veloce grazie alle ottimizzazioni vettoriali in codice C nativo della CPU. Tuttavia, viaggia completamente al buio.\n",
-"- **Il potere del filtro:** Lo Z-Score ha registrato lo **", round(ind_noise_ratio * 100, 2), "%** di rumore, fallendo nell'individuare le anomalie. Il PsiU-Protocol ha isolato con precisione chirurgica il **", round(psiu_noise_ratio * 100, 2), "%** di pura entropia stocastica, dimostrandosi l'unico vero **Guardiano Formale** in grado di trovare l'ordine geometrico dentro il caos puro.\n"
-)
+duello_scientifico()
 
-writeLines(readme_text, "README.md")
-cat("README.md aggiornato dinamicamente con i dati reali del duello.\n")
 
