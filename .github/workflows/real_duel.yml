@@ -20,17 +20,15 @@ jobs:
 
       - name: 3. Installazione Librerie (Mirror Cloud)
         run: |
-          install.packages(c("isotree", "dbscan"), repos="https://r-project.org")
+          install.packages(c("isotree", "dbscan"), repos="https://cloud.r-project.org")
         shell: Rscript {0}
 
       - name: 4. Esecuzione Benchmark REALE
-        # FORZIAMO l'esecuzione dello script corretto
         run: Rscript real_dataset_trust.R
 
       - name: 5. Archiviazione Risultati
         uses: actions/upload-artifact@v4
         with:
           name: real-trust-results
-          path: |
-            report_finale.txt
+          path: report_finale.txt
         if: always()
