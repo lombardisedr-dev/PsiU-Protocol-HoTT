@@ -1,6 +1,6 @@
-# duello.R
 if (!requireNamespace("isotree", quietly = TRUE)) install.packages("isotree", repos="https://cloud.r-project.org")
 if (!requireNamespace("dbscan", quietly = TRUE)) install.packages("dbscan", repos="https://cloud.r-project.org")
+
 
 library(isotree)
 library(dbscan)
