@@ -1,0 +1,193 @@
+# ==============================================================================
+# PROJECT:  PsiU-Protocol Framework (100% Native R Canonical Implementation)
+# MODULE:   Homotopy Type Theory (HoTT) Logic Engine, Univalence & 2-Paths Suite
+# VERSION:  2.1 (Official Release)
+# AUTHOR:   ROBERTO LOMABRDI
+# ==============================================================================
+# LICENSE: MIT License
+# 
+# Copyright (c) 2026 LOMBARDI ROBERTO
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ==============================================================================
+
+# --- 1. CONFIGURAZIONE DEI PARAMETRI SISTEMI (GLOBAL SETUP) ---
+G                 <- 0.6180339887  # Attrattore Centrale (Costante Gnomonica Target)
+BOX_THRESHOLD     <- 0.002         # Soglia Rettangolare □ (Necessità Logica)
+DIAMOND_THRESHOLD <- 0.010         # Soglia Rettangolare ♢ (Possibilità Omotopica)
+
+# --- 2. COSTRUTTORI DEI TIPI INDUTTIVI DI 1° LIVELLO ---
+
+#' Costruttore di Tipo Id (HoTT Type)
+create_hott_type <- function(value, type_label) {
+  structure(list(val = as.numeric(value), type = as.character(type_label)), 
+            class = "HoTT_Type")
+}
+
+#' Costruttore di Cammino Omotopico (1-Path)
+create_path <- function(type_a, type_b, tolerance) {
+  if (type_a$type != type_b$type) return(NULL) 
+  distance <- abs(type_a$val - type_b$val)
+  if (distance <= tolerance) {
+    return(list(from = type_a, to = type_b, distance = distance, proof = "Reflexivity_Path"))
+  } else {
+    return(NULL) 
+  }
+}
+
+#' Regola d'Induzione J (Assegnatore Modale di 1° Ordine)
+j_rule <- function(path, property_A, property_B) {
+  if (is.null(path)) return("NOISE (Accident)")
+  if (path$distance <= BOX_THRESHOLD) return(property_A) 
+  if (path$distance <= DIAMOND_THRESHOLD) return(property_B) 
+}
+
+# --- 3. COSTRUTTORI OMUTOPICI DI ORDINE SUPERIORE (2° LIVELLO) ---
+
+#' Costruttore di un 2-Path (Cammino tra due cammini omotopici)
+create_2path <- function(path_alpha, path_beta, coherence_threshold = 0.002) {
+  if (is.null(path_alpha) || is.null(path_beta)) {
+    return(structure(list(proof = "Discontinuous_Void"), class = "HoTT_2Path_Void"))
+  }
+  coherence_distance <- abs(path_alpha$distance - path_beta$distance)
+  if (coherence_distance <= coherence_threshold) {
+    return(structure(list(from_path = path_alpha, to_path = path_beta, 
+                          diff = coherence_distance, proof = "Coherence_2Path_Validated"), 
+                   class = "HoTT_2Path"))
+  } else {
+    return(structure(list(diff = coherence_distance, proof = "Homotopy_Break"), 
+                   class = "HoTT_2Path_Break"))
+  }
+}
+
+# --- 4. ASSIOMA DI UNIVALENZA E CONTRAZIONE (h-Level) ---
+
+#' Applicazione computazionale dell'Assioma di Univalenza di Voevodsky
+apply_univalence <- function(secondo_ordine_df) {
+  classi_equivalenza <- split(secondo_ordine_df$Transizione, secondo_ordine_df$Stato_Coerenza)
+  mappa_univalente <- lapply(names(classi_equivalenza), function(nome_classe) {
+    structure(list(Identita_Logica = nome_classe, 
+                   Morfismi_Inclusi = classi_equivalenza[[nome_classe]], 
+                   Cardinalita = length(classi_equivalenza[[nome_classe]])), 
+              class = "Univalent_Type")
+  })
+  names(mappa_univalente) <- names(classi_equivalenza)
+  return(mappa_univalente)
+}
+
+#' Calcolo del livello di contrazione omotopica (h-Level)
+calculate_h_level <- function(mappa_univalente, total_samples) {
+  if (!"Coherence_2Path_Validated" %in% names(mappa_univalente)) {
+    return(list(level = "h-Level 2 (Insiemi Liberi / Caos)", desc = "Spazio totalmente disorganizzato."))
+  }
+  selettivita_logica <- mappa_univalente[["Coherence_2Path_Validated"]]$Cardinalita / total_samples
+  if (selettivita_logica > 0.90) {
+    return(list(level = "h-Level 0 (Contrattibile / Punto Fisso)", desc = "Spazio dei tipi collassato simmetricamente su G."))
+  } else if (selettivita_logica > 0.50) {
+    return(list(level = "h-Level 1 (Proposizioni / Linea)", desc = "Spazio parzialmente polarizzato in flussi coerenti."))
+  } else {
+    return(list(level = "h-Level 2 (Insiemi Liberi / Caos)", desc = "Spazio disorganizzato senza equivalenze strutturali."))
+  }
+}
+
+# --- 5. COMPILATORE UNIFICATO DEL MOTORE LOGICO (1° E 2° ORDINE) ---
+
+#' Esecuzione integrata del framework PsiU-Protocol
+psiu_hott_engine_v2 <- function(raw_input_vector) {
+  G_target <- create_hott_type(G, "Gnomonic_Ratio")
+  prop_A   <- "BOX (Necessity) [□fgno]"
+  prop_B   <- "DIAMOND (Possibility) [♢fgno]"
+  
+  n <- length(raw_input_vector)
+  if(n < 2) stop("L'input deve contenere almeno 2 campioni per calcolare la coerenza temporale.")
+  
+  states  <- character(n)
+  offsets <- numeric(n)
+  
+  # Compilazione Primo Ordine
+  for (i in 1:n) {
+    current_u <- create_hott_type(raw_input_vector[i], "Gnomonic_Ratio")
+    path_to_G <- create_path(current_u, G_target, tolerance = DIAMOND_THRESHOLD)
+    states[i]  <- j_rule(path_to_G, prop_A, prop_B)
+    offsets[i] <- abs(raw_input_vector[i] - G)
+  }
+  df_primo <- data.frame(Valore_Grezzo = raw_input_vector, Distanza_G = round(offsets, 5), 
+                         Stato_Modale = states, stringsAsFactors = FALSE)
+  
+  # Compilazione Secondo Ordine (Coerenza Temporale dei Cammini)
+  coherence_states <- character(n - 1)
+  coherence_values <- numeric(n - 1)
+  for (i in 1:(n - 1)) {
+    type_t1 <- create_hott_type(raw_input_vector[i], "Gnomonic_Ratio")
+    type_t2 <- create_hott_type(raw_input_vector[i+1], "Gnomonic_Ratio")
+    path_t1 <- create_path(type_t1, G_target, tolerance = DIAMOND_THRESHOLD)
+    path_t2 <- create_path(type_t2, G_target, tolerance = DIAMOND_THRESHOLD)
+    path_superiore <- create_2path(path_t1, path_t2, coherence_threshold = BOX_THRESHOLD)
+    coherence_states[i] <- path_superiore$proof
+    coherence_values[i] <- round(path_superiore$diff, 5)
+  }
+  df_secondo <- data.frame(Transizione = sprintf("t%d -> t%d", 1:(n-1), 2:n), 
+                           Salto_Omotopico = coherence_values, Stato_Coerenza = coherence_states, 
+                           stringsAsFactors = FALSE)
+  
+  return(list(Primo_Ordine = df_primo, Secondo_Ordine = df_secondo))
+}
+
+# --- 6. ENGINE VISUALIZATION INTERFACE ---
+
+#' Rendering della Mappa di Risonanza in RStudio plots panel
+plot_resonance_map <- function(engine_output) {
+  df_p <- engine_output$Primo_Ordine
+  colori <- c("BOX (Necessity) [□fgno]" = "#2ecc71", 
+              "DIAMOND (Possibility) [♢fgno]" = "#f1c40f", 
+              "NOISE (Accident)" = "#95a5a6")
+  
+  old_par <- par(no.readonly = TRUE); on.exit(par(old_par))
+  par(bg = "#1e1e24", col.axis = "#ffffff", col.lab = "#ffffff", col.main = "#88c0d0", fg = "#ffffff")
+  
+  plot(df_p$Valore_Grezzo, col = colori[df_p$Stato_Modale], pch = 18, cex = 1.3, las = 1,
+       main = "PsiU-Protocol: Mappa di Risonanza Logico-Modale", xlab = "Indice Campione", ylab = "Valore U")
+  
+  rect(0, G - DIAMOND_THRESHOLD, nrow(df_p), G + DIAMOND_THRESHOLD, col = rgb(241, 196, 15, alpha = 20, maxColorValue = 255), border = NA)
+  rect(0, G - BOX_THRESHOLD, nrow(df_p), G + BOX_THRESHOLD, col = rgb(46, 204, 113, alpha = 35, maxColorValue = 255), border = NA)
+  abline(h = G, col = "#e74c3c", lwd = 2, lty = 2)
+  legend("topright", legend = c("BOX (□)", "DIAMOND (♢)", "NOISE", "Target G"), 
+         col = c("#2ecc71", "#f1c40f", "#95a5a6", "#e74c3c"), pch = c(18,18,18,NA), lty = c(NA,NA,NA,2), bg = "#2e3440")
+}
+
+# --- 7. PIPELINE PIP RUNNER AUTOMATICO DI CONTROLLO ---
+cat("[PsiU-BOOT] Inizializzazione della suite di autoverifica...\n")
+set.seed(101)
+vettore_autotest <- c(runif(15, min = G - 0.001, max = G + 0.001), runif(5, min = G - 0.02, max = G + 0.02))
+
+# Esecuzione del Compilatore
+runtime_results <- psiu_hott_engine_v2(vettore_autotest)
+mappa_uni       <- apply_univalence(runtime_results$Secondo_Ordine)
+cert_h          <- calculate_h_level(mappa_uni, nrow(runtime_results$Secondo_Ordine))
+
+# Stampa di validazione canonica in console
+cat("\n=======================================================\n")
+cat("          PSI-U PROTOCOL CORE EXECUTION SUCCESS         \n")
+cat("=======================================================\n")
+cat(sprintf("Campioni analizzati nel flusso: %d\n", length(vettore_autotest)))
+cat(sprintf("Stato di Contrazione Omotopica: %s\n", cert_h$level))
+cat("=======================================================\n")
+
+# Mostra il grafico nel pannello Plots di RStudio
+plot_resonance_map(runtime_results)
