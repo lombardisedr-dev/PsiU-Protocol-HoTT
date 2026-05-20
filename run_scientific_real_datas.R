@@ -1,41 +1,83 @@
 # ==============================================================================
-# PROJECT:  PsiU-Protocol External Test Suite (100% REAL DATA & HoTT LOGIC)
+# PROJECT:  PsiU-Protocol External Test Suite (100% NATIVE & INDEPENDENT)
 # MODULE:   Clinical Dataset Integration & Shannon Entropy Evaluation
 # ==============================================================================
 
-# 1. Setup e caricamento del motore originale
-if (!file.exists("PsiU_Protocol_Engine.R")) {
-  stop("❌ Errore: Il file PsiU_Protocol_Engine.R non è presente nella cartella!")
-}
-source("PsiU_Protocol_Engine.R") 
-# Ora abbiamo accesso nativo alle funzioni:
-# - psiu_hott_engine()
-# - generate_resonance_map()
-# - generate_advanced_report()
+required_packages <- c("isotree", "ggplot2", "FNN")
+new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
+if(length(new_packages)) install.packages(new_packages, repos = "https://r-project.org")
 
-# 2. Caricamento Dati Storici Reali (UCI Cardiotocography da ODDS Repository)
+library(isotree)
+library(ggplot2)
+library(FNN)
+
+G <- 0.6180339887  
+BOX_THRESHOLD     <- 0.002  
+DIAMOND_THRESHOLD <- 0.010  
+
+create_hott_type <- function(value, type_label) {
+  structure(list(val = value, type = type_label), class = "HoTT_Type")
+}
+
+create_path <- function(type_a, type_b, tolerance) {
+  if (type_a$type != type_b$type) return(NULL) 
+  distance <- abs(type_a$val - type_b$val)
+  if (distance <= tolerance) {
+    return(list(from = type_a, to = type_b, distance = distance, proof = "Reflexivity_Path"))
+  } else {
+    return(NULL) 
+  }
+}
+
+j_rule <- function(path, property_A, property_B) {
+  if (is.null(path)) return("NOISE (Accident)")
+  if (path$distance <= BOX_THRESHOLD) return(property_A) 
+  if (path$distance <= DIAMOND_THRESHOLD) return(property_B) 
+}
+
+psiu_hott_engine <- function(raw_input_vector) {
+  G_target <- create_hott_type(G, "Gnomonic_Ratio")
+  prop_A   <- "BOX (Necessity) [□fgno]"
+  prop_B   <- "DIAMOND (Possibility) [♢fgno]"
+  states  <- character(length(raw_input_vector))
+  offsets <- numeric(length(raw_input_vector))
+  for (i in 1:length(raw_input_vector)) {
+    current_u <- create_hott_type(raw_input_vector[i], "Gnomonic_Ratio")
+    path_to_G <- create_path(current_u, G_target, tolerance = DIAMOND_THRESHOLD)
+    states[i] <- j_rule(path_to_G, prop_A, prop_B)
+    offsets[i] <- abs(raw_input_vector[i] - G)
+  }
+  return(data.frame(Valore_Grezzo = raw_input_vector, Distanza_G = round(offsets, 5), Stato_Modale = states, stringsAsFactors = FALSE))
+}
+
+generate_resonance_map <- function(engine_results) {
+  color_map <- c("BOX (Necessity) [□fgno]" = "#2ecc71", "DIAMOND (Possibility) [♢fgno]" = "#f1c40f", "NOISE (Accident)" = "#95a5a6")
+  p_colors <- color_map[engine_results$Stato_Modale]
+  
+  png("psi_u_resonance_map.png", width = 1000, height = 600, res = 120)
+  plot(engine_results$Valore_Grezzo, col = p_colors, pch = 19, cex = 0.6,
+       main = "PsiU-Protocol: Mappa di Risonanza Logica (Dati Clinici Reali)", 
+       xlab = "Indice del Patient (Cardiotocography)", ylab = "Valore Scalato su G", ylim = c(G - 0.02, G + 0.02))
+  rect(0, G - DIAMOND_THRESHOLD, nrow(engine_results), G + DIAMOND_THRESHOLD, col = rgb(241, 196, 15, alpha = 25, maxColorValue = 255), border = NA)
+  rect(0, G - BOX_THRESHOLD, nrow(engine_results), G + BOX_THRESHOLD, col = rgb(46, 204, 113, alpha = 40, maxColorValue = 255), border = NA)
+  abline(h = G, col = "#e74c3c", lwd = 2, lty = 2)
+  legend("topright", legend = c("BOX (□)", "DIAMOND (♢)", "NOISE", "G (0.618)"), col = c("#2ecc71", "#f1c40f", "#95a5a6", "#e74c3c"), pch = c(19,19,19,NA), lty = c(NA,NA,NA,2), lwd = c(NA,NA,NA,2), bg = "white")
+  dev.off()
+}
+
 url_csv <- "https://githubusercontent.com"
 cat("📥 Download dei dati clinici reali in corso...\n")
 data_raw <- read.csv(url_csv, header = FALSE)
 
-# Estraiamo la prima feature clinica reale (Frequenza Cardiaca Fetale)
 raw_features <- data_raw[, 1]
-
-# Normalizziamo e mappiamo i dati attorno all'attrattore G (0.618) del motore
 min_max_scale <- (raw_features - min(raw_features)) / (max(raw_features) - min(raw_features))
 real_data_mapped <- G + (min_max_scale - 0.5) * 0.035 
 
-# 3. Interrogazione del Motore Logico originale con i Dati Reali
 risultati_reali <- psiu_hott_engine(real_data_mapped)
 
-# 4. Estensione: Calcolo dell'Entropia di Shannon (Senza modificare il motore)
 frequenze <- table(risultati_reali$Stato_Modale) / nrow(risultati_reali)
 entropia_shannon <- -sum(frequenze * log2(frequenze))
 
-# 5. Sovrascrittura dei Report e Grafici usando i Dati Reali
-generate_resonance_map(risultati_reali)
-
-# Generazione del report finale esteso
 is_noise <- risultati_reali$Stato_Modale == "NOISE (Accident)"
 scostamenti_noise <- risultati_reali$Distanza_G[is_noise]
 scostamenti_normali <- risultati_reali$Distanza_G[!is_noise]
@@ -72,5 +114,5 @@ report_output <- c(
 
 writeLines(report_output)
 writeLines(report_output, "report_scostamenti.txt")
-
-cat("\n📊 ANALISI ESTERNA SU DATI REALI COMPLETATA CON SUCCESSO.\n")
+generate_resonance_map(risultati_reali)
+cat("\n📊 ANALISI SU DATI REALI COMPLETATA CON SUCCESSO.\n")
