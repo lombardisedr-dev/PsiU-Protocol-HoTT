@@ -1,22 +1,22 @@
 # PsiU Protocol HoTT
 
-Questo repository contiene l'implementazione e la formalizzazione del protocollo **PsiU**, basato sulla Teoria dei Tipi di Homotopy (HoTT).
+This repository contains the implementation and formalization of the **PsiU Protocol**, based on Homotopy Type Theory (HoTT).
 
-## Certificazione e Conformità
+## Certification & Compliance
 
-Il progetto include la documentazione ufficiale di certificazione emessa da **GTB (Global Trust Body)**. I punti salienti includono:
+The project includes official certification documentation issued by **GTB (Global Trust Body)**. Key highlights include:
 
-*   **Validazione Formale:** Il protocollo è stato verificato per garantire la coerenza logica e la sicurezza crittografica attraverso metodi formali.
-*   **Standard di Sicurezza:** Conformità con i requisiti di integrità e riservatezza definiti nelle specifiche GTB per protocolli di comunicazione sicura.
-*   **HoTT Implementation:** Utilizzo della *Homotopy Type Theory* per la modellazione di tipi di dati complessi e prove di equivalenza strutturale.
+*   **Formal Validation:** The protocol has been verified to ensure logical consistency and cryptographic security using formal methods.
+*   **Security Standards:** Full compliance with integrity and confidentiality requirements as defined in GTB specifications for secure communication protocols.
+*   **HoTT Implementation:** Leveraging *Homotopy Type Theory* to model complex data types and structural equivalence proofs.
 
-Per i dettagli completi, consulta il documento: [Certification_From_GTB.pdf](./Certification_From_GTB.pdf).
+For full details, please refer to the document: [Certification_From_GTB.pdf](./Certification_From_GTB.pdf).
 
-## Requisiti
-*   [Inserisci qui il linguaggio/tool, es: Agda, Coq o Lean]
-*   Libreria HoTT standard
+## Requirements
+*   [Insert language/tool here, e.g., Agda, Coq, or Lean]
+*   Standard HoTT library
 
-## Installazione
+## Installation
 ```bash
 git clone https://github.com
 ```
