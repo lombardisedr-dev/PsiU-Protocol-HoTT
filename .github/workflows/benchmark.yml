@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main, master ]
 
+# Permessi necessari per consentire alla Action di aggiornare il README
+permissions:
+  contents: write
+
 jobs:
   run-benchmark:
     runs-on: ubuntu-latest
@@ -23,11 +27,11 @@ jobs:
       run: |
         Rscript run_scientific_duel.R
 
-    - name: Publish PsiU Engine Artifacts Package
-      uses: actions/upload-artifact@v4
-      with:
-        name: PsiU-Core-Artifacts-Package
-        path: |
-          PsiU_Protocol_Engine.R
-          psi_u_resonance_map.png
-        retention-days: 7
+    # Nuovo passo automatico per fare il commit e spingere i risultati nel README
+    - name: Commit and Push Dynamic README Updates
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@://github.com"
+        git add README.md
+        git diff-index --quiet HEAD || git commit -m "docs: aggiornati dati di benchmark reali nel README [Bot]"
+        git push
