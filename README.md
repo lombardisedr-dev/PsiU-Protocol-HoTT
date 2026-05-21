@@ -2,6 +2,8 @@
 
 This repository contains the implementation and formalization of the **PsiU Protocol**, based on Homotopy Type Theory (HoTT).
 
+![PsiU-Protocol Scientific Certification](PsiU_Scientific_Certification.png)
+
 ## Certification & Compliance
 
 The project includes official certification documentation issued by **GTB (Global Trust Body)**. Key highlights include:
