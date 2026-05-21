@@ -1,4 +1,4 @@
-# 🌌 PsiU-Protocol Engine v0.1.0 is officially live!
+# 🌌 PsiU-Protocol Engine v0.1.1 is officially live!
 
 I am excited to release the first official build of the **PsiU-Protocol**, a native R engine that integrates **Homotopy Type Theory (HoTT)** and **Quantitative Modal Logic** for structural convergence analysis.
 
