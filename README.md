@@ -18,9 +18,9 @@ For full details, please refer to the document: [Certification_From_GTB.pdf](./C
 
 #  First Real-World Experiment: PsiU-Protocol Validation
 
-We are proud to announce the successful completion of the first empirical test of the **PsiU-Protocol**, applied to complex urban data flows. The results confirm the model's effectiveness in mapping resonance and predicting instabilities within a Smart City environment.
+I am proud to announce the successful completion of the first empirical test of the **PsiU-Protocol**, applied to complex urban data flows. The results confirm the model's effectiveness in mapping resonance and predicting instabilities within a Smart City environment.
 
-### 📄 Official Technical Report
+### Official Technical Report
 The complete analysis, scientific inferences, and modeling methodology are documented in our official paper:
 
  **[Inferences and Modeling on London Urban Datas.pdf](./Inferences_and_Modeling_on_London_Urban_Datas.pdf)**
