@@ -1,0 +1,20 @@
+=================================================================
+         REPORT COMPLETO DI RISONANZA E INFERENZA MODALE         
+=================================================================
+Data/Ora Analisi:              2026-05-21 16:58:50.775248
+Volume Campioni Totali:        103
+-----------------------------------------------------------------
+1. DISTRIBUZIONE DEGLI STATI MODALI E RISONANZE COMPLEMENTARI:
+  [□] BOX (Necessita):    103 (100.00%) | Indice Risonanza: 10150.7369
+  [◆] DIAMOND (Possibilita): 0 (  0.00%) | Indice Risonanza: 0.0000
+  [ ] NOISE (Accidente):    0 (  0.00%) | Indice Risonanza: 0.0000
+-----------------------------------------------------------------
+2. RELAZIONE SCRITTA DI INFERENZA SUI DATI:
+   I dati mostrano una RISONANZA CRITICA MASSIMA. La struttura converge a G.
+-----------------------------------------------------------------
+3. BENCHMARK PRESTAZIONALE DEL MOTORE LOGICO (Microsecondi):
+  - Tempo Minimo:       1.35 us
+  - Tempo Medio:        1.39 us
+  - Tempo Massimo:      1.54 us
+  - Iterazioni Test: 10
+=================================================================

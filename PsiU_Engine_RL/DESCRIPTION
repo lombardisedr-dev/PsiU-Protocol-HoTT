@@ -1,0 +1,10 @@
+Package: PsiUEngineRL
+Title: PsiU Protocol Engine RL
+Version: 0.1.0
+Author: Roberto
+Maintainer: Roberto <roberto@example.com>
+Description: Homotopy Type Theory and Modal Logic Engine with Advanced Statistical Inference and Native Graphics.
+License: MIT
+Encoding: UTF-8
+Imports: microbenchmark
+Config/roxygen2/version: 8.0.0

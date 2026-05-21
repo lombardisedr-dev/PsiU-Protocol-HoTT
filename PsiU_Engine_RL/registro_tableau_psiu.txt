@@ -1,0 +1,22 @@
+=================================================================
+        REGISTRO CRONOLOGICO DELL'ALBERO DI CONFUTAZIONE         
+=================================================================
+Data/Ora Esportazione:   2026-05-21 17:12:56.511692
+Step Totali Elaborati:   8
+Cristalli BOX Salvati:   1
+Cristalli NOISE Salvati: 3
+-----------------------------------------------------------------
+CRONOLOGIA DELLE DERIVAZIONI GEOMETRICHE (PASSO DOPO PASSO):
+  [STEP 1] Valore: 0.61803 | BOX (Necessity) [□fgno] -> [ANCORAGGIO BASE]
+  [STEP 2] Valore: 0.61900 | BOX (Necessity) [□fgno] -> [ANCORAGGIO BASE]
+  [STEP 3] Valore: 0.61750 | BOX (Necessity) [□fgno] -> [ANCORAGGIO BASE]
+  [STEP 4] Valore: 0.62200 | DIAMOND (Possibility) [♢fgno] | Prossimo a: 0.61900 (Scostamento: 0.00300) [RAMO APERTO]
+  [STEP 5] Valore: 0.61810 | BOX (Necessity) [□fgno] | Prossimo a: 0.61803 (Scostamento: 0.00007) [RAMO CHIUSO -> CRISTALLIZZATO]
+  [STEP 6] Valore: 0.65000 | NOISE (Accident) | Prossimo a: 0.62200 (Scostamento: 0.02800) [RAMO CHIUSO -> CRISTALLIZZATO]
+  [STEP 7] Valore: 0.66200 | NOISE (Accident) | Prossimo a: 0.65000 (Scostamento: 0.01200) [RAMO CHIUSO -> CRISTALLIZZATO]
+  [STEP 8] Valore: 0.65800 | NOISE (Accident) | Prossimo a: 0.66200 (Scostamento: 0.00400) [RAMO CHIUSO -> CRISTALLIZZATO]
+-----------------------------------------------------------------
+VALORI NUMERICI CRISTALLIZZATI DEFINITIVI:
+  -> REGISTRO BOX (Necessita):  0.6181
+  -> REGISTRO NOISE (Accidente): 0.65, 0.662, 0.658
+=================================================================
