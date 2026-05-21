@@ -1,0 +1,66 @@
+# ==============================================================
+# PSI-U INTEGRATED SYSTEM (Engine 0.1.2 + Analyzer)
+
+# Copyright (c) 2026 Roberto Lombardi
+ All rights reserved.
+# Questo software è di proprietà esclusiva dell'autore. 
+# La riproduzione o distribuzione non autorizzata è vietata.
+
+==============================================================
+if (!require("ggplot2")) install.packages("ggplot2")
+library(ggplot2)
+
+# 1. CARICAMENTO MOTORE (Assicurati che il percorso sia corretto)
+source("C:/Users/Roberto/Desktop/PsiU_Engine_0_1_2.R")
+
+# --------------------------------------------------------------
+# 2. GENERAZIONE DATI / INPUT
+# --------------------------------------------------------------
+# Qui puoi incollare i tuoi dati o generarli come nel test:
+dati_test <- runif(1000, 0.60, 0.63)
+
+# --------------------------------------------------------------
+# 3. ELABORAZIONE (Engine & Inference)
+# --------------------------------------------------------------
+risultati <- PsiU_Engine_0.1.2(dati_test)
+
+# Crea il report originale dell'Engine
+PsiU_Produce_Inference_Report(risultati, filename = "Test_Inaugurazione_012.txt")
+
+# --------------------------------------------------------------
+# 4. ANALYZER GRAFICO & REPORT DESKTOP (Stile Standard)
+# --------------------------------------------------------------
+processa_report_standard <- function(data_results) {
+  desk <- file.path(Sys.getenv("USERPROFILE"), "Desktop")
+  out_txt <- file.path(desk, "REPORT_PSI_U_ESTRATTO.txt")
+  
+  # Conversione output Engine in DataFrame per ggplot
+  df_plot <- as.data.frame(data_results) 
+  # Nota: Assicurati che le colonne si chiamino ID, X, Stato nel tuo Engine
+  
+  sink(out_txt)
+  cat("=============================================================\n")
+  cat("           PSI-U INFERENCE & CARTESIAN DATA REPORT           \n")
+  cat("=============================================================\n\n")
+  cat(paste(" DATA REPORT:    ", Sys.time(), "\n"))
+  cat(" 1. SINTESI DISTRIBUZIONE\n")
+  cat(" -------------------------------------------------------------\n")
+  print(table(df_plot$Stato)) # Conteggio rapido stati
+  cat("\n 2. DETTAGLIO CAMPIONI\n")
+  cat(" -------------------------------------------------------------\n")
+  print(head(df_plot, 15), row.names = FALSE)
+  cat("\n=============================================================\n")
+  sink()
+  
+  # Grafico Standard Rosso/Blu/Grigio
+  p <- ggplot(df_plot, aes(x = 1:nrow(df_plot), y = X, color = Stato)) +
+    geom_point(alpha = 0.6) +
+    scale_color_manual(values = c("BOX"="red", "DIAMOND"="blue", "NOISE"="gray")) +
+    theme_minimal() +
+    labs(title = "Mappatura PSI-U - Engine 0.1.2", x = "Indice", y = "Valore X")
+  
+  print(p)
+}
+
+# Lancio dell'analisi visuale
+processa_report_standard(risultati)
