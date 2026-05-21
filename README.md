@@ -16,19 +16,32 @@ For full details, please refer to the document: [Certification_From_GTB.pdf](./C
 *   [Insert language/tool here, e.g., Agda, Coq, or Lean]
 *   Standard HoTT library
 
-# 🚀 Primo Esperimento su Dati Reali: London Smart City Resonance Analysis
+#  First Real-World Experiment: PsiU-Protocol Validation
 
-Abbiamo testato il protocollo **PsiU** rifondato ieri utilizzando i flussi di mobilità urbana in tempo reale della città di Londra (**TfL Open Data**). 
+We are proud to announce the successful completion of the first empirical test of the **PsiU-Protocol**, applied to complex urban data flows. The results confirm the model's effectiveness in mapping resonance and predicting instabilities within a Smart City environment.
 
-### 📊 Risultati Scientifici
-![PsiU London Validation](PsiU_Full_Scientific_Poster.png)
+### 📄 Official Technical Report
+The complete analysis, scientific inferences, and modeling methodology are documented in our official paper:
 
-#### **In sintesi:**
-*   **Convergenza del 65%**: La maggioranza dei sensori urbani (Box + Alpha) gravita attorno alla **Costante Gnomonica (G = 0.618)**.
-*   **Capacità Predittiva**: Il protocollo ha isolato 88 nodi **BETA**, identificandoli come punti di instabilità prima del collasso nel caos (Noise).
-*   **Verificabilità**: I dati provengono dal *London Datastore* via API ufficiale; l'esperimento è 100% riproducibile tramite lo script R incluso nel repository.
+ **[Inferences and Modeling on London Urban Datas.pdf](./Inferences_and_Modeling_on_London_Urban_Datas.pdf)**
 
-> **Inferenza:** Il sistema urbano non è casuale, ma tende a un'auto-organizzazione modale descritta dalla teoria PsiU.
+---
+
+###  Experimental Highlights
+*   **Dataset:** Real-time mobility feeds from *Transport for London (TfL)* via the London Datastore.
+*   **Key Finding:** Detected a **65% convergence** rate toward the Gnomonic Constant ($G \approx 0.618$).
+*   **Scientific Inference:** The London urban system exhibits a spontaneous tendency toward modal self-organization around the $G$ attractor.
+*   **Predictive Power:** Identification of 88 **BETA-nodes** acting as early warning signals for urban instability and potential chaos.
+
+###  Methodology & Reproducibility
+The data and R-scripts used to generate this report are included in this repository to ensure full scientific transparency.
+- **Logic Engine:** Built on **HoTT (Homotopy Type Theory)** and Modal Logic.
+- **Modal Classification:** Vectors are classified into **BOX** (Necessity), **DIAMOND** (Possibility/Alpha-Beta), and **NOISE** (Accident).
+
+
+---
+*Documented and validated on May 21, 2026.*
+
 
 
 
