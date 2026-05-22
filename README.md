@@ -33,7 +33,7 @@ library(PsiUEngineRL)
 
 # Update the tree with a new value and auto-save the library
 PsiU_MultiLibrary_Tree(0.61803)
-
+---
 
 ## 📋 Technical Requirements
 *   **R** >= 3.5
@@ -42,7 +42,7 @@ PsiU_MultiLibrary_Tree(0.61803)
 ## ⚖️ License
 This project is released under the **MIT** License.
 
----
+
 
 
 
