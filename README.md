@@ -21,32 +21,23 @@ The engine analyzes input vectors and categorizes them based on their distance f
 *   **DIAMOND (Possibility)**: Values with a deviation $\le 0.010$.
 *   **NOISE (Accident)**: Values beyond the resonance threshold.
 
-```R
-# 1. Install devtools (required to fetch packages from GitHub)
+## Installation
+Run this once to set up the environment:
+```r
 if (!require("devtools")) install.packages("devtools")
-
-# 2. Install the PsiU-Protocol directly from the source
 devtools::install_github("lombardisedr-dev/PsiU-Protocol-HoTT")
-
-# 3. Load the library to activate the functions
-library(PsiUEngineRL)
-
-# Update the tree with a new value and auto-save the library
-PsiU_MultiLibrary_Tree(0.61803)
----
-
-## 📋 Technical Requirements
-*   **R** >= 3.5
-*   **Rtools** (Required on Windows to compile the package from GitHub)
-
-## ⚖️ License
-This project is released under the **MIT** License.
-
-
-
-
-
 ```
+
+## Quick Start
+Copy and paste this line to run the engine:
+```r
+library(PsiUEngineRL); PsiU_MultiLibrary_Tree(0.61803)
+```
+
+
+
+
+
 BEST TESTS 
 
 Urban Planning & Quantum: The (G) Law 📊Analyzing TfL London mobility, I found a 65% convergence toward the constant (G) (0.618). Flows self-organize via gnomonic proportions; deviations at 88 "BETA-nodes" predict chaos before it hits.Same pattern in IBM Quantum chips: 39.7% of "noise" follows (G). Instead of heavy filters, we "clean" data by isolating structural truth from thermal noise.From cities to atoms, (G) is the universal coordinate for stability. 🌍⚛️
