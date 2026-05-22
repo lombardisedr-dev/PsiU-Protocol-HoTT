@@ -15,9 +15,16 @@ PsiU interprets continuous data streams as homotopy types, evaluates identity pa
 
 ### 💻 Quick Installation
 Open your R console and run:
+
+
+
 ```R
 if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-remotes::install_github("lombardisedr-dev/PsiU_Engine_RL")
+remotes::install_github("lombardisedr-dev/PsiU-Protocol-HoTT")
+
+# Carica il protocollo
+library(PsiU_Protocol_HoTT)
+```
 
 ```
 TESTS 
