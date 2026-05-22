@@ -1,6 +1,9 @@
 # 🌌 PsiU-Protocol Engine v0.1.1 is officially live! 22/05: Public release of the CRAN-submitted version
 
 I am excited to release the first official build of the **PsiU-Protocol**, a native R engine that integrates **Homotopy Type Theory (HoTT)** and **Quantitative Modal Logic** for structural convergence analysis.
+### 🛡️ Formal Validation
+*   **[PsiU-Protocol v0.1.2 - Validation Sheet (PDF)](https://github.com)**
+    *   **Description:** Official integrity report (v0.1.2). This single-page validation confirms the structural stability of Homotopy Types under stress. It highlights the engine's ability to isolate noise (Step 5) and instantly re-crystallize logical "BOX" necessity (Step 6), maintaining a stable Symbolic Decoherence Index (SDI) for Zero-Error Tolerance networks.
 
 ### 🧠 Core Architecture
 PsiU interprets continuous data streams as homotopy types, evaluates identity paths against the **Gnomonic Ratio ($G \approx 0.61803$)**, and processes them via a dynamic **Tableau Refutation Tree**:
