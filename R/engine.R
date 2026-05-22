@@ -3,10 +3,6 @@
 #' @param raw_input_vector Un vettore numerico di input.
 #' @return Un data.frame con valori, distanze e stati modali.
 #' @export
-#' @examples
-#' # Esempio di utilizzo
-#' inputs <- c(0.618, 0.619, 0.700)
-#' PsiU_Engine_RL(inputs)
 PsiU_Engine_RL <- function(raw_input_vector) {
   G <- 0.6180339887
   BOX_THRESHOLD <- 0.002
@@ -33,8 +29,6 @@ PsiU_Engine_RL <- function(raw_input_vector) {
   }
 
   G_target <- create_hott_type(G, "Gnomonic_Ratio")
-  
-  # Definizioni stati senza caratteri Unicode problematici
   prop_A <- "BOX (Necessity) [BOX]"
   prop_B <- "DIAMOND (Possibility) [DIAMOND]"
 
@@ -85,9 +79,8 @@ PsiU_MultiLibrary_Tree <- function(new_value, user_filename = "user_tableau_libr
     return(tree_lib)
   }
 
-  # Controllo stati coerente con le definizioni sopra
   if(str_stato == "DIAMOND (Possibility) [DIAMOND]") {
-    # Logica Diamond (Possibilità)
+    # Logica Diamond
   } else if(str_stato == "BOX (Necessity) [BOX]") {
     tree_lib$BOX_CRYSTAL <- c(tree_lib$BOX_CRYSTAL, new_value)
   } else {
