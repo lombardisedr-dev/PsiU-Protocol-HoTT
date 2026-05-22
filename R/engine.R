@@ -4,7 +4,7 @@
 #' @return Un data.frame con valori, distanze e stati modali.
 #' @export
 #' @examples
-#' # Esempio di utilizzo con valori vicini e lontani dal Gnomonic Ratio
+#' # Esempio di utilizzo
 #' inputs <- c(0.618, 0.619, 0.700)
 #' PsiU_Engine_RL(inputs)
 PsiU_Engine_RL <- function(raw_input_vector) {
@@ -19,8 +19,11 @@ PsiU_Engine_RL <- function(raw_input_vector) {
   create_path <- function(type_a, type_b, tolerance) {
     if (type_a$type != type_b$type) return(NULL)
     distance <- abs(type_a$val - type_b$val)
-    if (distance <= tolerance) return(list(from = type_a, to = type_b, distance = distance, proof = "Reflexivity_Path"))
-    else return(NULL)
+    if (distance <= tolerance) {
+      return(list(from = type_a, to = type_b, distance = distance, proof = "Reflexivity_Path"))
+    } else {
+      return(NULL)
+    }
   }
 
   j_rule <- function(path, property_A, property_B) {
@@ -30,8 +33,10 @@ PsiU_Engine_RL <- function(raw_input_vector) {
   }
 
   G_target <- create_hott_type(G, "Gnomonic_Ratio")
-  prop_A <- "BOX (Necessity) [\u25a1]"
-  prop_B <- "DIAMOND (Possibility) [\u25c6]"
+  
+  # Definizioni stati senza caratteri Unicode problematici
+  prop_A <- "BOX (Necessity) [BOX]"
+  prop_B <- "DIAMOND (Possibility) [DIAMOND]"
 
   states <- character(length(raw_input_vector))
   offsets <- numeric(length(raw_input_vector))
@@ -43,25 +48,23 @@ PsiU_Engine_RL <- function(raw_input_vector) {
     offsets[i] <- abs(raw_input_vector[i] - G)
   }
 
-  return(data.frame(Valore_Grezzo = raw_input_vector, Distanza_G = round(offsets, 5), Stato_Modale = states, stringsAsFactors = FALSE))
+  return(data.frame(
+    Valore_Grezzo = raw_input_vector, 
+    Distanza_G = round(offsets, 5), 
+    Stato_Modale = states, 
+    stringsAsFactors = FALSE
+  ))
 }
 
 #' @title PsiU MultiLibrary Tree Manager
 #' @description Gestisce l'albero di confutazione tableau e la cristallizzazione dei valori.
-# Sostituisci le vecchie righe con queste:
-prop_A <- " BOX (Necessity) [BOX]"
-prop_B <- " DIAMOND (Possibility) [DIAMOND]"
-
+#' @param new_value Singolo valore numerico da analizzare.
+#' @param user_filename Nome del file RDS per il salvataggio della libreria.
 #' @return Una lista contenente la struttura dell'albero aggiornata.
 #' @export
-#' @examples
-#' # Esempio di gestione albero (utilizza un file temporaneo per i test)
-#' tmp_file <- tempfile(fileext = ".rds")
-#' PsiU_MultiLibrary_Tree(0.618, user_filename = tmp_file)
-#' # Pulizia
-#' if (file.exists(tmp_file)) unlink(tmp_file)
 PsiU_MultiLibrary_Tree <- function(new_value, user_filename = "user_tableau_library.rds") {
   G <- 0.6180339887
+  
   if(file.exists(user_filename)) {
     tree_lib <- readRDS(user_filename)
   } else {
@@ -73,7 +76,8 @@ PsiU_MultiLibrary_Tree <- function(new_value, user_filename = "user_tableau_libr
   str_stato <- current_res$Stato_Modale
   dist_g <- current_res$Distanza_G
 
-  cat(sprintf("[STEP %d] Valore: %.5f | Stato: %s | Distanza G: %.5f\n", tree_lib$STEPS, new_value, str_stato, dist_g))
+  cat(sprintf("[STEP %d] Valore: %.5f | Stato: %s | Distanza G: %.5f\n", 
+              tree_lib$STEPS, new_value, str_stato, dist_g))
 
   if(tree_lib$STEPS <= 3) {
     tree_lib$HISTORY <- c(tree_lib$HISTORY, new_value)
@@ -81,9 +85,10 @@ PsiU_MultiLibrary_Tree <- function(new_value, user_filename = "user_tableau_libr
     return(tree_lib)
   }
 
-  if(str_stato == "DIAMOND (Possibility) [\u25c6]") {
-    # Logica Diamond
-  } else if(str_stato == "BOX (Necessity) [\u25a1]") {
+  # Controllo stati coerente con le definizioni sopra
+  if(str_stato == "DIAMOND (Possibility) [DIAMOND]") {
+    # Logica Diamond (Possibilità)
+  } else if(str_stato == "BOX (Necessity) [BOX]") {
     tree_lib$BOX_CRYSTAL <- c(tree_lib$BOX_CRYSTAL, new_value)
   } else {
     tree_lib$NOISE_CRYSTAL <- c(tree_lib$NOISE_CRYSTAL, new_value)
@@ -93,4 +98,3 @@ PsiU_MultiLibrary_Tree <- function(new_value, user_filename = "user_tableau_libr
   saveRDS(tree_lib, user_filename)
   return(tree_lib)
 }
-
