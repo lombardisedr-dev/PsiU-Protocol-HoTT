@@ -22,19 +22,18 @@ The engine analyzes input vectors and categorizes them based on their distance f
 *   **NOISE (Accident)**: Values beyond the resonance threshold.
 
 ```R
+# 1. Install devtools (required to fetch packages from GitHub)
+if (!require("devtools")) install.packages("devtools")
+
+# 2. Install the PsiU-Protocol directly from the source
+devtools::install_github("lombardisedr-dev/PsiU-Protocol-HoTT")
+
+# 3. Load the library to activate the functions
 library(PsiUEngineRL)
-test_input <- c(0.61803, 0.6195, 0.7000)
-analysis <- PsiU_Engine_RL(test_input)
-print(analysis)
-```
 
-### 2. Tableau Refutation Tree Management
-The `PsiU_MultiLibrary_Tree` module manages the crystallization of values and tracks the history of analysis steps in a local `.rds` file.
-
-```R
-# Update the tree with a new value and save the library
+# Update the tree with a new value and auto-save the library
 PsiU_MultiLibrary_Tree(0.61803)
-```
+
 
 ## 📋 Technical Requirements
 *   **R** >= 3.5
@@ -44,8 +43,6 @@ PsiU_MultiLibrary_Tree(0.61803)
 This project is released under the **MIT** License.
 
 ---
-*Developed by Roberto Lombardi - [lombardisedr-dev](https://github.com)*
-
 
 
 
@@ -55,8 +52,6 @@ BEST TESTS
 Urban Planning & Quantum: The (G) Law 📊Analyzing TfL London mobility, I found a 65% convergence toward the constant (G) (0.618). Flows self-organize via gnomonic proportions; deviations at 88 "BETA-nodes" predict chaos before it hits.Same pattern in IBM Quantum chips: 39.7% of "noise" follows (G). Instead of heavy filters, we "clean" data by isolating structural truth from thermal noise.From cities to atoms, (G) is the universal coordinate for stability. 🌍⚛️
 
 ## Artifacts
-
-
 
 ### 📊 Quantum Inferences
 * **[IBM Quantum Open Data Inferences.pdf](./IBM%20Quantum%20Open%20Data%20Inferences.pdf)**
