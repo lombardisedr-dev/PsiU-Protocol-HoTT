@@ -24,9 +24,9 @@ TESTS
 
 Urban Planning & Quantum: The (G) Law 📊Analyzing TfL London mobility, I found a 65% convergence toward the constant (G) (0.618). Flows self-organize via gnomonic proportions; deviations at 88 "BETA-nodes" predict chaos before it hits.Same pattern in IBM Quantum chips: 39.7% of "noise" follows (G). Instead of heavy filters, we "clean" data by isolating structural truth from thermal noise.From cities to atoms, (G) is the universal coordinate for stability. 🌍⚛️
 
-## Research Papers & Artifacts
+## Artifacts
 
-This repository contains papers and research artifacts documenting the applications of the **PsiU Protocol** and **Homotopy Type Theory (HoTT)** framework to real-world and quantum datasets.
+
 
 ### 📊 Quantum Inferences
 * **[IBM Quantum Open Data Inferences.pdf](./IBM%20Quantum%20Open%20Data%20Inferences.pdf)**
