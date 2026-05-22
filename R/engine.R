@@ -48,8 +48,10 @@ PsiU_Engine_RL <- function(raw_input_vector) {
 
 #' @title PsiU MultiLibrary Tree Manager
 #' @description Gestisce l'albero di confutazione tableau e la cristallizzazione dei valori.
-#' @param new_value Singolo valore numerico da analizzare.
-#' @param user_filename Nome del file RDS per il salvataggio della libreria.
+# Sostituisci le vecchie righe con queste:
+prop_A <- " BOX (Necessity) [BOX]"
+prop_B <- " DIAMOND (Possibility) [DIAMOND]"
+
 #' @return Una lista contenente la struttura dell'albero aggiornata.
 #' @export
 #' @examples
