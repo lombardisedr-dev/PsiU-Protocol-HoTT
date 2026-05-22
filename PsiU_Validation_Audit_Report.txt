@@ -13,5 +13,5 @@
  Entropia Approx: 0.6029
  VERDETTO: INTEGRITÀ LOGICA CONFERMATA
 -----------------------------------------------------------
- Analysis Date / Data Analisi: 2026-05-22 05:32:16.332743
+ Analysis Date / Data Analisi: 2026-05-22 11:45:00.231607
 ===========================================================
