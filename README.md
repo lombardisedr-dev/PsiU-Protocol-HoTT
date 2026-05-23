@@ -63,10 +63,9 @@ library(PsiUEngineRL); PsiU_MultiLibrary_Tree(0.61803)
 
 BEST TESTS 
 ### 🇬🇧 Urban Resonance (London TfL)
-![London Urban Resonance](london_resonance.png)
+![London Urban Resonance](Inferences%20and%20Modeling%20on%20London%20Urban%20Datas-1.png)
 
 ### ⚛️ Quantum Coherence (IBM Quantum)
-![Quantum Coherence](quantum_analysis.png)
-
+![Quantum Coherence](IBM%20Quantum%20Open%20Data%20Inferences-1.png)
 
 
