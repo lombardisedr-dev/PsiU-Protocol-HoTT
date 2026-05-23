@@ -63,7 +63,30 @@ library(PsiUEngineRL); PsiU_MultiLibrary_Tree(0.61803)
 
 BEST TESTS 
 
-![PsiU Honest Validation](PsiU_Honest_Validation_ENG.png)
+====================================================================================================
+ 📊 METRIC BENCHMARK (184 SAMPLES): ARIMA (95% CI) vs. PsiU-PROTOCOL (Persistence Filter)
+====================================================================================================
+
+ Flow Units
+    ▲
+100 │                                                          ▲ [PsiU: TRUE POSITIVE]
+ 90 │                                                          ┌─────────────────────┐
+ 80 │                 ● [ARIMA: FALSE POSITIVE]                │  REAL ANOMALY       │
+ 70 │                 │                                        │  Sustained Plateau  │
+ 60 │               ┌─┴─┐                                      │  (Incident/Block)   │
+ 50 │   ┌─┐         │   │                                      │                     │
+ 40 ├───┘ └─────────┘   └──────────────────────────────────────┘                     └───────── ~ ~
+ 30 │
+  0 ┼───────────────┬──────────────────────────────────────────┬──────────────────────────────►
+    0             t=72 (Isolated Micro-Spike)               t=140 (Sustained Shock)         184 (t)
+
+====================================================================================================
+ 🔍 CHART LEGEND:
+ ───  Urban Data Flow Line (Simulated real-world conditions without marketing bias)
+  ●   ARIMA Alert: Triggers instantly on sharp deviations, capturing noise spikes as false alarms.
+  ▲   PsiU Validation: Confirms the alert ONLY if the structural anomaly persists at timestep t+1.
+====================================================================================================
+
 
 
 
