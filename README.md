@@ -8,6 +8,9 @@ I am excited to release the first official build of the **PsiU-Protocol**, a nat
 
 The **PsiU-Protocol v0.1.1** has been officially validated using heterogeneous data streams (SmartSantander & IBM Quantum) to verify logical type stability.
 
+![Descrizione dell'immagine](IMG_0150.png)
+
+
 ### [➔ View Official Validation Report (PDF)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/blob/main/PsiU_Final_Validation_v0.1.1.pdf)
 
 ### 📊 Why PsiU is Scientifically Superior
