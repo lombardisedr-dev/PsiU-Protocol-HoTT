@@ -22,6 +22,7 @@ This validation sheet confirms that the engine maintains structural integrity wh
 > **Status:** Structurally qualified for **Zero-Error Tolerance Quantum Networks**.
 
 ![Report Complessivo PsiU](psiu_complessivo_report.png)
+![PsiU Protocol v0.1.1 - Formal Quality Report](psiu_precision_zero_error.png)
 
 ---
 
