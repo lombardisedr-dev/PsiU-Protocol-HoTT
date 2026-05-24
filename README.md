@@ -11,7 +11,6 @@ The **PsiU-Protocol v0.1.1** has been officially validated using heterogeneous d
 ![Descrizione dell'immagine](IMG_0150.png)
 
 
-### [➔ View Official Validation Report (PDF)](https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/blob/main/PsiU_Final_Validation_v0.1.1.pdf)
 
 ### 📊 Why PsiU is Scientifically Superior
 This validation sheet confirms that the engine maintains structural integrity where traditional statistical filters fail:
@@ -21,6 +20,8 @@ This validation sheet confirms that the engine maintains structural integrity wh
 *   **Entropic Resilience**: Maintained a **Symbolic Decoherence Index (SDI) of 0.8091** despite a topological stream entropy of 0.6500 bits.
 
 > **Status:** Structurally qualified for **Zero-Error Tolerance Quantum Networks**.
+
+![Report Complessivo PsiU](psiu_complessivo_report.png)
 
 ---
 
@@ -61,9 +62,7 @@ library(PsiUEngineRL); PsiU_MultiLibrary_Tree(0.61803)
 
 
 
-BEST TESTS 
-### 🇬🇧 Urban Resonance (London TfL)
-![London Urban Resonance](Inferences%20and%20Modeling%20on%20London%20Urban%20Datas-1.png)
+
 
 ### ⚛️ Quantum Coherence (IBM Quantum)
 ![Quantum Coherence](IBM%20Quantum%20Open%20Data%20Inferences-1.png)
