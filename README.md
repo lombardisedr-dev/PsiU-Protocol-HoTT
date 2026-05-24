@@ -21,9 +21,8 @@ This validation sheet confirms that the engine maintains structural integrity wh
 
 > **Status:** Structurally qualified for **Zero-Error Tolerance Quantum Networks**.
 
-# 🔱 PSI-U PROTOCOL v0.1.1 - OFFICIAL BENCHMARK
-
-![Benchmark Risultati](PsiU_Report_Final_V2.png)
+## 📊 Comparative Performance Analysis
+![PSI-U Benchmark](PSI_U_Benchmark_Full_Methodology.png)
 
 
 
