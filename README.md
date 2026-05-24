@@ -24,6 +24,15 @@ This validation sheet confirms that the engine maintains structural integrity wh
 ## 📊 Comparative Performance Analysis
 ![PSI-U Benchmark](PSI_U_Benchmark_Full_Methodology.png)
 
+# PSI-U Protocol Validation Report
+
+
+## Overview
+This report summarizes the technical validation of the **PSI-U Protocol v0.1.1** using the international **BattLeDIM (L-Town)** benchmark.
+The engine demonstrated superior performance in terms of latency (8.28ms) and detection speed (3-step delay) compared to industry standards.
+
+![Technical Analysis Report](REPORT_PSIU_ENGLISH.png)
+
 
 
 
