@@ -76,8 +76,6 @@ library(PsiUEngineRL); PsiU_MultiLibrary_Tree(0.61803)
 
 
 
-![PsiU Protocol Graph](./graph.png)
-
 ![Lombardi's Engine Theory](./Lombardi's%20Eninge%20Theory.png)
 
 
