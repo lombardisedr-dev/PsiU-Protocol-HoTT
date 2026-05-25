@@ -9,14 +9,11 @@ I am excited to release the first official build of the **PsiU-Protocol**, a nat
 ## 🛡️ Formal Validation & Scientific Evidence
 All benchmarks and performance metrics (8.28ms latency) were structured and calculated locally using native R vectorization on a standard consumer PC, proving the lightweight and high-efficiency nature of the PsiU logic engine."
 
-<p align="center">
-  <img src="PsiU_Water_Infrastructure_Report.png" alt="PSI-U Water Infrastructure Validation Report" width="750"/>
-</p>
+### Infrastructure Overview
+![PSIU Infra English](https://github.com)
 
-
-<p align="center">
-  <img src="graph%20(1).png" alt="PSI-U Protocol Visualization" width="750"/>
-</p>
+### Clinical Protocol
+![PSIU Clinical English](https://github.com)
 
 
 
