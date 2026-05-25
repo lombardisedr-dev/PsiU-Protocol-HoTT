@@ -13,11 +13,20 @@ All benchmarks and performance metrics (8.28ms latency) were structured and calc
 #### Infrastructures
 ![PsiU Infra English](./PSIU_Infra_English.png)
 
-# ⚡ PSIU-PROTOCOL ENGINE v0.1.1
+
 
 <p align="center">
-  <img src="https://githubusercontent.com" alt="PSIU Validation Report" width="100%">
+  <img src="PSIU_Final_Technical_Validation_ENG.png" alt="PSIU Validation Report" width="100%">
 </p>
+
+---
+
+### 📊 Quick Clinical Status
+*   **Validation:** SUCCESSFUL ✅
+*   **Core Integrity:** 100% SECURED 🔒
+*   **Latency:** 8.28ms ⚡
+
+> **Note:** The report above illustrates the engine's ability to segregate kinetic noise (BOX) from early occult hemorrhage signals (DIAMOND).
 
 ---
 
