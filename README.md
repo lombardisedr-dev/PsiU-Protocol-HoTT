@@ -1,5 +1,7 @@
 io# 🌌 PsiU-Protocol Engine v0.1.1 is officially live! 22/05: Public release of the CRAN-submitted version
 
+![PsiU Protocol Graph](./graph.png)
+
 I am excited to release the first official build of the **PsiU-Protocol**, a native R engine that integrates **Homotopy Type Theory (HoTT)** and **Quantitative Modal Logic** for structural convergence analysis.
 
 ---
@@ -74,8 +76,9 @@ library(PsiUEngineRL); PsiU_MultiLibrary_Tree(0.61803)
 
 
 
+![PsiU Protocol Graph](./graph.png)
 
-### ⚛️ Quantum Coherence (IBM Quantum)
-![Quantum Coherence](IBM%20Quantum%20Open%20Data%20Inferences-1.png)
+![Lombardi's Engine Theory](./Lombardi's%20Eninge%20Theory.png)
+
 
 
