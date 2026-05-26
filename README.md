@@ -104,7 +104,10 @@ library(PsiUEngineRL); PsiU_MultiLibrary_Tree(0.61803)
 
 
 
-![Lombardi's Engine Theory](./Lombardi's%20Eninge%20Theory.png)
+## Clinical Validation  v0.1.1
+![PSIU Validation Manifesto](PSIU_VALIDATION_MANIFESTO_ENG.png)
+
+---
 
 
 
