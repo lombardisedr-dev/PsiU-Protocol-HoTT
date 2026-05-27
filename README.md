@@ -7,11 +7,24 @@ I am excited to release the first official build of the **PsiU-Protocol**, a nat
 
 ---
 
+
+
 ## 🛡️ Formal Validation & Scientific Evidence
 All benchmarks and performance metrics (8.28ms latency) were structured and calculated locally using native R vectorization on a standard consumer PC, proving the lightweight and high-efficiency nature of the PsiU logic engine."
 
+![PSIU Official Validation Report v1.1](https://github.com)
+
+
+
+
+
 ![Integrated Validation Summary](INTEGRATED_VALIDATION_SUMMARY.png)
+
+
 ![Clinical Validation](PSIU_CLINICAL_VALIDATION_EN.png)
+
+
+
 ![Hydro Validation](HYDRO_VALIDATION_EN.png)
 
 
