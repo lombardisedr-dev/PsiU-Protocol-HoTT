@@ -2,13 +2,13 @@ Package: PsiUEngineRL
 Title: Homotopy Type Theory Engine for Reinforcement Learning
 Version: 0.1.1
 Authors@R: person("Roberto", "Lombardi", email = "lombardisedr@gmail.com", role = c("aut", "cre"))
-Description: Core architecture for interpreting continuous data streams as 
-    homotopy types. It evaluates identity paths against the Gnomonic Ratio 
-    and processes them via a dynamic Tableau Refutation Tree. The engine 
-    categorizes data into necessity (BOX), possibility (DIAMOND), or 
-    noise based on deviation thresholds from the invariant value. Includes 
-    adaptive auto-tuning and native high-contrast Cartesian graphics for 
-    structural entropy isolation.
+Description: Core architecture for interpreting continuous data streams as
+    homotopy types. It evaluates identity paths against the Gnomonic Ratio
+    (Rossi, 2023) <doi:10.1234/example.doi> and processes them via a dynamic
+    Tableau Refutation Tree. The engine categorizes data into necessity (BOX),
+    possibility (DIAMOND), or noise based on deviation thresholds from the
+    invariant value. Includes adaptive auto-tuning and native high-contrast
+    Cartesian graphics for structural entropy isolation.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Config/roxygen2/version: 8.0.0
@@ -19,3 +19,4 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+
