@@ -43,27 +43,36 @@ PsiU_Engine_RL <- function(raw_input_vector) {
     offsets[i] <- abs(raw_input_vector[i] - G)
   }
 
-  return(data.frame(Valore_Grezzo = raw_input_vector, Distanza_G = round(offsets, 5), Stato_Modale = states, stringsAsFactors = FALSE))
+  return(data.frame(Valore_Grezzo = raw_input_vector, 
+                    Distanza_G = round(offsets, 5), 
+                    Stato_Modale = states, 
+                    stringsAsFactors = FALSE))
 }
 
 #' @title PsiU MultiLibrary Tree Manager
 #' @description Gestisce l'albero di confutazione tableau e la cristallizzazione dei valori.
 #' @param new_value Singolo valore numerico da analizzare.
-#' @param user_filename Nome del file RDS per il salvataggio della libreria.
+#' @param user_filename Nome del file RDS. Se NULL, salva in una locazione temporanea.
+#' @param verbose Logico. Se TRUE, stampa i progressi in console.
 #' @return Una lista contenente la struttura dell'albero aggiornata.
 #' @export
 #' @examples
-#' # Esempio di gestione albero (utilizza un file temporaneo per i test)
+#' # Esempio di gestione albero (usa file temporaneo per i test)
 #' tmp_file <- tempfile(fileext = ".rds")
-#' PsiU_MultiLibrary_Tree(0.618, user_filename = tmp_file)
-#' # Pulizia
-#' if (file.exists(tmp_file)) unlink(tmp_file)
-PsiU_MultiLibrary_Tree <- function(new_value, user_filename = "user_tableau_library.rds") {
+#' PsiU_MultiLibrary_Tree(0.618, user_filename = tmp_file, verbose = TRUE)
+PsiU_MultiLibrary_Tree <- function(new_value, user_filename = NULL, verbose = FALSE) {
   G <- 0.6180339887
+  
+  # FIX: Non scrive più nel workspace dell'utente per default
+  if (is.null(user_filename)) {
+    user_filename <- file.path(tempdir(), "user_tableau_library.rds")
+  }
+
   if(file.exists(user_filename)) {
     tree_lib <- readRDS(user_filename)
   } else {
-    tree_lib <- list(HISTORY = numeric(), BOX_CRYSTAL = numeric(), NOISE_CRYSTAL = numeric(), STEPS = 0)
+    tree_lib <- list(HISTORY = numeric(), BOX_CRYSTAL = numeric(), 
+                     NOISE_CRYSTAL = numeric(), STEPS = 0)
   }
 
   tree_lib$STEPS <- tree_lib$STEPS + 1
@@ -71,7 +80,11 @@ PsiU_MultiLibrary_Tree <- function(new_value, user_filename = "user_tableau_libr
   str_stato <- current_res$Stato_Modale
   dist_g <- current_res$Distanza_G
 
-  cat(sprintf("[STEP %d] Valore: %.5f | Stato: %s | Distanza G: %.5f\n", tree_lib$STEPS, new_value, str_stato, dist_g))
+  # FIX: Messaggio ora sopprimibile con verbose = FALSE
+  if (verbose) {
+    message(sprintf("[STEP %d] Valore: %.5f | Stato: %s | Distanza G: %.5f", 
+                    tree_lib$STEPS, new_value, str_stato, dist_g))
+  }
 
   if(tree_lib$STEPS <= 3) {
     tree_lib$HISTORY <- c(tree_lib$HISTORY, new_value)
@@ -91,4 +104,3 @@ PsiU_MultiLibrary_Tree <- function(new_value, user_filename = "user_tableau_libr
   saveRDS(tree_lib, user_filename)
   return(tree_lib)
 }
-
