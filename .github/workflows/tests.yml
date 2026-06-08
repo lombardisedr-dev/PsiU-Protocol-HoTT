@@ -19,15 +19,19 @@ jobs:
 
       - name: Setup R Environment
         uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
 
       - name: Install System Dependencies
         run: |
-          Rscript -e 'install.packages("ggplot2", repos = "https://posit.co")'
+          Rscript -e 'install.packages("ggplot2", repos = "https://cloud.r-project.org")'
 
       - name: Execute PsiU Validation Plot
-        run: Rscript PsiU_Generate_Validation_Plot.R
+        run: |
+          if [ -f PsiU_Generate_Validation_Plot.R ]; then
+            Rscript PsiU_Generate_Validation_Plot.R
+          else
+            echo "Errore: PsiU_Generate_Validation_Plot.R non trovato nella radice."
+            exit 1
+          fi
 
       - name: Force Commit and Push to Repository
         run: |
@@ -37,14 +41,16 @@ jobs:
           git fetch origin main
           git checkout main
           
-          git add -f psi_u_validation_plot.png
-          
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: aggiornamento automatico plot di validazione omotopica [skip ci]"
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com{{ github.repository }}.git main
+          if [ -f psi_u_validation_plot.png ]; then
+            git add -f psi_u_validation_plot.png
+            if ! git diff --cached --quiet; then
+              git commit -m "chore: aggiornamento automatico plot di validazione omotopica [skip ci]"
+              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com{{ github.repository }}.git main
+            else
+              echo "Nessuna variazione rilevata nel grafico."
+            fi
           else
-            echo "Nessuna variazione rilevata nel grafico."
+            echo "Errore: L'immagine psi_u_validation_plot.png non è stata generata dallo script R."
+            exit 1
           fi
 
-          
-    
