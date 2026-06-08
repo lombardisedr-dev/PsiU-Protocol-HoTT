@@ -1,5 +1,5 @@
 library(testthat)
 
-test_that("Sblocco della pipeline", {
+test_that("Sblocco finale della pipeline", {
   expect_true(TRUE)
 })
