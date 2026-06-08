@@ -19,26 +19,6 @@ All benchmarks and performance metrics (8.28ms latency) were structured and calc
 
 ## Versione Italiana
 ![Validazione Integrata PsiU](REPORT_PSIU_v1.1_DEFINITIVO.png)
-
-
-
-
-
-
-![Integrated Validation Summary](INTEGRATED_VALIDATION_SUMMARY.png)
-
-
-![Clinical Validation](PSIU_CLINICAL_VALIDATION_EN.png)
-
-
-
-![Hydro Validation](HYDRO_VALIDATION_EN.png)
-
-
-
-
-
-
 ---
 
 ### 📊 Quick Clinical Status
@@ -71,20 +51,6 @@ This validation sheet confirms that the engine maintains structural integrity wh
 *   **Entropic Resilience**: Maintained a **Symbolic Decoherence Index (SDI) of 0.8091** despite a topological stream entropy of 0.6500 bits.
 
 > **Status:** Structurally qualified for **Zero-Error Tolerance Quantum Networks**.
-
-## 📊 Comparative Performance Analysis
-![PSI-U Benchmark](PSI_U_Benchmark_Full_Methodology.png)
-
-# PSI-U Protocol Validation Report
-
-
-## Overview
-This report summarizes the technical validation of the **PSI-U Protocol v0.1.1** using the international **BattLeDIM (L-Town)** benchmark.
-The engine demonstrated superior performance in terms of latency (8.28ms) and detection speed (3-step delay) compared to industry standards.
-
-![Technical Analysis Report](REPORT_PSIU_ENGLISH.png)
-
-
 
 
 ### 🧠 Core Architecture
