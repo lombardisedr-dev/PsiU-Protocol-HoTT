@@ -42,7 +42,10 @@ What it demonstrates: It proves the mathematical flexibility of the algorithm, w
 
 4. Smart Cities and the Internet of Things (action_smart_cities)
 What it analyzes: A continuous stream of data from IoT sensors (iot_stream).
-What it demonstrates: The algorithm is optimized for real-time analysis (stream processing). It classifies smart city information to isolate entropy (the chaos of useless data) and identify necessary or possible events for the artificial intelligence to act upon.Summary: The Underlying Mathematical LogicThe test demonstrates that, regardless of whether the input is pressure, a heartbeat, a quantum state, or an IoT sensor, the PsiUEngineRL extension treats every stream as a continuous geometric path (homotopic identity). Through a Tableau Refutation Tree, the code separates signals of logical relevance (necessity or possibility) from mere noise.
+What it demonstrates: The algorithm is optimized for real-time analysis (stream processing). It classifies smart city information to isolate entropy (the chaos of useless data) and identify necessary or possible events for the artificial intelligence to act upon.
+
+
+Summary: The Underlying Mathematical LogicThe test demonstrates that, regardless of whether the input is pressure, a heartbeat, a quantum state, or an IoT sensor, the PsiUEngineRL extension treats every stream as a continuous geometric path (homotopic identity). Through a Tableau Refutation Tree, the code separates signals of logical relevance (necessity or possibility) from mere noise.
 
 
 
