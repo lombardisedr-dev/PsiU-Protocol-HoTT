@@ -20,6 +20,9 @@ All benchmarks and performance metrics (8.28ms latency) were structured and calc
 ## Versione Italiana
 ![Validazione Integrata PsiU](REPORT_PSIU_v1.1_DEFINITIVO.png)
 
+
+https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/runs/27145753782/job/80122894130
+
 1. Urban Infrastructure Monitoring (action_ltown_scada)
 What it analyzes: Pressure data from a water distribution network (scada_df$pressure).
 What it demonstrates: The use of the PsiU_MultiLibrary_Tree function (configured with a threshold value of 0.52881) allows the engine to calculate structural deviations. It serves to detect critical anomalies such as water leaks or faults in city pipelines.
