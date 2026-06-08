@@ -1,4 +1,4 @@
-io# 🌌 PsiU-Protocol Engine v0.1.1 is officially live! 22/05: Public release of the CRAN-submitted version
+io# 🌌 PsiU-Protocol Engine v0.1.1 is officially live! 22/05: Public release of the CRAN-version
 
 
 ![PsiU Graph](./graph.png)
