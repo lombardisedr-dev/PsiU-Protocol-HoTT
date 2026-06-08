@@ -2,40 +2,55 @@
 
 # ==============================================================================
 # PROGETTO: PsiU-Protocol-HoTT
-# SCRIPT: PsiU_Generate_Validation_Plot.R (VERSIONE DINAMICA)
-# DESCRIZIONE: Parsing automatico di report_scostamenti.txt e plot HoTT.
+# SCRIPT: PsiU_Generate_Validation_Plot.R (ALL-IN-ONE)
+# DESCRIZIONE: Scansione di report_08/, parsing dinamico e rendering grafico.
 # ==============================================================================
 
+# 1. VERIFICA E CARICAMENTO LIBRERIE
+# ------------------------------------------------------------------------------
 if (!requireNamespace("ggplot2", quietly = TRUE)) {
   install.packages("ggplot2", repos = "https://posit.co")
 }
 library(ggplot2)
 
-report_file <- "report_scostamenti.txt"
-
-# 1. PARSING DINAMICO DEI DATI DAL REPORT DELL'ENGINE
+# 2. INDIVIDUAZIONE DINAMICA DELL'ULTIMO REPORT
 # ------------------------------------------------------------------------------
-if (file.exists(report_file)) {
-  cat("[PsiU-Omen] Rilevato report_scostamenti.txt. Estrazione metriche in corso...\n")
-  linee <- readLines(report_file)
+report_dir <- "report_08"
+box_val <- 403
+diamond_val <- 330
+noise_val <- 267
+
+cat("[PsiU-Engine] Scansione della directory di output...\n")
+
+if (dir.exists(report_dir)) {
+  # Elenca i file che corrispondono al pattern dei report
+  file_list <- list.files(path = report_dir, pattern = "^report_.*\\.txt$", full.names = TRUE)
   
-  # Ricerca dei pattern numerici nel report tramite espressioni regolari
-  box_val     <- as.numeric(gsub(".*BOX.*?\\[.*?\\]\\s*([0-9]+).*", "\\1", linee[grep("BOX", linee)]))
-  diamond_val <- as.numeric(gsub(".*DIAMOND.*?\\[.*?\\]\\s*([0-9]+).*", "\\1", linee[grep("DIAMOND", linee)]))
-  noise_val   <- as.numeric(gsub(".*NOISE.*\\s*([0-9]+).*", "\\1", linee[grep("NOISE", linee)]))
-  
-  # Fallback in caso di anomalie di formattazione nel file di testo
-  if (length(box_val) == 0 || is.na(box_val)) box_val <- 403
-  if (length(diamond_val) == 0 || is.na(diamond_val)) diamond_val <- 330
-  if (length(noise_val) == 0 || is.na(noise_val)) noise_val <- 267
+  if (length(file_list) > 0) {
+    # Seleziona il file più recente in base alla data di modifica
+    report_file <- file_list[which.max(file.info(file_list)$mtime)]
+    cat(paste0("[PsiU-Omen] Analisi dell'ultimo artifact rilevato: ", report_file, "\n"))
+    
+    linee <- readLines(report_file)
+    
+    # Parsing delle stringhe HoTT tramite espressioni regolari
+    extracted_box     <- as.numeric(gsub(".*BOX.*?\\[.*?\\]\\s*([0-9]+).*", "\\1", linee[grep("BOX", linee)]))
+    extracted_diamond <- as.numeric(gsub(".*DIAMOND.*?\\[.*?\\]\\s*([0-9]+).*", "\\1", linee[grep("DIAMOND", linee)]))
+    extracted_noise   <- as.numeric(gsub(".*NOISE.*\\s*([0-9]+).*", "\\1", linee[grep("NOISE", linee)]))
+    
+    if (length(extracted_box) > 0 && !is.na(extracted_box)) box_val <- extracted_box
+    if (length(extracted_diamond) > 0 && !is.na(extracted_diamond)) diamond_val <- extracted_diamond
+    if (length(extracted_noise) > 0 && !is.na(extracted_noise)) noise_val <- extracted_noise
+  } else {
+    cat("[PsiU-Warning] Nessun file report trovato in report_08/. Uso valori standard.\n")
+  }
 } else {
-  cat("[PsiU-Warning] report_scostamenti.txt non trovato. Utilizzo valori di fallback.\n")
-  box_val <- 403
-  diamond_val <- 330
-  noise_val <- 267
+  cat("[PsiU-Warning] Cartella report_08/ non rilevata. Uso valori standard.\n")
 }
 
-# 2. STRUTTURAZIONE DATA FRAME MODALE
+cat(paste0("[PsiU-Data] Valori integrati -> BOX: ", box_val, " | DIAMOND: ", diamond_val, " | NOISE: ", noise_val, "\n"))
+
+# 3. STRUTTURAZIONE DATA FRAME MODALE
 # ------------------------------------------------------------------------------
 metriche <- data.frame(
   Categoria = c("BOX (Necessity)", "DIAMOND (Possibility)", "NOISE (Accident)"),
@@ -43,16 +58,16 @@ metriche <- data.frame(
   Colore    = c("#00FFCC", "#FFCC00", "#FF3366")
 )
 
-# 3. RENDER GRAFICO AD ALTO CONTRASTO (ZERO-ERROR NETWORK DESIGN)
+# 4. RENDER GRAFICO AD ALTO CONTRASTO (ZERO-ERROR NETWORK DESIGN)
 # ------------------------------------------------------------------------------
 plot_validazione <- ggplot(metriche, aes(x = Categoria, y = Valore, fill = Categoria)) +
   geom_bar(stat = "identity", width = 0.55, color = "#FFFFFF", linewidth = 0.7) +
-  geom_text(aes(label = Valore), venv = -0.5, color = "#FFFFFF", fontface = "bold", size = 5) +
+  geom_text(aes(label = Valore), vjust = -0.5, color = "#FFFFFF", fontface = "bold", size = 5) +
   scale_fill_manual(values = metriche$Colore) +
   labs(
     title = "PsiU Protocol - Real-Time Validation Plot",
-    subtitle = paste0("Gnomonic Ratio Convergence Framework (G ~ 0.61803)"),
-    x = "Modal-Logic Logic Branches (Tableau Tree)",
+    subtitle = "Gnomonic Ratio Convergence Framework (G ~ 0.61803)",
+    x = "Modal-Logic Branches (Tableau Tree)",
     y = "Geometric Invariance Steps"
   ) +
   theme_minimal(base_size = 14) +
@@ -68,8 +83,10 @@ plot_validazione <- ggplot(metriche, aes(x = Categoria, y = Valore, fill = Categ
     legend.position  = "none"
   )
 
-# 4. EXPORT ARTIFACT
+# 5. ESPORTAZIONE E SALVATAGGIO
 # ------------------------------------------------------------------------------
 output_path <- "psi_u_validation_plot.png"
 ggsave(filename = output_path, plot = plot_validazione, width = 8, height = 5, dpi = 300)
-cat(paste0("[PsiU-Success] Generato plot dinamico ad alto contrasto in: ", output_path, "\n"))
+cat(paste0("[PsiU-Success] Processo completato. Grafico aggiornato salvato in: ", output_path, "\n"))
+
+
