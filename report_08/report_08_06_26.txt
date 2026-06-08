@@ -1,92 +1,38 @@
-#!/usr/bin/env Rscript
+name: PSIU Protocol Automation
 
-# ==============================================================================
-# PROGETTO: PsiU-Protocol-HoTT
-# SCRIPT: PsiU_Generate_Validation_Plot.R (ALL-IN-ONE)
-# DESCRIZIONE: Scansione di report_08/, parsing dinamico e rendering grafico.
-# ==============================================================================
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-# 1. VERIFICA E CARICAMENTO LIBRERIE
-# ------------------------------------------------------------------------------
-if (!requireNamespace("ggplot2", quietly = TRUE)) {
-  install.packages("ggplot2", repos = "https://posit.co")
-}
-library(ggplot2)
+permissions:
+  contents: write
 
-# 2. INDIVIDUAZIONE DINAMICA DELL'ULTIMO REPORT
-# ------------------------------------------------------------------------------
-report_dir <- "report_08"
-box_val <- 403
-diamond_val <- 330
-noise_val <- 267
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-cat("[PsiU-Engine] Scansione della directory di output...\n")
+      - name: Setup R Environment
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
 
-if (dir.exists(report_dir)) {
-  # Elenca i file che corrispondono al pattern dei report
-  file_list <- list.files(path = report_dir, pattern = "^report_.*\\.txt$", full.names = TRUE)
-  
-  if (length(file_list) > 0) {
-    # Seleziona il file più recente in base alla data di modifica
-    report_file <- file_list[which.max(file.info(file_list)$mtime)]
-    cat(paste0("[PsiU-Omen] Analisi dell'ultimo artifact rilevato: ", report_file, "\n"))
-    
-    linee <- readLines(report_file)
-    
-    # Parsing delle stringhe HoTT tramite espressioni regolari
-    extracted_box     <- as.numeric(gsub(".*BOX.*?\\[.*?\\]\\s*([0-9]+).*", "\\1", linee[grep("BOX", linee)]))
-    extracted_diamond <- as.numeric(gsub(".*DIAMOND.*?\\[.*?\\]\\s*([0-9]+).*", "\\1", linee[grep("DIAMOND", linee)]))
-    extracted_noise   <- as.numeric(gsub(".*NOISE.*\\s*([0-9]+).*", "\\1", linee[grep("NOISE", linee)]))
-    
-    if (length(extracted_box) > 0 && !is.na(extracted_box)) box_val <- extracted_box
-    if (length(extracted_diamond) > 0 && !is.na(extracted_diamond)) diamond_val <- extracted_diamond
-    if (length(extracted_noise) > 0 && !is.na(extracted_noise)) noise_val <- extracted_noise
-  } else {
-    cat("[PsiU-Warning] Nessun file report trovato in report_08/. Uso valori standard.\n")
-  }
-} else {
-  cat("[PsiU-Warning] Cartella report_08/ non rilevata. Uso valori standard.\n")
-}
+      - name: Install System Dependencies
+        run: |
+          Rscript -e 'install.packages("ggplot2", repos = "https://posit.co")'
 
-cat(paste0("[PsiU-Data] Valori integrati -> BOX: ", box_val, " | DIAMOND: ", diamond_val, " | NOISE: ", noise_val, "\n"))
+      - name: Execute PsiU Validation Plot
+        run: Rscript PsiU_Generate_Validation_Plot.R
 
-# 3. STRUTTURAZIONE DATA FRAME MODALE
-# ------------------------------------------------------------------------------
-metriche <- data.frame(
-  Categoria = c("BOX (Necessity)", "DIAMOND (Possibility)", "NOISE (Accident)"),
-  Valore    = c(box_val, diamond_val, noise_val),
-  Colore    = c("#00FFCC", "#FFCC00", "#FF3366")
-)
-
-# 4. RENDER GRAFICO AD ALTO CONTRASTO (ZERO-ERROR NETWORK DESIGN)
-# ------------------------------------------------------------------------------
-plot_validazione <- ggplot(metriche, aes(x = Categoria, y = Valore, fill = Categoria)) +
-  geom_bar(stat = "identity", width = 0.55, color = "#FFFFFF", linewidth = 0.7) +
-  geom_text(aes(label = Valore), vjust = -0.5, color = "#FFFFFF", fontface = "bold", size = 5) +
-  scale_fill_manual(values = metriche$Colore) +
-  labs(
-    title = "PsiU Protocol - Real-Time Validation Plot",
-    subtitle = "Gnomonic Ratio Convergence Framework (G ~ 0.61803)",
-    x = "Modal-Logic Branches (Tableau Tree)",
-    y = "Geometric Invariance Steps"
-  ) +
-  theme_minimal(base_size = 14) +
-  theme(
-    panel.background = element_rect(fill = "#12121A", color = NA),
-    plot.background  = element_rect(fill = "#0B0B0F", color = NA),
-    panel.grid.major = element_line(color = "#222230", linewidth = 0.5),
-    panel.grid.minor = element_blank(),
-    text             = element_text(color = "#E2E2E8"),
-    plot.title       = element_text(color = "#FFFFFF", face = "bold", size = 16, hjust = 0.5),
-    plot.subtitle    = element_text(color = "#8A8A9F", size = 11, hjust = 0.5),
-    axis.text        = element_text(color = "#8A8A9F", face = "bold"),
-    legend.position  = "none"
-  )
-
-# 5. ESPORTAZIONE E SALVATAGGIO
-# ------------------------------------------------------------------------------
-output_path <- "psi_u_validation_plot.png"
-ggsave(filename = output_path, plot = plot_validazione, width = 8, height = 5, dpi = 300)
-cat(paste0("[PsiU-Success] Processo completato. Grafico aggiornato salvato in: ", output_path, "\n"))
+      - name: Commit and Push Generated Plot
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add psi_u_validation_plot.png
+          git commit -m "chore: aggiornato plot di validazione omotopica automatico" || echo "Nessuna modifica"
+          git push origin main
 
 
