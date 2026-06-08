@@ -8,6 +8,7 @@ The PsiUEngineRL R package, developed by Roberto Lombardi and available on CRAN,
 
 https://doi.org/10.32614/CRAN.package.
 
+My Theory behind the engine: https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/blob/main/Ideas_for_a_protocoll_ENG.pdf
 The Formulas: https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/blob/main/Formulas_Finally_from_paper_to_Latex%20ENG.pdf
 ---
 
