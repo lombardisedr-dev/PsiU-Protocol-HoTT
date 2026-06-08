@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Recupera l'intera cronologia per evitare conflitti di push
+          fetch-depth: 0
 
       - name: Setup R Environment
         uses: r-lib/actions/setup-r@v2
@@ -32,20 +32,19 @@ jobs:
       - name: Force Commit and Push to Repository
         run: |
           git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "github-actions[bot]@://github.com"
           
-          # Sincronizza lo stato locale con il server per evitare disallineamenti
           git fetch origin main
           git checkout main
           
-          # Forza l'aggiunta fisica dell'artifact grafico
           git add -f psi_u_validation_plot.png
           
-          # Crea il commit solo se il file è stato effettivamente modificato o creato
           if ! git diff --cached --quiet; then
             git commit -m "chore: aggiornamento automatico plot di validazione omotopica [skip ci]"
-            # Utilizza il token nativo della Action per bypassare i blocchi di scrittura remoti
             git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com{{ github.repository }}.git main
           else
-            echo "Nessuna variazione geometrica rilevata nel grafico cartesiano."
+            echo "Nessuna variazione rilevata nel grafico."
           fi
+
+          
+    
