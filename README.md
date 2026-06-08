@@ -34,7 +34,8 @@ https://github.com/lombardisedr-dev/PsiU-Protocol-HoTT/actions/runs/27145753782/
 </p>
 
 
-Summary: The Underlying Mathematical LogicThe test demonstrates that, regardless of whether the input is pressure, a heartbeat, a quantum state, or an IoT sensor, the PsiUEngineRL extension treats every stream as a continuous geometric path (homotopic identity). Through a Tableau Refutation Tree, the code separates signals of logical relevance (necessity or possibility) from mere noise.
+Summary: The Underlying Mathematical Logic
+The test demonstrates that, regardless of whether the input is pressure, a heartbeat, a quantum state, or an IoT sensor, the PsiUEngineRL extension treats every stream as a continuous geometric path (homotopic identity). Through a Tableau Refutation Tree, the code separates signals of logical relevance (necessity or possibility) from mere noise.
 
 
 
