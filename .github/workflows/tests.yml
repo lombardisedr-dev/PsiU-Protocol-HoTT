@@ -1,31 +1,25 @@
-name: PSIU Protocol - Final Scientific Certification
+name: PSIU Protocol Automation
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch: # Attiva il pulsante per l'avvio manuale
 
 jobs:
-  execute-protocol:
+  run-protocol-pipeline:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up R Environment
+      - name: Setup R Environment
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      - name: Install Dependencies
+      - name: Install System Dependencies
         run: |
-          Rscript -e 'install.packages("ggplot2")'
-          # Rscript -e 'devtools::install_github("lombardisedr-dev/PsiUEngineRL")' # Decommenta se serve l'engine remoto
+          Rscript -e 'install.packages("ggplot2", repos="https://r-project.org")'
 
-      - name: Run PsiU Protocol Engine
-        run: |
-          if [ -f PsiU_Protocol_Engine.R ]; then Rscript PsiU_Protocol_Engine.R; else echo "PsiU_Protocol_Engine.R non trovato, salto lo step."; fi
-
-      - name: Generate Validation Plot
+      - name: Execute PsiU Validation Plot
         run: Rscript PsiU_Generate_Validation_Plot.R
-
