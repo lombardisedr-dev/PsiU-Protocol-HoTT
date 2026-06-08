@@ -1,43 +1,16 @@
-on: [push, pull_request]
-name: Validazione-Scientifica-Protocollo
-
-jobs:
-  test-onesto:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout del Codice
-        uses: actions/checkout@v4
-
-      - name: Setup di R
-        uses: r-lib/actions/setup-r@v2
-
-      - name: Installazione Engine dal CRAN e Testthat
-        run: |
-          install.packages(c("PsiUEngineRL", "testthat"))
-        shell: Rscript {0}
-
       - name: Esecuzione dei 4 Test (Idrico, Sanità, Quantum, Smart Cities)
         run: |
-          # Carichiamo le tue funzioni Action
-          if (file.exists("R/actions.R")) source("R/actions.R")
-          
+          # Carichiamo le funzioni Action
+          source("R/actions.R")
           library(testthat)
           
-          # Cerchiamo il file di test in tutti i percorsi possibili
-          test_path_1 <- "tests/testthat/test-actions.R"
-          test_path_2 <- "tests/testthat/test-action.R"
-          test_path_3 <- "test-action.R"
+          # Cerchiamo il file ignorando la struttura delle cartelle
+          files <- list.files(recursive = TRUE, pattern = "test-action\\.R$", full.names = TRUE)
           
-          if (file.exists(test_path_1)) {
-            test_file(test_path_1)
-          } else if (file.exists(test_path_2)) {
-            test_file(test_path_2)
-          } else if (file.exists(test_path_3)) {
-            test_file(test_path_3)
+          if (length(files) > 0) {
+            message("Eseguo il test trovato in: ", files[1])
+            test_file(files[1])
           } else {
-            stop("ERRORE: Nessun file di test trovato nel repository!")
+            stop("ERRORE: Nessun file test-action.R trovato nel repository!")
           }
         shell: Rscript {0}
-
-
-          
