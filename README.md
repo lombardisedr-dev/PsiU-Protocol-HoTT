@@ -106,26 +106,10 @@ The engine analyzes input vectors and categorizes them based on their distance f
 *   **DIAMOND (Possibility)**: Values with a deviation $\le 0.010$.
 *   **NOISE (Accident)**: Values beyond the resonance threshold.
 
-## Installation
-Run this once to set up the environment:
-```r
-if (!require("devtools")) install.packages("devtools")
-devtools::install_github("lombardisedr-dev/PsiU-Protocol-HoTT")
-```
-
-## Quick Start
-Copy and paste this line to run the engine:
-```r
-library(PsiUEngineRL); PsiU_MultiLibrary_Tree(0.61803)
-```
 
 
 
 
-
-
-
----
 
 
 
