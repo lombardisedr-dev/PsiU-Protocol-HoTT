@@ -1,5 +1,4 @@
 on: [push, pull_request]
-
 name: Validazione-Scientifica-Protocollo
 
 jobs:
@@ -7,21 +6,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: r-lib/actions/setup-r@v2
 
-      - name: Installa Engine dal CRAN e Testthat
-        run: |
-          install.packages(c("PsiUEngineRL", "testthat", "remotes"))
+      - name: Installa Engine dal CRAN
+        run: install.packages(c("PsiUEngineRL", "testthat"))
         shell: Rscript {0}
 
-      - name: Esecuzione Onesta dei 4 Test (Idrico, Sanità, Quantum, Smart Cities)
+      - name: Esecuzione Onesta dei 4 Test
         run: |
-          # Carichiamo le tue funzioni in memoria
           source("R/actions.R")
-          # Lanciamo il file di test
           library(testthat)
-          test_file("tests/testthat/test-actions.R")
+          # Questo comando trova il test sia che si chiami test-action che test-actions
+          test_dir("tests/testthat/") 
         shell: Rscript {0}
 
           
