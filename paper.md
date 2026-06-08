@@ -68,4 +68,4 @@ The framework provides two primary operational functions written in optimized R:
 - `PsiU_Engine_RL(raw_input_vector)`: Evaluates streaming vectors against the gnomonic-barycentric boundaries, yielding immediate modal verdicts.
 - `PsiU_MultiLibrary_Tree(new_value)`: Manages an asynchronous tableau library, executing cross-domain parallel ingestion to detect hidden homotopic equivalences via structural inter-resonance without heavy matrix calculations.
 
-The package is officially distributed on the Comprehensive R Archive Network [CRAN](https://r-project.org). Datasets, verification benchmarks, and mathematical source codes are permanently archived with an open-science DOI on [Zenodo](https://zenodo.org) to guarantee complete computational reproducibility
+The package is officially distributed on the Comprehensive R Archive Network https://doi.org/10.32614/CRAN.package.PsiUEngineRL. Datasets, verification benchmarks, and mathematical source codes are permanently archived with an open-science DOI on https://zenodo.org/records/20385840 to guarantee complete computational reproducibility
