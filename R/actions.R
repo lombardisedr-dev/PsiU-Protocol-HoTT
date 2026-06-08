@@ -1,21 +1,32 @@
-#' @export
-action_ltown_scada <- function(scada_df) {
-  PsiUEngineRL::PsiU_MultiLibrary_Tree(new_value = 0.52881)
-  return(PsiUEngineRL::PsiU_Engine_RL(scada_df$pressure))
-}
+library(testthat)
 
-#' @export
-action_mitbih_clinical <- function(ecg_vector) {
-  return(PsiUEngineRL::PsiU_Engine_RL(ecg_vector))
-}
+test_that("action_ltown_scada funziona correttamente", {
+  # Prepariamo un finto data.frame con la colonna 'pressure'
+  finto_scada <- data.frame(pressure = c(1.2, 1.5, 1.1))
+  
+  # Proviamo a eseguire la tua funzione
+  risultato <- action_ltown_scada(finto_scada)
+  
+  # Verifichiamo solo che restituisca qualcosa e non si blocchi
+  expect_false(is.null(risultato))
+})
 
-#' @export
-action_quantum_coherence <- function(state_tensor) {
-  return(PsiUEngineRL::PsiU_Engine_RL(state_tensor))
-}
+test_that("action_mitbih_clinical funziona correttamente", {
+  finto_ecg <- c(0.5, 0.6, 0.5, 0.4)
+  risultato <- action_mitbih_clinical(finto_ecg)
+  expect_false(is.null(risultato))
+})
 
-#' @export
-action_smart_cities <- function(iot_stream) {
-  return(PsiUEngineRL::PsiU_Engine_RL(iot_stream))
-}
+test_that("action_quantum_coherence funziona correttamente", {
+  finto_tensor <- c(1, 0, 0, 1)
+  risultato <- action_quantum_coherence(finto_tensor)
+  expect_false(is.null(risultato))
+})
+
+test_that("action_smart_cities funziona correttamente", {
+  finto_iot <- c(22.5, 23.0, 21.9)
+  risultato <- action_smart_cities(finto_iot)
+  expect_false(is.null(risultato))
+})
+
 
