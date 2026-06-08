@@ -3,13 +3,13 @@ name: PSIU Protocol Automation
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # Attiva il pulsante per l'avvio manuale
+  workflow_dispatch: # Questo attiva il pulsante manuale
 
 jobs:
-  run-protocol-pipeline:
+  run-pipeline:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Setup R Environment
@@ -18,8 +18,7 @@ jobs:
           use-public-rspm: true
 
       - name: Install System Dependencies
-        run: |
-          Rscript -e 'install.packages("ggplot2", repos="https://r-project.org")'
+        run: Rscript -e 'install.packages("ggplot2", repos="https://r-project.org")'
 
       - name: Execute PsiU Validation Plot
         run: Rscript PsiU_Generate_Validation_Plot.R
