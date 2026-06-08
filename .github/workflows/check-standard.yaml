@@ -1,16 +1,40 @@
-      - name: Esecuzione dei 4 Test (Idrico, Sanità, Quantum, Smart Cities)
+on: [push, pull_request]
+name: Validazione-Scientifica-PsiU
+
+jobs:
+  test-onesto:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del Codice
+        uses: actions/checkout@v4
+
+      - name: Setup di R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Installazione Engine (CRAN) e Testthat
         run: |
-          # Carichiamo le funzioni Action
-          source("R/actions.R")
-          library(testthat)
-          
-          # Cerchiamo il file ignorando la struttura delle cartelle
-          files <- list.files(recursive = TRUE, pattern = "test-action\\.R$", full.names = TRUE)
-          
-          if (length(files) > 0) {
-            message("Eseguo il test trovato in: ", files[1])
-            test_file(files[1])
+          install.packages(c("PsiUEngineRL", "testthat"))
+        shell: Rscript {0}
+
+      - name: Esecuzione Onesta dei 4 Test (Idrico, Sanità, Quantum, Smart Cities)
+        run: |
+          # 1. Carichiamo le funzioni del tuo Protocollo
+          if (file.exists("R/actions.R")) {
+            source("R/actions.R")
           } else {
-            stop("ERRORE: Nessun file test-action.R trovato nel repository!")
+            stop("ERRORE: Il file R/actions.R non esiste!")
+          }
+          
+          library(testthat)
+          library(PsiUEngineRL)
+          
+          # 2. Cerchiamo il file di test (test-action.R o test-actions.R)
+          file_test <- list.files(recursive = TRUE, pattern = "test-actions?\\.R$", full.names = TRUE)
+          
+          if (length(file_test) > 0) {
+            message("Trovato file di test: ", file_test[1])
+            test_file(file_test[1])
+          } else {
+            stop("ERRORE: Nessun file di test trovato nel repository!")
           }
         shell: Rscript {0}
