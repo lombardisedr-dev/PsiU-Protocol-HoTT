@@ -9,7 +9,7 @@ tags:
   - real-time streaming
 authors:
   - name: Roberto Lombardi
-    orcid: 0000-0000-0000-0000
+    orcid:  0009-0005-6687-3140
     affiliation: Independent Researcher
 date: 19 May 2026
 bibliography: paper.bib
