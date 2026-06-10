@@ -1,0 +1,7 @@
+      - name: "Scientific Action Benchmark"
+        shell: Rscript {0}
+        run: |
+          source("gnomonic_check.R")
+          if (points_per_second < 10000) {
+            stop("Performance Degradation: Throughput insufficient")
+          }
