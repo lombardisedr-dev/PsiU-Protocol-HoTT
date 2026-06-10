@@ -1,10 +1,4 @@
-      - name: "Scientific Action Benchmark"
-        shell: Rscript {0}
-        run: |
-          source("gnomonic_check.R")
-          if (points_per_second < 10000) {
-            stop("Performance Degradation: Throughput insufficient")
-          }
+           # 1.  installi tutto quello che serve
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
@@ -12,3 +6,14 @@
             any::microbenchmark
             any::ggplot2
             any::testthat
+
+      # 2.  lanci lo script scientifico
+      - name: "Scientific Action Benchmark"
+        shell: Rscript {0}
+        run: |
+          source("gnomonic_check.R")
+          # points_per_second viene creato dentro gnomonic_check.R
+          if (points_per_second < 10000) {
+            stop("Performance Degradation: Throughput insufficient")
+          }
+
