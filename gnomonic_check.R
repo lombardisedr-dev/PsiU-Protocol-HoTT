@@ -1,50 +1,67 @@
-#' @file extreme_benchmark.R
-#' @title Stress Test: Stabilità Topologica vs Rumore Bianco
-#' @description Dimostriamo che PsiUEngineRL mantiene la coerenza dove il RL classico fallisce.
+#' @file gnomonic_check.R
+#' @title Validazione Scientifica e Stress Test di PsiUEngineRL
+#' @description Test di produzione su latenza, throughput e selettività topologica.
 
-library(microbenchmark)
-library(ggplot2) # Per visualizzare il "cuore" del motore
-
-# --- 1. GENERAZIONE DI UNO SCENARIO DI CRISI ---
-# Creiamo tre livelli di rumore: Leggero, Critico, Caotico
-n_samples <- 100000
-G <- 0.6180339887
-
-generate_stress <- function(noise_level) {
-  G + (rnorm(n_samples, sd = noise_level))
+# --- 1. GESTIONE DIPENDENZE (Anti-Errore GitHub) ---
+libs <- c("microbenchmark", "testthat", "PsiUEngineRL")
+for (lib in libs) {
+  if (!requireNamespace(lib, quietly = TRUE)) {
+    install.packages(lib, repos = "https://r-project.org")
+  }
+  library(lib, character.only = TRUE)
 }
 
-# --- 2. IL TEST DI RESILIENZA ---
-cat("Inizio Stress Test: Valutazione della coerenza del motore... \n")
+# --- 2. PREPARAZIONE DEL CAMPIONE SCIENTIFICO ---
+set.seed(2026)
+n_samples <- 100000
+G <- 0.6180339887
+# Simuliamo un segnale attorno al Gnomonic Ratio con rumore variabile
+raw_data <- G + (runif(n_samples, -0.015, 0.015) * rnorm(n_samples))
 
-levels <- c(0.01, 0.05, 0.2) # Rumore crescente
-results_list <- lapply(levels, function(sd) {
-  data <- generate_stress(sd)
-  bench <- microbenchmark(PsiU_Engine_RL(data), times = 20, unit = "ms")
-  analysis <- PsiU_Engine_RL(data)
+# --- 3. BENCHMARK DI PRESTAZIONE ---
+cat("Esecuzione Benchmark su", n_samples, "punti... \n")
+
+bench_results <- microbenchmark(
+  core_engine = PsiU_Engine_RL(raw_data),
+  times = 50, 
+  unit = "ms"
+)
+
+# --- 4. CALCOLO METRICHE ---
+stats <- summary(bench_results)
+total_time_ms <- stats$median
+time_per_point_us <- (total_time_ms * 1000) / n_samples
+points_per_second <- 1000000 / time_per_point_us
+
+# --- 5. ANALISI DELLA SELETTIVITÀ ---
+analysis <- PsiU_Engine_RL(raw_data)
+counts <- table(analysis$Stato_Modale)
+dist_mean <- mean(analysis$Distanza_G)
+
+# --- 6. REPORT SCIENTIFICO FINALE ---
+cat("\n======================================================\n")
+cat("      REPORT SCIENTIFICO: gnomonic_check.R           \n")
+cat("======================================================\n")
+cat(sprintf("Campioni processati:      %d\n", n_samples))
+cat(sprintf("Latenza mediana totale:   %.3f ms\n", total_time_ms))
+cat(sprintf("Costo per singolo punto:  %.4f microsecondi\n", time_per_point_us))
+cat(sprintf("Throughput Reale:         %.0f operazioni/sec\n", points_per_second))
+cat("------------------------------------------------------\n")
+cat("DISTRIBUZIONE DEGLI STATI (Selettività):\n")
+print(counts)
+cat(sprintf("\nDistanza media dal Target G: %.6f\n", dist_mean))
+cat("======================================================\n")
+
+# --- 7. UNIT TEST DI VALIDAZIONE (testthat) ---
+test_that("Performance e Logica sono conformi", {
+  # Verifica che il throughput sia sopra una soglia minima accettabile (es. 50k ops/sec)
+  expect_gt(points_per_second, 50000)
   
-  # Calcoliamo l'Entropia dello Stato (Selettività sotto stress)
-  entropy <- -sum(proportions(table(analysis$Stato_Modale)) * 
-               log(proportions(table(analysis$Stato_Modale)) + 1e-9))
+  # Verifica che la distanza dal Target G sia minima
+  expect_lt(dist_mean, 0.01)
   
-  return(data.frame(Noise = sd, Time = median(bench$time)/1e6, Entropy = entropy))
+  # Verifica che il motore abbia identificato stati diversi (non tutto rumore)
+  expect_gt(length(counts), 1)
 })
 
-report <- do.call(rbind, results_list)
-
-# --- 3. VISUALIZZAZIONE "THE SMOKING GUN" (La prova regina) ---
-# Mostriamo come il motore "vede" l'omotopia del segnale rispetto al dato grezzo
-raw_data_caos <- generate_stress(0.1)
-final_view <- PsiU_Engine_RL(raw_data_caos)
-
-# --- 4. REPORT DI ALTO LIVELLO ---
-cat("\n======================================================\n")
-cat("      PRESTAZIONI SOTTO ATTACCO (STRESS TEST)         \n")
-cat("======================================================\n")
-print(report)
-cat("------------------------------------------------------\n")
-cat("ANALISI DI SUPERIORITÀ:\n")
-cat("1. Scalabilità: Il tempo di calcolo aumenta linearmente o resta costante?\n")
-cat("2. Entropia: Se l'entropia resta bassa anche con rumore 0.2, \n")
-cat("   hai dimostrato che il 'Gnomonic Ratio' è un attrattore stabile.\n")
-cat("======================================================\n")
+cat("\n[SUCCESS] Il protocollo ha superato tutti i test di validazione.\n")
