@@ -1,0 +1,18 @@
+name: "PsiU: Topological Invariance"
+
+on: [push, pull_request]
+
+jobs:
+  topology-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::testthat
+
+      - name: "Run Topological Validation"
+        shell: Rscript {0}
+        run: |
+          source("topological_invariance_test.R")
