@@ -19,17 +19,25 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install Dependencies
+      - name: Install System Dependencies
         run: |
-          install.packages(c("testthat", "remotes"), repos = "https://r-project.org")
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev # Necessario per installare pacchetti R
+
+      - name: Install testthat
         shell: Rscript {0}
+        run: |
+          # Installiamo testthat nel percorso di libreria predefinito del sistema
+          install.packages("testthat", repos = "https://r-project.org")
 
       - name: Install PsiUEngineRL (Local Build)
-        run: R CMD INSTALL .
+        run: |
+          # Installa il pacchetto locale pubblicato il 7 giugno
+          R CMD INSTALL .
 
       - name: Run Topological Validation
         shell: Rscript {0}
         run: |
-          # Carichiamo lo script che valida la capacità del motore 
-          # di distinguere l'ordine (G-Ratio) dal caos (Rumore 0.08)
+          # Assicuriamoci che la libreria testthat sia visibile
+          library(testthat)
           source("topological_invariance_test.R")
