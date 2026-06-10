@@ -5,3 +5,10 @@
           if (points_per_second < 10000) {
             stop("Performance Degradation: Throughput insufficient")
           }
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::rcmdcheck
+            any::microbenchmark
+            any::ggplot2
+            any::testthat
