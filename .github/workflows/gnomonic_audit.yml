@@ -22,14 +22,13 @@ jobs:
       with:
         r-version: 'release'
 
-    # 3. Installazione pulita tramite i repository predefiniti del sistema
+    # 3. Installa il pacchetto dai server predefiniti di GitHub Actions
     - name: Installazione PsiUEngineRL
       run: |
-        # Usiamo i repository stabili già configurati dall'ambiente Linux
         install.packages("PsiUEngineRL")
       shell: Rscript {0}
 
-    # 4. Esecuzione dello script R nello stesso ambiente di runtime
+    # 4. Esegue lo script R di validazione calibrato
     - name: Esecuzione Audit Gnomonic Ratio
       run: |
         source("gnomonic_ratio_validation.R")
