@@ -28,14 +28,15 @@ jobs:
         install.packages("PsiUEngineRL")
       shell: Rscript {0}
 
-    # 4. Esegue il primo Audit (BOX e NOISE)
+    # 4. Esegue l'Audit Principale (BOX e NOISE)
     - name: Esecuzione Audit Principale (BOX & NOISE)
       run: |
         source("gnomonic_ratio_validation.R")
       shell: Rscript {0}
 
-    # 5. Esegue il secondo Audit (DIAMOND)
+    # 5. Esegue il secondo Audit puntando al tuo file esatto (diamond_ratio validation.R)
     - name: Esecuzione Audit Mirato (DIAMOND)
       run: |
-        source("gnomonic_diamond_validation.R")
+        source("diamond_ratio validation.R")
       shell: Rscript {0}
+
