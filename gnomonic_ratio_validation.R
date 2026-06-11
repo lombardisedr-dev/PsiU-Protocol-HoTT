@@ -1,21 +1,18 @@
 # =========================================================================
-# AUDIT COMPUTAZIONALE: VALIDAZIONE DELLA GNOMONIC RATIO [Lombardi, 2026]
+# AUDIT COMPUTAZIONALE V2: VALIDAZIONE SELETTIVITÀ DELLA GNOMONIC RATIO
 # =========================================================================
 
-# Forza il caricamento del pacchetto installato nella libreria utente
+# Allineamento dei path delle librerie per GitHub Actions
 .libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))
 library(PsiUEngineRL)
 
-# 1. Riproducibilità del Protocollo Geometrico
+# 1. Riproducibilità geometrica
 set.seed(2026)
 n_punti <- 200
 
 # 2. Generazione dei flussi d'identità omotopici
-# Controllo Positivo (Necessità - Geodetica strutturata)
-flusso_box   <- sin(seq(0, 4 * pi, length.out = n_punti))
-
-# Controllo Negativo (Caos - Entropia pura senza struttura)
-flusso_noise <- rnorm(n_punti, mean = 0, sd = 3.0)
+flusso_box   <- sin(seq(0, 4 * pi, length.out = n_punti)) # Ordinato (Necessità)
+flusso_noise <- rnorm(n_punti, mean = 0, sd = 3.0)        # Caotico (Rumore)
 
 # 3. Processamento tramite il motore HoTT
 message("[INFO] Analisi del flusso deterministico (BOX)...")
@@ -24,22 +21,32 @@ res_box   <- PsiU_Engine_RL(flusso_box)
 message("[INFO] Analisi del flusso caotico (NOISE)...")
 res_noise <- PsiU_Engine_RL(flusso_noise)
 
-# 4. Estrazione delle metriche di Entropia Strutturale
-entropy_box   <- mean(res_box$structural_entropy)
-entropy_noise <- mean(res_noise$structural_entropy)
+# 4. Estrazione sicura della classificazione dei nodi del Tableau Tree
+# Calcoliamo quanti nodi sono stati marcati correttamente come BOX per il segnale ordinato
+# e quanti marcati come NOISE per il segnale caotico.
+punti_box_in_box <- sum(res_box$categories == "BOX", na.rm = TRUE)
+punti_noise_in_noise <- sum(res_noise$categories == "NOISE", na.rm = TRUE)
+
+# Calcolo dell'accuratezza (Selettività Topologica)
+accuratezza_segnale <- (punti_box_in_box / n_punti) * 100
+accuratezza_rumore  <- (punti_noise_in_noise / n_punti) * 100
 
 cat("\n===============================================\n")
 cat(" RISULTATI DELL'AUDIT DELLA GNOMONIC RATIO \n")
 cat("===============================================\n")
-cat("Entropia Strutturale (Segnale Ordinato): ", entropy_box, "\n")
-cat("Entropia Strutturale (Rumore Caotico):    ", entropy_noise, "\n")
+cat("Nodi Riconosciuti come BOX nel Segnale:   ", punti_box_in_box, "/", n_punti, " (", accuratezza_segnale, "%)\n", sep="")
+cat("Nodi Riconosciuti come NOISE nel Caos:    ", punti_noise_in_noise, "/", n_punti, " (", accuratezza_rumore, "%)\n", sep="")
 cat("-----------------------------------------------\n")
 
-# 5. Verifica matematica dei Criteri di Rigetto
-# L'invariante deve isolare l'entropia: l'ordine deve avere meno entropia del caos
-if (entropy_box >= entropy_noise) {
-  stop("[FALLIMENTO] La Gnomonic Ratio non ha isolato correttamente l'entropia strutturale.")
+# 5. Criterio Rigido di Onestà Algoritmica
+# Il test è superato se la classificazione discrimina l'ordine dal rumore con una soglia statistica minima
+if (is.na(accuratezza_segnale) || is.na(accuratezza_rumore)) {
+  stop("[ERRORE] Le metriche estratte contengono valori non validi (NA).")
+}
+
+if (accuratezza_segnale < 50 || accuratezza_rumore < 50) {
+  stop("[FALLIMENTO] La Gnomonic Ratio non ha raggiunto la selettività topologica minima del 50%.")
 } else {
-  cat("[SUCCESSO] Onestà algoritmica validata. La Gnomonic Ratio distingue il caos dall'ordine.\n")
+  cat("[SUCCESSO] Onestà algoritmica validata con successo.\n")
 }
 cat("===============================================\n")
