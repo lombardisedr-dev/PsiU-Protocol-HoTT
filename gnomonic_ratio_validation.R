@@ -1,9 +1,7 @@
 # =========================================================================
-# AUDIT COMPUTAZIONALE V2: VALIDAZIONE SELETTIVITÀ DELLA GNOMONIC RATIO
+# AUDIT COMPUTAZIONALE V3: VALIDAZIONE SELETTIVITÀ DELLA GNOMONIC RATIO
 # =========================================================================
 
-# Allineamento dei path delle librerie per GitHub Actions
-.libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))
 library(PsiUEngineRL)
 
 # 1. Riproducibilità geometrica
@@ -22,8 +20,6 @@ message("[INFO] Analisi del flusso caotico (NOISE)...")
 res_noise <- PsiU_Engine_RL(flusso_noise)
 
 # 4. Estrazione sicura della classificazione dei nodi del Tableau Tree
-# Calcoliamo quanti nodi sono stati marcati correttamente come BOX per il segnale ordinato
-# e quanti marcati come NOISE per il segnale caotico.
 punti_box_in_box <- sum(res_box$categories == "BOX", na.rm = TRUE)
 punti_noise_in_noise <- sum(res_noise$categories == "NOISE", na.rm = TRUE)
 
@@ -39,7 +35,6 @@ cat("Nodi Riconosciuti come NOISE nel Caos:    ", punti_noise_in_noise, "/", n_p
 cat("-----------------------------------------------\n")
 
 # 5. Criterio Rigido di Onestà Algoritmica
-# Il test è superato se la classificazione discrimina l'ordine dal rumore con una soglia statistica minima
 if (is.na(accuratezza_segnale) || is.na(accuratezza_rumore)) {
   stop("[ERRORE] Le metriche estratte contengono valori non validi (NA).")
 }
