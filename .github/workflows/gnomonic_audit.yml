@@ -22,22 +22,26 @@ jobs:
       with:
         r-version: 'release'
 
-    # 3. Installa il pacchetto in modo Fail-Safe
-    - name: Installazione PsiUEngineRL e Dipendenze
+    # 3. Installazione ed Esecuzione Unificata (Risolve il problema dei path isolati)
+    - name: Installazione Dipendenze ed Esecuzione Audit
       run: |
-        install.packages("remotes", repos = "https://r-project.org")
+        # Definizione repository specchio
+        options(repos = c(CRAN = "https://r-project.org"))
+        
+        # Installazione gestore remotes
+        if (!requireNamespace("remotes", quietly = TRUE)) {
+          install.packages("remotes")
+        }
+        
+        # Installazione fail-safe del pacchetto ufficiale
         tryCatch(
-          install.packages("PsiUEngineRL", repos = "https://r-project.org"),
+          install.packages("PsiUEngineRL"),
           error = function(e) {
-            message("Mirror cloud non aggiornato. Compilazione da sorgente GitHub...")
+            message("Mirror primario non sincronizzato. Download dal mirror ufficiale CRAN GitHub...")
             remotes::install_github("cran/PsiUEngineRL")
           }
         )
-      shell: Rscript {0}
-
-    # 4. Esegue il file R garantendo la visibilità dei path di libreria
-    - name: Esecuzione Audit Gnomonic Ratio
-      run: |
-        .libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))
+        
+        # Esecuzione diretta dello script di validazione nello stesso ambiente
         source("gnomonic_ratio_validation.R")
       shell: Rscript {0}
