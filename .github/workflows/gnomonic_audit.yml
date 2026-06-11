@@ -1,0 +1,34 @@
+name: Validazione Scientifica Gnomonic Ratio
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # Permette l'avvio manuale con un click su GitHub
+
+jobs:
+  execute-gnomonic-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Scarica il codice dal tuo repository
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2. Configura l'ambiente R ufficiale
+      uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: 'release'
+
+    # 3. Installa il motore HoTT da CRAN e le dipendenze minime
+    - name: Installazione PsiUEngineRL
+      run: |
+        install.packages("PsiUEngineRL", repos = "https://r-project.org")
+      shell: Rscript {0}
+
+    # 4. Esegue lo script R di validazione presente nel tuo repository
+    - name: Esecuzione Audit Gnomonic Ratio
+      run: |
+        source("gnomonic_ratio_validation.R")
+      shell: Rscript {0}
