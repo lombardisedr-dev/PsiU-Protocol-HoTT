@@ -22,26 +22,15 @@ jobs:
       with:
         r-version: 'release'
 
-    # 3. Installazione ed Esecuzione Unificata (Risolve il problema dei path isolati)
-    - name: Installazione Dipendenze ed Esecuzione Audit
+    # 3. Installazione pulita tramite i repository predefiniti del sistema
+    - name: Installazione PsiUEngineRL
       run: |
-        # Definizione repository specchio
-        options(repos = c(CRAN = "https://r-project.org"))
-        
-        # Installazione gestore remotes
-        if (!requireNamespace("remotes", quietly = TRUE)) {
-          install.packages("remotes")
-        }
-        
-        # Installazione fail-safe del pacchetto ufficiale
-        tryCatch(
-          install.packages("PsiUEngineRL"),
-          error = function(e) {
-            message("Mirror primario non sincronizzato. Download dal mirror ufficiale CRAN GitHub...")
-            remotes::install_github("cran/PsiUEngineRL")
-          }
-        )
-        
-        # Esecuzione diretta dello script di validazione nello stesso ambiente
+        # Usiamo i repository stabili già configurati dall'ambiente Linux
+        install.packages("PsiUEngineRL")
+      shell: Rscript {0}
+
+    # 4. Esecuzione dello script R nello stesso ambiente di runtime
+    - name: Esecuzione Audit Gnomonic Ratio
+      run: |
         source("gnomonic_ratio_validation.R")
       shell: Rscript {0}
