@@ -16,20 +16,28 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 2. Configura l'ambiente R ufficiale (Risolto l'errore sintattico)
+    # 2. Configura l'ambiente R ufficiale
     - name: Configura l'ambiente R
       uses: r-lib/actions/setup-r@v2
       with:
         r-version: 'release'
 
-    # 3. Installa il motore HoTT da CRAN
-    - name: Installation PsiUEngineRL
+    # 3. Installa il pacchetto in modo Fail-Safe
+    - name: Installazione PsiUEngineRL e Dipendenze
       run: |
-        install.packages("PsiUEngineRL", repos = "https://r-project.org")
+        install.packages("remotes", repos = "https://cloud.r-project.org")
+        tryCatch(
+          install.packages("PsiUEngineRL", repos = "https://cloud.r-project.org"),
+          error = function(e) {
+            message("Mirror cloud non aggiornato. Compilazione da sorgente GitHub...")
+            remotes::install_github("cran/PsiUEngineRL")
+          }
+        )
       shell: Rscript {0}
 
-    # 4. Esegue lo script R di validazione presente nel tuo repository
+    # 4. Esegue il file R garantendo la visibilità dei path di libreria
     - name: Esecuzione Audit Gnomonic Ratio
       run: |
+        .libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))
         source("gnomonic_ratio_validation.R")
       shell: Rscript {0}
