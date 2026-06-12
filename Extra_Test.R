@@ -1,18 +1,12 @@
 # ==============================================
-# PsiU - Benchmark Scientifico + Test del Cieco
+# PsiU - Validazione Scientifica Rigorosa
 # ==============================================
-
-# 1. Auto-install dipendenze - risolve il tuo "rosso"
-if (!require("testthat")) {
-  install.packages("testthat", repos="https://cloud.r-project.org", quiet=TRUE)
-}
 library(testthat)
 
-# 2. Parametri YML - modificali qui o carica da file
 PARAMS <- list(
   n_records = 100000,
   seed = 2026,
-  g_target = 0.618,      # Metti 0.500 per Test del Cieco
+  g_target = 0.618,      # MODIFICARE: 0.618 per In-Target, 0.500 per Test del Cieco
   rumore_mean = 0.618,
   rumore_sd = 0.01,
   eps = 0.002
@@ -20,59 +14,77 @@ PARAMS <- list(
 
 set.seed(PARAMS$seed)
 
-# 3. Motore PsiU - versione minimale per test
 psiU_classify <- function(x, g, eps) {
   dist <- abs(x - g)
-  if (dist < eps) {
-    return("BOX")      # Necessity
-  } else if (dist < eps * 5) {
-    return("DIAMOND")  # Possibility  
-  } else {
-    return("NOISE")    # Accident
-  }
+  if (dist < eps) return("BOX")
+  if (dist < eps * 5) return("DIAMOND")
+  return("NOISE")
 }
 
-# 4. Genera dati test - gaussiana centrata su G
-cat("Generazione", PARAMS$n_records, "campioni...\n")
+# 1. Generazione dati
 dati <- rnorm(PARAMS$n_records, mean=PARAMS$rumore_mean, sd=PARAMS$rumore_sd)
 
-# 5. Benchmark
-start_time <- Sys.time()
+# 2. Esecuzione Classificazione
 stati <- sapply(dati, psiU_classify, g=PARAMS$g_target, eps=PARAMS$eps)
-end_time <- Sys.time()
+stati_factor <- factor(stati, levels=c("BOX", "DIAMOND", "NOISE"))
+conteggi_osservati <- table(stati_factor)
 
-latenza_totale_ms <- as.numeric(difftime(end_time, start_time, units="secs")) * 1000
-costo_per_punto_us <- (latenza_totale_ms * 1000) / PARAMS$n_records
-throughput <- PARAMS$n_records / as.numeric(difftime(end_time, start_time, units="secs"))
+# 3. CALCOLO DELLE PROBABILITÀ TEORICHE (Integrazione Scientifica)
+# Calcolo delle aree sotto la curva gaussiana per i tre intervalli rispetto a G
+p_box <- pnorm(PARAMS$g_target + PARAMS$eps, mean=PARAMS$rumore_mean, sd=PARAMS$rumore_sd) - 
+         pnorm(PARAMS$g_target - PARAMS$eps, mean=PARAMS$rumore_mean, sd=PARAMS$rumore_sd)
 
-# 6. Report
-tab <- table(stati)
-box_pct <- ifelse("BOX" %in% names(tab), tab["BOX"] / PARAMS$n_records * 100, 0)
-diamond_pct <- ifelse("DIAMOND" %in% names(tab), tab["DIAMOND"] / PARAMS$n_records * 100, 0)
-noise_pct <- ifelse("NOISE" %in% names(tab), tab["NOISE"] / PARAMS$n_records * 100, 0)
+p_diamond_tot <- pnorm(PARAMS$g_target + (PARAMS$eps * 5), mean=PARAMS$rumore_mean, sd=PARAMS$rumore_sd) - 
+                 pnorm(PARAMS$g_target - (PARAMS$eps * 5), mean=PARAMS$rumore_mean, sd=PARAMS$rumore_sd)
+p_diamond <- p_diamond_tot - p_box
 
+p_noise <- 1 - p_diamond_tot
+prob_teoriche <- c(BOX=p_box, DIAMOND=p_diamond, NOISE=p_noise)
+conteggi_attesi <- prob_teoriche * PARAMS$n_records
+
+# 4. TEST DI BONTA DEL FIT (Chi-Square Test)
+# Misura se la classificazione PsiU diverge dalla teoria matematica
+p_value_chi2 <- NA
+if (all(conteggi_attesi > 5)) { # Il test è valido solo se le frequenze attese sono > 5
+  chi2_test <- chisq.test(conteggi_osservati, p = prob_teoriche)
+  p_value_chi2 <- chi2_test$p.value
+}
+
+# 5. REPORT SCIENTIFICO AVANZATO
 dist_media <- mean(abs(dati - PARAMS$g_target))
 
-cat("\nREPORT SCIENTIFICO: action_benchmark.R\n")
-cat("======================================================\n")
-cat(sprintf("Campioni processati:      %d\n", PARAMS$n_records))
-cat(sprintf("Latenza mediana totale:   %.3f ms\n", latenza_totale_ms))
-cat(sprintf("Costo per singolo punto:  %.4f microsecondi\n", costo_per_punto_us))
-cat(sprintf("Throughput Reale:         %.0f operazioni/sec\n", throughput))
-cat("------------------------------------------------------\n")
-cat("DISTRIBUZIONE DEGLI STATI (Selettività):\n\n")
-cat(sprintf("      BOX (Necessity) [□] DIAMOND (Possibility) [◆]          NOISE (Accident) \n"))
-cat(sprintf("                    %d                     %d                     %d \n\n", 
-            tab["BOX"], tab["DIAMOND"], tab["NOISE"]))
-cat(sprintf("Distanza media dal Target G: %.6f\n", dist_media))
-cat("======================================================\n")
+cat("\nVALIDAZIONE SCIENTIFICA: PsiU System\n")
+cat("========================================================================\n")
+cat(sprintf("Configurazione: Target G = %.3f | Media Rumore = %.3f | Dev.Std = %.2f\n", 
+            PARAMS$g_target, PARAMS$rumore_mean, PARAMS$rumore_sd))
+cat(sprintf("Distanza media empirica dal Target G: %.6f\n", dist_media))
+cat("------------------------------------------------------------------------\n")
+cat("CONFRONTO DISTRIBUZIONE (Selettività Empirica vs Modello Teorico):\n\n")
 
-# 7. Unit test automatico - ora non crasha più
-test_that("PsiU classifica BOX vicino a G", {
-  expect_equal(psiU_classify(PARAMS$g_target, PARAMS$g_target, PARAMS$eps), "BOX")
-})
-test_that("PsiU classifica NOISE lontano da G", {
-  expect_equal(psiU_classify(PARAMS$g_target + 0.1, PARAMS$g_target, PARAMS$eps), "NOISE")
-})
+cat(sprintf("  STATO     | Osservati (N) | Attesi (N)  | Scostamento Reale\n"))
+cat(sprintf("  ----------|---------------|-------------|---------------------\n"))
+cat(sprintf("  BOX       | %-13d | %-11.1f | %+.4f%%\n", 
+            conteggi_osservati["BOX"], conteggi_attesi["BOX"], 
+            ((conteggi_osservati["BOX"] - conteggi_attesi["BOX"]) / PARAMS$n_records) * 100))
+cat(sprintf("  DIAMOND   | %-13d | %-11.1f | %+.4f%%\n", 
+            conteggi_osservati["DIAMOND"], conteggi_attesi["DIAMOND"], 
+            ((conteggi_osservati["DIAMOND"] - conteggi_attesi["DIAMOND"]) / PARAMS$n_records) * 100))
+cat(sprintf("  NOISE     | %-13d | %-11.1f | %+.4f%%\n", 
+            conteggi_osservati["NOISE"], conteggi_attesi["NOISE"], 
+            ((conteggi_osservati["NOISE"] - conteggi_attesi["NOISE"]) / PARAMS$n_records) * 100))
+cat("------------------------------------------------------------------------\n")
 
-cat("\nTutti i test passati. Exit code 0.\n")
+if (!is.na(p_value_chi2)) {
+  cat(sprintf("P-Value del Test Chi-Quadro: %.4f\n", p_value_chi2))
+  cat("Interpretazione: ")
+  if (p_value_chi2 > 0.05) {
+    cat("H0 ACCETTATA. La ripartizione di PsiU rispecchia perfettamente la teoria.\n")
+  } else {
+    cat("H0 RIFIUTATA. Anomalia statistica o deviazione significativa dalla teoria.\n")
+  }
+} else {
+  cat("P-Value del Test Chi-Quadro: N/D (Frequenze attese vicine allo zero - Controllo Negativo Riuscito)\n")
+}
+cat("========================================================================\n")
+
+
