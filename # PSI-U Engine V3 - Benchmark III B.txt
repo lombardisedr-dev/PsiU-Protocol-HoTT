@@ -1,0 +1,26 @@
+# PSI-U Engine V3 - Benchmark III: Bio-mimetic RR Validation
+**Author**: Roberto Lombardi  
+**Date**: 2026-06-13  
+**License**: CC BY-NC-ND 4.0
+
+## Description
+This dataset contains the validation results of PsiU Engine V3 on bio-mimetic RR interval sequences. 
+We demonstrate structural resonance detection on physiological variability with SDNN=50ms.
+
+## Key Result
+General Proximity Index: 71.07% - exactly at critical threshold  
+Pruned Branches: 0 - no anomalies detected  
+Diamond Resonance Share: 30.267% - structural coherence confirmed
+
+## Files
+- `benchmark3_rr_bio_modal_volumes.csv`: Integral Modal Volume Mapping 
+- `benchmark3_rr_bio_diagnostics.csv`: Resonance Diagnostics 
+- `benchmark3_rr_bio_metrics.csv`: Computational Scale & Performance
+
+## Reproducibility
+Engine source: `PsiU_Complete_MultiLibrary_V3.R` - included in this deposit  
+Test data: Bio-mimetic RR generated with seed=42, N=3000, mean=850ms, SDNN=50ms  
+R version: 4.x required
+
+## Citation
+Lombardi R. PSI-U Engine V3: Modal Logic and Gnomonic Resonance for Structural Data Analysis. Zenodo. 2026. DOI: [TO_BE_ADDED_AFTER_UPLOAD]
