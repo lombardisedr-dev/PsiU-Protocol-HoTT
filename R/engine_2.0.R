@@ -66,10 +66,13 @@ PsiU_Complete_MultiLibrary_V3 <- function(raw_input_vector, block_size = 50000, 
         scostamento_M1 <- mean(abs(diamond_grezzo - target_M1))
         scostamento_M2 <- mean(abs(diamond_grezzo - target_M2))
         scostamento_M3 <- mean(abs(diamond_grezzo - target_M3))
+                scostamento_reale_minimo <- min(scostamento_M1, scostamento_M2, scostamento_M3)
         
-        scostamento_reale_minimo <- min(scostamento_M1, scostamento_M2, scostamento_M3)
-        vicinanza_blocco <- (1 - (scostamento_reale_minimo / rng_globale)) * 100
-        
+        # Calcolo scientifico: quanto devia il blocco rispetto alla stabilità del DNA base
+        stabilità_base <- sd(c(MULTILIBRARY$M1, MULTILIBRARY$M2, MULTILIBRARY$M3))
+        vicinanza_blocco <- (1 - (scostamento_reale_minimo / (stabilità_base * 4))) * 100
+
+
         if (vicinanza_blocco < critical_threshold) {
           rami_recisi <- rami_recisi + 1
         }
