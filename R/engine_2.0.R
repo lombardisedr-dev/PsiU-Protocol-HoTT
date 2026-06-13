@@ -1,156 +1,137 @@
-# ==============================================================================
-#           UNIFIED ARCHITECTURE PSI-U: MULTILIBRARY EXCLUSION FILTER
-# ==============================================================================
-
-#' @title MultiLibrary Analytical Engine with Exclusion Filter V3
-#' @description We evaluate data streams over macro-volumes by segmenting them 
-#' into sequential blocks. During the first 3 steps, we accumulate tautologies 
-#' and verify their geometric signature. From the 4th step onward, we proceed 
-#' by strict exclusion while maintaining a fixed target.
-#' @param raw_input_vector Numeric vector containing the raw data stream.
-#' @param block_size Numerical size of each temporal block (default = 50000).
-#' @return An object of class 'PsiU_Exclusion_Report' ready for the benchmark.
-#' @export
-PsiU_MultiLibrary_Exclusion_V3 <- function(raw_input_vector, block_size = 50000) {
+#' @title PsiU Theoretical Engine V3 - MultiLibrary & HoTT Compliance
+#' @description Implementazione rigorosa e imparziale del framework PsiU con partizione
+#' multilibrary e verifica di risonanza tramite la regola J di Martin-Löf.
+#' @param raw_input_vector Vettore numerico del flusso macro-volume da analizzare.
+#' @param block_size Dimensione numerica del singolo blocco temporale (default = 50000).
+#' @param critical_threshold Soglia teorica di vicinanza minima (default = 71.07).
+PsiU_Complete_MultiLibrary_V3 <- function(raw_input_vector, block_size = 50000, critical_threshold = 71.07) {
   
-  # 1. GEOMETRIC PARAMETERS AND CONSTANTS OF OUR THEORY
-  MATTER_THRESHOLD <- 1/3   # 0.33333... (The first third for matter)
-  SPACE_THRESHOLD  <- 2/3   # 0.66667... (The total two thirds of space)
-  G_COSMIC         <- SPACE_THRESHOLD * 0.6180339887 # ~0.41202
-  DIAMOND_TOLERANCE <- (SPACE_THRESHOLD - MATTER_THRESHOLD) * 0.5 
-
+  # 1. PARAMETRI GEOMETRICI E COSTANTI DELL'UNIVERSO LOGICO (Sezioni 1 e 2)
+  MATTER_THRESHOLD <- 1/3
+  SPACE_THRESHOLD  <- 2/3
+  G_COSMIC         <- (sqrt(5) - 1) / 3  # Costante Gnomonica (~0.4120227)
+  
   N_total  <- length(raw_input_vector)
   n_blocks <- floor(N_total / block_size)
   
-  # 2. OUR TAUTOLOGICAL MULTILIBRARY MEMORY STRUCTURES
-  MEMORIA_TAUTOLOGICA_P      <- numeric(0)
-  MEMORIA_TAUTOLOGICA_GREZZO <- numeric(0)
+  # STRUTTURA MULTILIBRARY (DNA DI BASE) - Tre librerie indipendenti e separate
+  MULTILIBRARY <- list(
+    "M1" = numeric(0),
+    "M2" = numeric(0),
+    "M3" = numeric(0)
+  )
   
-  # We initialize accumulators for temporal block diagnostics
-  valori_risonanza_storici <- numeric(n_blocks)
-  indici_vicinanza_storici <- numeric(n_blocks)
-  scostamenti_medi_storici <- numeric(n_blocks)
-  
-  # We initialize counters for total modal volumes
+  # Inizializzazione dei contatori per i volumi modali totali
   volumi_box <- 0; volumi_diamond <- 0; volumi_transizione <- 0; volumi_vuoto <- 0
   rami_recisi <- 0
-
-  # 3. WE BEGIN THE SEQUENTIAL TEMPORAL BLOCK PROCESSING
+  
+  indici_vicinanza_storici <- numeric(n_blocks)
+  scostamenti_medi_storici <- numeric(n_blocks)
+  valori_risonanza_storici <- numeric(n_blocks)
+  
+  # Normalizzazione Globale del Campo Continuo (Invarianza di scala)
+  min_globale <- min(raw_input_vector)
+  max_globale <- max(raw_input_vector)
+  rng_globale <- max_globale - min_globale
+  if (rng_globale == 0) rng_globale <- 1
+  
+  # 2. ELABORAZIONE SEQUENZIALE PER BLOCCHI TEMPORALI
   for (b in 1:n_blocks) {
     idx_start <- ((b - 1) * block_size) + 1
     idx_end   <- b * block_size
     block_grezzo <- raw_input_vector[idx_start:idx_end]
     
-    # We perform local normalization on the current block (Scale adaptation)
-    min_b <- min(block_grezzo)
-    max_b <- max(block_grezzo)
-    rng_b <- max_b - min_b
-    if (rng_b == 0) rng_b <- 1
-    val_p <- (block_grezzo - min_b) / rng_b
+    # Mappatura sul dominio normalizzato U [0, 1]
+    val_p <- (block_grezzo - min_globale) / rng_globale
     
-    # We execute vectorized logical operations on the present block
+    # Valutazione dei predicati introduzione (Coprodotto Box + Space)
     is_box         <- val_p <= MATTER_THRESHOLD
     is_vuoto       <- val_p > SPACE_THRESHOLD
     in_space       <- !is_box & !is_vuoto
-    dist_g         <- abs(val_p - G_COSMIC)
-    is_diamond     <- in_space & (dist_g <= DIAMOND_TOLERANCE)
-    is_transizione <- in_space & !is_diamond
     
-    # We update the macroscopic quantitative historical volumes
+    # Definizione geometrica del tipo DIAMOND nell'intorno continuo
+    diamond_tolerance <- (SPACE_THRESHOLD - MATTER_THRESHOLD) * 0.5 
+    dist_g            <- abs(val_p - G_COSMIC)
+    is_diamond        <- in_space & (dist_g <= diamond_tolerance)
+    is_transizione    <- in_space & !is_diamond
+    
+    # Aggiornamento accumulativo dei volumi macroscopici
     volumi_box         <- volumi_box + sum(is_box)
     volumi_diamond     <- volumi_diamond + sum(is_diamond)
     volumi_transizione <- volumi_transizione + sum(is_transizione)
     volumi_vuoto       <- volumi_vuoto + sum(is_vuoto)
     
-    diamond_p      <- val_p[is_diamond]
     diamond_grezzo <- block_grezzo[is_diamond]
     
     # --------------------------------------------------------------------------
-    # PHASE 1: FIRST 3 STEPS - WE SAVE TAUTOLOGICAL VALUES (Building the DNA)
+    # FASE 1: PRIMI 3 STEP - CRISTALLIZZAZIONE NELLA MULTILIBRARY
     # --------------------------------------------------------------------------
     if (b <= 3) {
-      valori_validi_p       <- val_p[is_box | is_diamond]
-      valori_validi_grezzi  <- block_grezzo[is_box | is_diamond]
+      # Ogni blocco iniziale riempie la sua rispettiva partizione di libreria (M1, M2, M3)
+      lib_name <- paste0("M", b)
+      MULTILIBRARY[[lib_name]] <- block_grezzo[is_box | is_diamond]
       
-      MEMORIA_TAUTOLOGICA_P      <- c(MEMORIA_TAUTOLOGICA_P, valori_validi_p)
-      MEMORIA_TAUTOLOGICA_GREZZO <- c(MEMORIA_TAUTOLOGICA_GREZZO, valori_validi_grezzi)
-      
-      valori_risonanza_storici[b] <- if(length(MEMORIA_TAUTOLOGICA_GREZZO) > 0) mean(MEMORIA_TAUTOLOGICA_GREZZO) else mean(block_grezzo)
-      indici_vicinanza_storici[b] <- 71.07  # Our baseline initial control value
+      valori_risonanza_storici[b] <- mean(block_grezzo)
+      indici_vicinanza_storici[b] <- critical_threshold
       scostamenti_medi_storici[b] <- 0
       
     } else {
       # --------------------------------------------------------------------------
-      # PHASE 2: FROM 4TH STEP ONWARD - WE PROCEED BY STRICT EXCLUSION
+      # FASE 2: DAL 4° STEP IN POI - RISONANZA MULTILIBRARY E REGOLA J
       # --------------------------------------------------------------------------
-      target_proiettato_fisso         <- mean(MEMORIA_TAUTOLOGICA_P)
-      VALORE_REALE_DI_RISONANZA_FISSO <- mean(MEMORIA_TAUTOLOGICA_GREZZO)
+      # Estraiamo i target reali di risonanza (le medie reali di M1, M2, M3)
+      target_M1 <- mean(MULTILIBRARY$M1)
+      target_M2 <- mean(MULTILIBRARY$M2)
+      target_M3 <- mean(MULTILIBRARY$M3)
       
-      if (length(diamond_p) > 0) {
-        scostamento_medio_p <- mean(abs(diamond_p - target_proiettato_fisso))
-        scostamento_grezzo  <- mean(abs(diamond_grezzo - VALORE_REALE_DI_RISONANZA_FISSO))
+      # La firma di risonanza globale del sistema è data dalla sintesi della libreria
+      firma_risonanza_fissa <- mean(c(target_M1, target_M2, target_M3))
+      
+      if (length(diamond_grezzo) > 0) {
+        # Regola J estesa: Confrontiamo il blocco con CIASCUNA libreria di memoria
+        scostamento_M1 <- mean(abs(diamond_grezzo - target_M1))
+        scostamento_M2 <- mean(abs(diamond_grezzo - target_M2))
+        scostamento_M3 <- mean(abs(diamond_grezzo - target_M3))
         
-        vicinanza_blocco <- (1 - scostamento_medio_p) * 100
+        # Lo scostamento di risonanza effettivo valuta la sintonia minima (o massima vicinanza)
+        scostamento_reale_minimo <- min(scostamento_M1, scostamento_M2, scostamento_M3)
         
-        # WE DEFINE THE CRITICAL CRITERION FOR HOMOTOPIC FALLACY
-        if (vicinanza_blocco < 71.07) {
+        # Calcolo dell'indice di vicinanza geometrico inverso
+        vicinanza_blocco <- (1 - (scostamento_reale_minimo / rng_globale)) * 100
+        
+        # CRITERIO DI POTATURA OMOTOPIA (Equazione 5)
+        if (vicinanza_blocco < critical_threshold) {
           rami_recisi <- rami_recisi + 1
         }
         
         indici_vicinanza_storici[b] <- vicinanza_blocco
-        scostamenti_medi_storici[b]  <- scostamento_grezzo
+        scostamenti_medi_storici[b] <- scostamento_reale_minimo
       } else {
-        indici_vicinanza_storici[b] <- 100
-        scostamenti_medi_storici[b]  <- 0
+        # Se il tipo è vuoto, collassa sul tipo 0 (Formal Contradiction) -> Pruning immediato
+        indici_vicinanza_storici[b] <- 0
+        scostamenti_medi_storici[b] <- rng_globale
+        rami_recisi <- rami_recisi + 1
       }
-      valori_risonanza_storici[b] <- VALORE_REALE_DI_RISONANZA_FISSO
+      valori_risonanza_storici[b] <- firma_risonanza_fissa
     }
   }
   
-  # 4. WE COMPILE THE STRUCTURAL COMPONENTS FOR OUR FINAL REPORT
+  # 3. COMPILAZIONE COMPONENTI DEL REPORT FINALE IMPARZIALE
   report <- list(
-    SCALA_INPUT = c(
-      "Total Volume Analyzed"                    = N_total,
-      "Original Tautological Values (Steps 1-3)" = length(MEMORIA_TAUTOLOGICA_P),
-      "Severed Branches by Exclusion (Steps 4+)" = rami_recisi
+    STRUTTURA_ALBERO = c(
+      "Volume Totale Analizzato" = N_total,
+      "Rami Recisi per Esclusione" = rami_recisi
     ),
     VOLUMI_MODALI = data.frame(
-      Absolute_Volume   = c(N_total, volumi_box, volumi_diamond, volumi_transizione, volumi_vuoto),
-      Percentage_Quota  = c(100.0, (volumi_box/N_total)*100, (volumi_diamond/N_total)*100, (volumi_transizione/N_total)*100, (volumi_vuoto/N_total)*100),
-      row.names         = c("Total Stream Volume", "BOX (Matter / Necessity) [\u25a1]", "DIAMOND (Inheritance / Possibility) [\u25c6]", "HOMOTOPIC TRANSITION (Spatial Flow)", "EXPANSIVE VOID (Open Mutation)")
+      Volume_Assoluto = c(volumi_box, volumi_diamond, volumi_transizione, volumi_vuoto),
+      Quota_Percentuale = c((volumi_box/N_total)*100, (volumi_diamond/N_total)*100, (volumi_transizione/N_total)*100, (volumi_vuoto/N_total)*100),
+      row.names = c("BOX (Materia)", "DIAMOND (Ereditarietà)", "TRANSIZIONE OMOTOPICA", "VUOTO ESPANSIVO")
     ),
-    DIAGNOSTICA_ESCLUSIONE = c(
-      "REAL RESONANCE SIGNATURE (FIXED TARGET)" = tail(valori_risonanza_storici, 1),
-      "Mean Deviation from Baseline DNA"        = mean(scostamenti_medi_storici, na.rm=TRUE),
-      "Mean Proximity Index of the Process"     = mean(indici_vicinanza_storici, na.rm=TRUE)
+    DIAGNOSTICA_MULTILIBRARY = c(
+      "FIRMA REALE DI RISONANZA (TARGET FISSO)" = tail(valori_risonanza_storici, 1),
+      "Scostamento Medio dal DNA Multilibrary"   = mean(scostamenti_medi_storici[4:n_blocks], na.rm=TRUE),
+      "Indice di Vicinanza Generale al Presente" = mean(indici_vicinanza_storici[4:n_blocks], na.rm=TRUE)
     )
   )
-  class(report) <- "PsiU_Exclusion_Report"
   return(report)
-}
-
-#' @title S3 Print Method for Our PsiU_Exclusion_Report
-#' @description We display the structured results by rigidly ordering scale, volumes, and diagnostics.
-#' @export
-print.PsiU_Exclusion_Report <- function(x, ...) {
-  cat("\n========================================================================\n")
-  cat("          METRIC BENCHMARK - MULTILIBRARY WITH EXCLUSION FILTER         \n")
-  cat("========================================================================\n\n")
-  
-  cat(" COMPUTATIONAL TREE STRUCTURE\n")
-  cat("------------------------------------------------------------------------\n")
-  for (i in seq_along(x$SCALA_INPUT)) {
-    cat(sprintf("  %-40s : %d\n", names(x$SCALA_INPUT)[i], x$SCALA_INPUT[i]))
-  }
-  
-  cat("\n MAPPING OF TOTAL MODAL VOLUMES\n")
-  cat("------------------------------------------------------------------------\n")
-  print(round(x$VOLUMI_MODALI, 5))
-  
-  cat("\n ALIGNMENT DIAGNOSTICS AND EXCLUSION PROCESS\n")
-  cat("------------------------------------------------------------------------\n")
-  cat(sprintf("  -> %-45s : %.5f\n", names(x$DIAGNOSTICA_ESCLUSIONE), x$DIAGNOSTICA_ESCLUSIONE))
-  cat(sprintf("  %-48s : %.5f\n", names(x$DIAGNOSTICA_ESCLUSIONE), x$DIAGNOSTICA_ESCLUSIONE))
-  cat(sprintf("  %-48s : %.2f%%\n", names(x$DIAGNOSTICA_ESCLUSIONE), x$DIAGNOSTICA_ESCLUSIONE))
-  cat("========================================================================\n")
 }
