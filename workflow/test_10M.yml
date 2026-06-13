@@ -1,0 +1,29 @@
+name: PSI-U Engine 2.0 Validation
+on: [push]
+
+jobs:
+  engine-performance-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Run 10M Stress Test & Efficiency Check
+        run: |
+          source("engine_2.0.R")
+          set.seed(1306)
+          # Generazione dataset 10M
+          massive_data <- c(rnorm(6000000, 50, 2), rnorm(2000000, 58, 2), runif(2000000, 0, 100))
+          
+          # Esecuzione Engine
+          res <- PsiU_Engine_2.0(massive_data)
+          
+          # Fail se il throughput scende sotto lo standard di 8M rec/sec
+          if(res$efficiency < 8000000) {
+            print("PERFORMANCE DEGRADATION DETECTED")
+            exit 1
+          }
+        shell: Rscript {0}
