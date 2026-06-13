@@ -83,7 +83,9 @@ PsiU_Complete_MultiLibrary_V3 <- function(raw_input_vector, block_size = 50000, 
         scostamenti_medi_storici[b] <- rng_globale
         rami_recisi <- rami_recisi + 1
       }
-      valori_risonanza_storici[b] <- firma_risonanza_fissa
+      # Calcolo scientifico: tolleranza ridotta per massima sensibilità
+vicinanza_blocco <- (1 - (scostamento_reale_minimo / (stabilità_base * 1.5))) * 100
+
     }
   }
   
