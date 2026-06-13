@@ -31,16 +31,11 @@ PsiU_Complete_MultiLibrary_V3 <- function(raw_input_vector, block_size = 50000, 
   deviation_history <- numeric(n_blocks)
   resonance_history <- numeric(n_blocks)
   
-  # Global range calculation
-  min_g <- min(raw_input_vector)
-  max_g <- max(raw_input_vector)
-  rng_g <- max_g - min_g
-  if (rng_g == 0) rng_g <- 1
-  
-  for (b in 1:n_blocks) {
-    idx_start <- ((b - 1) * block_size) + 1
-    idx_end   <- b * block_size
-    raw_block <- raw_input_vector[idx_start:idx_end]
+  # Global range calculation - PATCH ANTI-NA
+min_g <- min(raw_input_vector, na.rm = TRUE)
+max_g <- max(raw_input_vector, na.rm = TRUE)
+rng_g <- max_g - min_g
+if (is.na(rng_g) || rng_g == 0) rng_g <- 1
     
     # Modal Projection: We map data into the modal space
     val_p <- (raw_block - min_g) / rng_g
