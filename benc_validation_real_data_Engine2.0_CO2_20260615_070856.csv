@@ -1,0 +1,17 @@
+"Metric","Value","Engine_Version","Dataset","Seed","Test_Date"
+"Total Volume Processed",468,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Vector Memory Size MB",0.0036163330078125,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Pruned Branches (Anom)",1,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Modal_BOX (Matter)_Volume",196,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Modal_DIAMOND (Resonance)_Volume",111,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Modal_TRANSITION_Volume",35,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Modal_VOID (Mutation)_Volume",58,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Modal_BOX (Matter)_Share_%",41.8803418803419,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Modal_DIAMOND (Resonance)_Share_%",23.7179487179487,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Modal_TRANSITION_Share_%",7.47863247863248,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Modal_VOID (Mutation)_Share_%",12.3931623931624,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Target Resonance Signature",327.365849484536,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Average Deviation",6.04905154639175,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"General Proximity Index %",50.7112187476204,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"CPU Calculation Time",0.00713896751403809,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
+"Throughput (rec/sec)",65555.6982266306,"2.0_PsiUEngineRL_FinalVersion","datasets::co2",13062026,2026-06-15
